@@ -1,5 +1,5 @@
 
-importScripts('./_.js');
+importScripts('./x.js');
 
 const CN='vapor';
 const CC=['/','/512.png','/192.png',...'json,woff2,css,svg,html'.split(',').map(_=>'/o.'+_)];
