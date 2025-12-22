@@ -1,0 +1,29 @@
+{
+	"name":"Vapor",
+	"short_name":"vapor",
+	"description":"轻量级PWA应用框架",
+	"start_url":"./",
+	"scope":"./",
+	"display":"standalone",
+	"display_override":["standalone","minimal-ui"],
+	"orientation":"portrait-primary",
+	"background_color":"#000",
+	"theme_color":"#fff",
+	"categories":["productivity","utilities"],
+	"lang":"zh-CN",
+	"icons":[
+		{
+			"src":"192.png",
+			"sizes":"192x192",
+			"type":"image/png",
+			"purpose":"any maskable"
+		},
+		{
+			"src":"512.png",
+			"sizes":"512x512",
+			"type":"image/png",
+			"purpose":"any maskable"
+		}
+	],
+	"crossorigin":"use-credentials"
+}
