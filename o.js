@@ -221,9 +221,19 @@ class O{
 		}finally{$.remove()}
 	}
 	async fetch(url,m,body,headers,otype){
-		return fetch('/fetch',{
-			method:'POST',headers:{'Content-Type':'application/json'},
-			body:JSON.stringify({url,body,headers,otype,method:m=='POST'?m:'GET',})});
+		const x={method:m=='POST'?'POST':'GET'};
+		if(body)x.body=body;
+		if(headers)x.headers=headers;
+		let e=null,o=await fetch(url,x).catch(_=>(e=_.message));
+		if(e)return {ok:false,e:'请求异常: '+e};
+		if(otype=='json'){
+			const x=await o.text();
+			if(!/^\s*(\{.*\}|\[.*\])\s*$/.test(x))return {ok:false,e:'请求返回数据Json解析异常!'};
+			o=JSON.parse(x);
+		}else if(otype=='buffer')o=await o.arrayBuffer();
+		else o=await o.text();
+		
+		return {ok:true,o,e};
 	}
 	observer(){
 		const ov=new IntersectionObserver((s,o)=>{
