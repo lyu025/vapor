@@ -97,7 +97,7 @@ H.page_video=async function(){
 			if(F)return todo(JSON.parse(F));
 			switch(X){
 				case 'ole':
-					this.fetch('https://api.olelive.com/v1/pub/vod/list/type',null,null,null,'json').then(_=>_.json()).then(async _=>{
+					this.fetch('https://api.olelive.com/v1/pub/vod/list/type',null,null,null,'json').then(async _=>{
 						for(let x of _.o.data.filter(_=>_.typeId<5)){
 							const C=x.children
 								.map(_=>(_.typeId+'').startsWith(x.typeId+'')?[_.typeId,_.typeName]:null)
@@ -136,7 +136,7 @@ H.page_video=async function(){
 			switch(this.X.video.website.X){
 				case 'ole':
 					const url=`https://api.olelive.com/v1/pub/vod/list/true/3/0/${encodeURIComponent(X.Z)}/${X.T}/${X.C}/${X.Y}/${X.S}/${p}/20`;
-					this.fetch(url+`?_vv=${(new Date).vv()}`,null,null,null,'json').then(_=>_.json()).then(({ok,o,e:err})=>{
+					this.fetch(url+`?_vv=${(new Date).vv()}`,null,null,null,'json').then(({ok,o,e:err})=>{
 						if(!ok)return this.toast(err,'error');
 						const {data:{list,total}}=o;
 						if(!list||list.length<1)return;
@@ -178,7 +178,7 @@ H.page_video=async function(){
 			'#video_website>h2>#website_back'.N().classList.remove('hide');
 			switch(X){
 				case 'ole':
-					this.fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,null,null,null,'json').then(_=>_.json()).then(async({ok,o,err})=>{
+					this.fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,null,null,null,'json').then(async({ok,o,err})=>{
 						if(!ok)return this.toast(err,'error');
 						const tm={电影:1,连续剧:2,动漫:3,综艺:4};
 						let {typeIdName:C,typeId1Name:t,area,year,director,actor,urls,content:brief,pic}=o.data;
