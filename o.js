@@ -330,8 +330,8 @@ class O{
 				const x=e.target.classList.contains('grid');
 				if(!(x&&$s.length>0))continue;
 				const $=$s[$s.length-1];
-				ov.observe($);
 				$s.map(_=>_.querySelector('img[s]:not(img[_])')).forEach(_=>_?oi.observe(_):null);
+				ov.observe($);
 			}
 		});
 		oo.observe(document.body,{subtree:true,childList:true,attributeFilter:['_']});
