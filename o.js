@@ -1,4 +1,3 @@
-const fetch=require('node-fetch');
 const express=require('express');
 const WebSocket=require('ws');
 
@@ -7,7 +6,7 @@ app.get('/',(req,res)=>{
 	res.send('WebSocket Proxy Server is running');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 const server=app.listen(PORT,()=>{
 	console.log(`Server running on port ${PORT}`);
 });
@@ -39,6 +38,7 @@ wss.on('connection',(ws)=>{
 						}
 					}));
 				}catch(error){
+					console.log("出差了:",error);
 					ws.send(JSON.stringify({
 						type:'fetch-error',
 						payload:{error:error.message}
