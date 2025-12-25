@@ -28,7 +28,7 @@ wss.on('connection',(ws)=>{
 					});
 					const text=await response.text();
 					ws.send(JSON.stringify({
-						type:'fetch-response',
+						id:data.id,type:'fetch-response',
 						payload:{
 							ok:response.ok,
 							status:response.status,
@@ -40,7 +40,7 @@ wss.on('connection',(ws)=>{
 				}catch(error){
 					console.log("出差了:",error);
 					ws.send(JSON.stringify({
-						type:'fetch-error',
+						id:data.id,type:'fetch-error',
 						payload:{error:error.message}
 					}));
 				}
