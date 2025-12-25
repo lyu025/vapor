@@ -1,10 +1,12 @@
 const express=require('express');
 const WebSocket=require('ws');
 const axios=require('axios');
+const cors=require('cors');
 
 const PORT=process.env.PORT||4000;
 
 const app=express();
+app.use(cors());
 
 app.get('/',(req,res)=>{
 	res.send('WebSocket Proxy Server is running');
