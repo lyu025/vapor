@@ -7,7 +7,7 @@ String.prototype.E=function(html,attrs){
 	return o;
 };
 // 图标代码
-String.prototype.V=function(_,o){return `<svg${_?` onclick='H.${_}(this)'`:''}${o&&o.s?` width='${o.s}' height='${o.s}'`:''}${o&&o.c?` class='${o.c}'`:''}${o&&o.id?` id='${o.id}'`:''}><use xlink:href='o.svg#${this.trim()}'/></svg>`}
+String.prototype.V=function(_,o){return `<svg${_?` onclick='H.${_}(this)'`:''}${o&&o.s?` width='${o.s}' height='${o.s}'`:''}${o&&o.c?` class='${o.c}'`:''}${o&&o.id?` id='${o.id}'`:''} ${o&&o.f?` style='fill:${o.f}'`:''} ><use xlink:href='o.svg#${this.trim()}'/></svg>`}
 // 获取节点
 String.prototype.N=function(_){return _?Array.from(document.querySelectorAll(this)):document.querySelector(this)}
 // 绑定事件

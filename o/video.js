@@ -68,7 +68,7 @@ H.page_video=async function(){
 				$w.innerHTML='';
 			}
 		},
-		website_init:e=>{
+		website_init:async e=>{
 			const X=e.getAttribute('X'),N=e.getAttribute('N');
 			this.X.video.website={X};
 			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
@@ -76,23 +76,23 @@ H.page_video=async function(){
 			'#video_website>[T="A"]'.N().classList.add('hide');
 			'#video_website>[T="F"],#video_website>[T="W"]'.N(true).forEach(_=>_.classList.remove('hide'));
 			'#video_website>h2>#website_back'.N().classList.remove('hide');
-			const {S:F,P:H}=this.db_get('select S,P from video where X=? and N=?',[X,'.'],true)||{};
-			let {T:HT,C:HC,Z:HZ,Y:HY,S:HS}=JSON.parse(H||'{}');
+			const {S:F,P:V}=this.db_get('select S,P from video where X=? and N=?',[X,'.'],true)||{};
+			let {T:HT,C:HC,Z:HZ,Y:HY,S:HS}=JSON.parse(V||'{}');
 			const O={},todo=o=>{
 				const ks=Object.keys(this.X.video.website.filters=o);
 				HT=HT&&o[HT]?HT:ks[0];
 				const {C,Z,Y,S}=o[HT],cks=Object.keys(C),sks=Object.keys(S);
 				if(HC===undefined)HC=cks[0];
-				if(HZ===undefined)HZ=Z[0];
-				if(HY===undefined)HY=Y[0];
+				if(HZ===undefined)HZ=Z[0][0];
+				if(HY===undefined)HY=Y[0][0];
 				if(HS===undefined)HS=sks[0];
 				const T=ks.map(_=>`<div onclick='H.X.video.website_list(this)' k='T' v='${_}' class='${_===HT?'active':''}'>${o[_].N}</div>`).join('');
 				const c=cks.map(_=>`<div onclick='H.X.video.website_list(this)' k='C' v='${_}' class='${_===HC?'active':''}'>${C[_]}</div>`).join('');
-				const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_}' class='${_===HZ?'active':''}'>${_||'全部'}</div>`).join('');
-				const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_}' class='${_===HY?'active':''}'>${_||'全部'}</div>`).join('');
+				const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_[0]}' class='${_[0]===HZ?'active':''}'>${_[1]}</div>`).join('');
+				const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_[0]}' class='${_[0]===HY?'active':''}'>${_[1]}</div>`).join('');
 				const s=sks.map(_=>`<div onclick='H.X.video.website_list(this)' k='S' v='${_}' class='${_===HS?'active':''}'>${S[_]}</div>`).join('');
 				'#video_website>[T="F"]'.N().innerHTML+=`<div k='T'>${T}</div><div k='C'>${c}</div><div k='Z'>${z}</div><div k='Y'>${y}</div><div k='S'>${s}</div>`;
-				'#video_website>[T="F"]>[k="T"]>.active'.N().click();
+				'#video_website>[T="F"]>[k="C"]>.active'.N().click();
 			}
 			if(F)return todo(JSON.parse(F));
 			switch(X){
@@ -100,14 +100,33 @@ H.page_video=async function(){
 					this.fetch('https://api.olelive.com/v1/pub/vod/list/type',null,null,null,'json').then(async _=>{
 						for(let x of _.o.data.filter(_=>_.typeId<5)){
 							const C=x.children
-								.map(_=>(_.typeId+'').startsWith(x.typeId+'')?[_.typeId,_.typeName]:null)
+								.map(_=>(_.typeId+'').startsWith(x.typeId+'')?[_.typeId+'',_.typeName]:null)
 								.filter(_=>_).reduce((x,[k,v])=>{x[k]=v;return x},{});
-							O[x.typeId]={N:x.typeName,Z:['',...x.area],Y:['',...x.year],C,S:{update:'最新',hot:'最热',desc:'添加'}};
+							x.area=x.area.map(_=>[_,_]);
+							x.year=x.year.map(_=>[_+'',_+'']);
+							O[x.typeId]={N:x.typeName,Z:[['','全部'],...x.area],Y:[['','全部'],...x.year],C,S:{update:'最新',hot:'最热',desc:'添加'}};
 						}
 						await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
 						todo(O);
 					});
 					break;
+				case 'ayf':
+					let C={movie:'电影',drama:'连续剧',variety:'综艺',anime:'动漫'};
+					for(let k in C){
+						O[k]={N:C[k],Z:[],Y:[],C:{},S:{}};
+						let x=await this.fetch(`https://api.yfsp.tv/api/list/getfiltertagsdata?SecondaryCode=${k}`,null,null,null,'json').then(_=>_.o.data.list);
+						x.forEach((_,i)=>{
+							if(i>4)return;
+							for(let v of _.list){
+								if(i===0||i==1)O[k][['S','C'][i]][v.classifyId+'']=v.classifyName;
+								else if(i==2||i==4)O[k][i==2?'Z':'Y'].push([v.classifyId+'',v.classifyName]);
+							}
+						});
+					}
+					await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
+					todo(O);
+					break;
+				
 			}
 		},
 		website_list:async(e,p=1)=>{
@@ -120,8 +139,8 @@ H.page_video=async function(){
 					'#video_website>[T="F"]>*:not([k="T"])'.N(true).forEach(_=>_.remove());
 					const cks=Object.keys(C),sks=Object.keys(S);
 					const c=cks.map(_=>`<div onclick='H.X.video.website_list(this)' k='C' v='${_}' class='${_===cks[0]?'active':''}'>${C[_]}</div>`).join('');
-					const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_}' class='${_===Z[0]?'active':''}'>${_||'全部'}</div>`).join('');
-					const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_}' class='${_===Y[0]?'active':''}'>${_||'全部'}</div>`).join('');
+					const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_[0]}' class='${_[0]===Z[0][0]?'active':''}'>${_[1]}</div>`).join('');
+					const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_[0]}' class='${_[0]===Y[0][0]?'active':''}'>${_[1]}</div>`).join('');
 					const s=sks.map(_=>`<div onclick='H.X.video.website_list(this)' k='S' v='${_}' class='${_===sks[0]?'active':''}'>${S[_]}</div>`).join('');
 					'#video_website>[T="F"]'.N().innerHTML+=`<div k='C'>${c}</div><div k='Z'>${z}</div><div k='Y'>${y}</div><div k='S'>${s}</div>`;
 				}
@@ -131,11 +150,11 @@ H.page_video=async function(){
 			}
 			const X=`#video_website>[T='F']>*>[k].active`.N(true).map(_=>[_.getAttribute('k'),_.getAttribute('v')]).reduce((_,[k,v])=>{_[k]=v;return _},{});
 			if(e)await this.db_set('update video set P=? where X=? and N=?',[JSON.stringify(X),this.X.video.website.X,'.']);
-			console.log(X);
 			
+			let url;
 			switch(this.X.video.website.X){
 				case 'ole':
-					const url=`https://api.olelive.com/v1/pub/vod/list/true/3/0/${encodeURIComponent(X.Z)}/${X.T}/${X.C}/${X.Y}/${X.S}/${p}/20`;
+					url=`https://api.olelive.com/v1/pub/vod/list/true/3/0/${encodeURIComponent(X.Z)}/${X.T}/${X.C}/${X.Y}/${X.S}/${p}/20`;
 					this.fetch(url+`?_vv=${(new Date).vv()}`,null,null,null,'json').then(({ok,o,e:err})=>{
 						if(!ok)return this.toast(err,'error');
 						const {data:{list,total}}=o;
@@ -148,11 +167,28 @@ H.page_video=async function(){
 						if(x.length<1)return;
 						$w.append(...x);
 						$w.setAttribute('p',p+1);
-						$w.classList.add('open');
+					}).then(()=>{
 						`#video_website`.N().classList.remove('wait');
 					});
 					break;
-				
+				case 'ayf':
+					url=`https://api.yfsp.tv/api/list/getconditionfilterdata?titleid=${X.T}&ids=${X.S},${X.C},${X.Z},,${X.Y}&page=${p}&size=24`;
+					this.fetch(url,null,null,null,'json').then(({ok,o,e:err})=>{
+						if(!ok)return this.toast(err,'error');
+						const {data:{list}}=o;
+						if(!list||list.length<1)return;
+						const x=list.map(({mediaKey:id,title:n,coverImgUrl:pic,score})=>{
+							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
+							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
+							return NF.test(N)?null:'div'.E(`<img src='${II}' s='${pic}'/><score>${score}</score><div>${N}</div>`,{X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
+						}).filter(_=>_);
+						if(x.length<1)return;
+						$w.append(...x);
+						$w.setAttribute('p',p+1);
+					}).then(()=>{
+						`#video_website`.N().classList.remove('wait');
+					});
+					break;
 			}
 			
 		},
@@ -176,44 +212,62 @@ H.page_video=async function(){
 			$.classList.remove('hide');
 			'#video_website>[T="A"]'.N().classList.add('hide');
 			'#video_website>h2>#website_back'.N().classList.remove('hide');
+			const tm={电影:1,电视剧:2,连续剧:2,动漫:3,综艺:4};
+			const todo=async(C,t,area,year,director,actor,urls,brief,pic)=>{
+				const r=this.db_get('select N,P,O from video where N=? AND X=?',[N,X],true);
+				if(!r)await this.db_set('replace into video(X,N,T,C,Z,Y,D,A,I,B,S)values(?,?,?,?,?,?,?,?,?,?,?)',[
+					X,N,tm[t],C,area,year,director,actor,pic,brief,JSON.stringify(urls)
+				]);
+				'#video_website>h2>#website_collect>use'.N().setAttribute('xlink:href',r&&r.O?'o.svg#collect_ok':'o.svg#collect_no');
+				'#video_website>h2>#website_collect'.N().classList.remove('hide');
+				let {start,end,curr,u}=JSON.parse(r?.P||'{}');
+				this.X.video.website.start=start||0;
+				this.X.video.website.end=end||0;
+				this.X.video.website.curr=curr||0;
+				$.innerHTML=`<p><span>地区:&emsp;<em>${area}</em>&emsp;&emsp;&emsp;年份:&emsp;<em>${year}</em>&emsp;&emsp;&emsp;类型:&emsp;<em>${C}</em></span></p>
+					<p ${director.length>0?'':` class='hide'`}><span>导演: </span>${director.map(_=>`<span><em>${_}</em></span>`).join('')}</p>
+					<p><span>主演: </span>${actor.map(_=>`<span><em>${_}</em></span>`).join('')}</p><br>
+					<p vs>${urls.map(_=>`<span u='${_[1]}' onclick='H.X.video.website_play(this)'>${_[0]}</span>`).join('')}</p>
+					<video preload autoplay crossorigin='anonymous' controls></video>
+					<p sc><span se s onclick='H.X.video.website_option(1)'>╟ ${this.X.video.website.start}</span><span se e onclick='H.X.video.website_option(-1)'>-${this.X.video.website.end} ╢</span></p>
+					<p bf>${brief}</p>`;
+				`#video_website`.N().classList.remove('wait');
+				const V='video'.N();
+				V.ondurationchange=()=>{
+					if(V.duration<250)return;
+					V.playbackRate=1.25;
+					V.currentTime=Math.max(this.X.video.website.curr,this.X.video.website.start);
+				};
+				V.ontimeupdate=()=>{
+					if(V.duration<250)return;
+					if(V.duration-V.currentTime>this.X.video.website.end)return;
+					const x=$.querySelector('p[vs]>span.active'),xx=x?x.nextElementSibling:null;
+					xx&&xx.click();
+				};
+				$.querySelector(`p[vs]>span${u?`[u='${u}']`:''}`).click();
+			};
 			switch(X){
 				case 'ole':
-					this.fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,null,null,null,'json').then(async({ok,o,err})=>{
+					this.fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,null,null,null,'json').then(({ok,o,err})=>{
 						if(!ok)return this.toast(err,'error');
-						const tm={电影:1,连续剧:2,动漫:3,综艺:4};
 						let {typeIdName:C,typeId1Name:t,area,year,director,actor,urls,content:brief,pic}=o.data;
+						actor=actor.split(' / ').map(_=>_.trim()).filter(_=>_);
+						director=director.split(' / ').map(_=>_.trim()).filter(_=>_);
+						pic=`https://static.olelive.com/${pic}`;
 						urls=urls.map(_=>[_.title,_.url]);
-						const r=this.db_get('select N,P,O from video where N=? AND X=?',[N,X],true);
-						if(!r)await this.db_set('replace into video(X,N,T,C,Z,Y,D,A,I,B,S)values(?,?,?,?,?,?,?,?,?,?,?)',[
-							X,N,tm[t],C,area,year,director,actor,`https://static.olelive.com/${pic}`,brief,JSON.stringify(urls)
-						]);
-						'#video_website>h2>#website_collect>use'.N().setAttribute('xlink:href',r&&r.O?'o.svg#collect_ok':'o.svg#collect_no');
-						'#video_website>h2>#website_collect'.N().classList.remove('hide');
-						let {start,end,curr,u}=JSON.parse(r?.P||'{}');
-						this.X.video.website.start=start||0;
-						this.X.video.website.end=end||0;
-						this.X.video.website.curr=curr||0;
-						$.innerHTML=`<p><span>地区:&emsp;<em>${area}</em>&emsp;&emsp;&emsp;年份:&emsp;<em>${year}</em></span></p>
-							<p ${director!=''?'':` class='hide'`}><span>导演: </span>${director.split(' / ').filter(_=>_).map(_=>`<span><em>${_}</em></span>`).join('')}</p>
-							<p><span>主演: </span>${actor.split(' / ').filter(_=>_).map(_=>`<span><em>${_}</em></span>`).join('')}</p><br>
-							<p vs>${urls.map(_=>`<span u='${_[1]}' onclick='H.X.video.website_play(this)'>${_[0]}</span>`).join('')}</p>
-							<video preload autoplay crossorigin='anonymous' controls></video>
-							<p sc><span se s onclick='H.X.video.website_option(1)'>╟ ${this.X.video.website.start}</span><span se e onclick='H.X.video.website_option(-1)'>-${this.X.video.website.end} ╢</span></p>
-							<p bf>${brief}</p>`;
-						`#video_website`.N().classList.remove('wait');
-						const V='video'.N();
-						V.ondurationchange=()=>{
-							if(V.duration<250)return;
-							V.playbackRate=1.25;
-							V.currentTime=Math.max(this.X.video.website.curr,this.X.video.website.start);
-						};
-						V.ontimeupdate=()=>{
-							if(V.duration<250)return;
-							if(V.duration-V.currentTime>this.X.video.website.end)return;
-							const x=$.querySelector('p[vs]>span.active'),xx=x?x.nextElementSibling:null;
-							xx&&xx.click();
-						};
-						$.querySelector(`p[vs]>span${u?`[u='${u}']`:''}`).click();
+						todo(C,t,area,year,director,actor,urls,brief,pic);
+					});
+					break;
+				case 'ayf':
+					this.fetch(`https://api.yfsp.tv/api/video/videodetails?mediaKey=${I}`,null,null,null,'json').then(({ok,o,err})=>{
+						if(!ok)return this.toast(err,'error');
+						console.log(o.data.detailInfo);
+						let {contentType:C,typeName:t,regional:area,postTime:year,director,starring:actor,episodes:urls,introduce:brief,coverImgUrl:pic}=o.data.detailInfo;
+						year=year.split('-')[0];
+						actor=actor.split(',').map(_=>_.trim()).filter(_=>_);
+						director=director.split(',').map(_=>_.trim()).filter(_=>_);
+						urls=urls.map(v=>[v.episodeTitle,v.episodeKey]);
+						todo(C,t,area,year,director,actor,urls,brief,pic);
 					});
 					break;
 			}

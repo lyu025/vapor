@@ -43,10 +43,12 @@ H.page_img=function(){
 					s=s.replace(/ +(xlmns|style|class|version)=['"][^'"]+['"]/ig,'').replace(/(\<path [^\>]+)\>[\t\r\n ]*<\/path\>[\t\r\n ]*/ig,'$1/>').replace(/ +\/\>/g,'/>').replace(/ +fill=""/g,'');
 					return `<div onclick='H.X.img.copy(this)'><i>${x}</i>${s}<div>${v.name}</div></div>`;
 				});
+				if(o.length<1)return;
 				$g.setAttribute('p',p+1);
 				$g.innerHTML+=o.join('');
+			}).catch(_=>this.toast('加载图标异常: '+_.message,'error')).finally(()=>{
 				$.classList.remove('wait');
-			}).catch(_=>this.toast('加载图标异常: '+_.message,'error'));
+			});
 		},
 		vector_plugin:e=>{
 			const $=e.parentNode,$u=e.firstChild.firstChild,o=$u.getAttribute('xlink:href').endsWith('_off');

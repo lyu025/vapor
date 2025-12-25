@@ -1,8 +1,57 @@
+class PWS{
+	constructor(u){
+		this.$='#toggle_proxy'.N();
+		this.cs=new Map();
+		this.s=null;
+		this.id=0;
+		this.u=u;
+		this.cc();
+	}
+	cc(){
+		this.s=new WebSocket(this.u);
+		this.s.onopen=()=>(this.$.style.fill='green');
+		this.s.onmessage=e=>{
+			const {id,type,payload}=JSON.parse(e.data);
+			if(id&&this.cs.has(id)){
+				this.$.style.fill='orange';
+				setTimeout(()=>(this.$.style.fill='green'),1000);
+				const{resolve,reject}=this.cs.get(id);
+				if(type==='fetch-response'){
+					resolve(payload);
+				}else{
+					reject(payload);
+				}
+				this.cs.delete(id);
+			}
+		};
+		this.s.onclose=()=>{
+			console.log('WebSocket 已断开,重新连接中...');
+			this.$.style.fill='red';
+			setTimeout(()=>this.cc(),3000);
+		};
+	}
+	async fetch(url,options={}){
+		return new Promise((resolve,reject)=>{
+			if(this.s.readyState!==WebSocket.OPEN)return reject(new Error('WebSocket 未连接'));
+			const id=this.id=++this.id;
+			this.cs.set(id,{resolve,reject});
+			this.s.send(JSON.stringify({id,type:'fetch',payload:{url,options}}));
+			setTimeout(()=>{
+				if(this.cs.has(id)){
+					this.cs.delete(id);
+					reject(new Error('请求超时'));
+				}
+			},3000);
+		});
+	}
+}
+
 class O{
 	constructor(){
 		this.app_name='vapor';
 		this.page=localStorage.getItem('page')||'home';
 		this.theme=localStorage.getItem('theme')||'dark';
+		this.use_proxy=localStorage.getItem('use_proxy')==='1';
 		this.P={
 			home:'首页',video:'影视天地',music:'音乐天地',
 			radio:'广播电台',news:'新闻天地',article:'美文欣赏',
@@ -16,11 +65,26 @@ class O{
 		this.catcher();
 		this.observer();
 		if(!navigator||!navigator.serviceWorker)return;
+		if(this.use_proxy)this.init_proxy();
 		this.db_init().then(()=>{
 			this.X={};
 			this.events();
 			this.jump_to(`nav>.core>[p='${this.page}']`.N());
 		}).catch(e=>this.toast(`初始数据库异常: ${e.message}`,'error'));
+	}
+	init_proxy(){
+		this.proxy=new PWS('wss://vapor-u1lk.onrender.com'); // wss://vapor-u1lk.onrender.com
+		return new Promise(resolve=>{
+			const check=()=>{
+				if(!this.proxy)return;
+				if(this.proxy.s.readyState===WebSocket.OPEN){
+					resolve();
+				}else{
+					setTimeout(check,100);
+				}
+			};
+			check();
+		});
 	}
 	catcher(){
 		window.addEventListener('error',e=>{
@@ -160,7 +224,7 @@ class O{
 	</svg>载入中...
 </wait>
 <app>
-	<header>${'menu'.V('toggle_menu')}<div id='ptitle'></div>${'download'.V('install_app',{c:'hide',id:'install_app'})}${'clean'.V('clear_cache')}${'theme'.V('toggle_theme')}</header>
+	<header>${'menu'.V('toggle_menu')}<div id='ptitle'></div>${'download'.V('install_app',{c:'hide',id:'install_app'})}${'clean'.V('clear_cache')}${`proxy_${this.use_proxy?'on':'off'}`.V('toggle_proxy',{id:'toggle_proxy',f:this.use_proxy?'red':null})}${'theme'.V('toggle_theme')}</header>
 	<nav><div class='top'><img src='192.png'/><div><h2>Vapor</h2><div><br>1.0.0</div></div></div><div class='core'></div></nav>
 	<main>
 		<svg viewBox='0 0 50 50'>
@@ -221,18 +285,21 @@ class O{
 		}finally{$.remove()}
 	}
 	async fetch(url,m,body,headers,otype){
+		let e,o;
 		const x={method:m=='POST'?'POST':'GET'};
 		if(body)x.body=body;
 		if(headers)x.headers=headers;
-		let e=null,o=await fetch(url,x).catch(_=>(e=_.message));
+		if(this.use_proxy){
+			if(!this.proxy)await this.init_proxy();
+			o=await this.proxy.fetch(url,x).then(_=>_.body).catch(_=>(e=_.message));
+		}else{
+			o=await fetch(url,x).then(_=>_.text()).catch(_=>(e=_.message));
+		}
 		if(e)return {ok:false,e:'请求异常: '+e};
 		if(otype=='json'){
-			const x=await o.text();
-			if(!/^\s*(\{.*\}|\[.*\])\s*$/.test(x))return {ok:false,e:'请求返回数据Json解析异常!'};
-			o=JSON.parse(x);
-		}else if(otype=='buffer')o=await o.arrayBuffer();
-		else o=await o.text();
-		
+			if(!/^\s*(\{.*\}|\[.*\])\s*$/.test(o))return {ok:false,e:'请求返回数据Json解析异常!'};
+			o=JSON.parse(o);
+		}
 		return {ok:true,o,e};
 	}
 	observer(){
@@ -286,6 +353,12 @@ class O{
 			$.style.transform='translateX(100%)';
 			setTimeout(()=>$.remove(),300);
 		},3000);
+	}
+	toggle_proxy(e){
+		e.style.fill=this.use_proxy?null:'green';
+		localStorage.setItem('use_proxy',this.use_proxy?'0':'1');
+		e.firstChild.setAttribute('xlink:href',this.use_proxy?'o.svg#proxy_off':'o.svg#proxy_on');
+		this.use_proxy=!this.use_proxy;
 	}
 	toggle_theme(e){
 		this.theme=(this.theme=='dark')?'light':'dark';
