@@ -316,11 +316,10 @@ class O{
 		const oi=new IntersectionObserver((s,o)=>{
 			for(let e of s)if((e.target.nodeName=='IMG')&&(e.intersectionRatio>=0.7)){
 				const sa=e.target.getAttribute('src'),sb=e.target.getAttribute('s');
-				if(sa!=sb){
+				if(sb&&sa!=sb){
 					e.target.setAttribute('src',sb);
 					e.target.setAttribute('_','');
 					o.unobserve(e.target);
-					break;
 				}
 			}
 		},{threshold:0.7});
