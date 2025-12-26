@@ -2,7 +2,7 @@
 importScripts('./x.js');
 
 const CN='vapor';
-const CC=['/','/index.html','/512.png','/192.png',...'json,woff2,css,svg'.split(',').map(_=>'/o.'+_)];
+const CC=['/','/index.html','/512.png','/192.png',...'json,woff2,css'.split(',').map(_=>'/o.'+_)];
 
 const csize=async(c)=>{
 	const s=await c.keys();
