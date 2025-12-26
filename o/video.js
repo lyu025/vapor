@@ -285,16 +285,15 @@ H.page_video=async function(){
 		},
 		website_pu_ayf:async(vk,pi)=>{
 			const u=`https://api.yfsp.tv/api/video/getplaydata?mediaKey=${vk}&videoId=${pi}&videoType=1`;
-			console.log(u);
-			return await this.fetch(u,null,null,null,'json').then(_=>_.o.data.list.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution)).pop()).then(_=>_?_.mediaUrl:null);
+			return await this.fetch(u,null,null,null,'json').then(_=>_.o?.data?.list?.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution))?.pop()).then(_=>_?_.mediaUrl:null);
 		},
 		website_play:async e=>{
 			const u=e.getAttribute('u'),fn=e.getAttribute('fn');
 			e.parentNode.childNodes.forEach(_=>_.classList[_==e?'add':'remove']('active'));
 			this.X.video.website.u=u;
 			const todo=async url=>{
-				if(H.use_proxy)url='https://vapor-u1lk.onrender.com/video?url='+encodeURIComponent(url);
-				`#video_website video`.N().setAttribute('src',url);
+				if(url&&H.use_proxy)url='https://vapor-u1lk.onrender.com/video?url='+encodeURIComponent(url);
+				`#video_website video`.N().setAttribute('src',url||'');
 				await H.X.video.website_option(0);
 			};
 			if(!fn)return await todo(u);
