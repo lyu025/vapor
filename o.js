@@ -104,8 +104,9 @@ class CachedStream extends Readable{
 					}catch(error){
 						return line;
 					}
+					return `${proxyPrefix}${encodeURIComponent(url)}`;
 				}
-				return `${proxyPrefix}${encodeURIComponent(url)}`;
+				return url;
 			});
 			return this.set_text(rewrittenLines.join('\n'));
 		}catch(error){
