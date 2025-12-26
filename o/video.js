@@ -355,7 +355,7 @@ H.page_video=async function(){
 		</style>
 		<card id='video_favorite'><h2>${'favorite'.V()}收藏夹${'trash'.V('X.video.favorite_flush',{id:'favorite_flush',c:'hide'})}</h2><div class='grid' style='--gc:4'></div></card>
 		<card id='video_website'><h2>${'website'.V()}媒体源${'back'.V('X.video.website_back',{id:'website_back',c:'hide'})}${'collect_no'.V('X.video.website_collect',{id:'website_collect',c:'hide'})}</h2>
-			<div T='A' class='grid open' style='--gc:2'></div>
+			<div T='A' class='grid' style='--gc:2'></div>
 			<div T='F' class='hide'></div>
 			<div T='W' class='grid hide' style='--gc:4' more='H.X.video.website_list' p='1'></div>
 			<div T='V' class='row hide'></div>
