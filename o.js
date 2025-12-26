@@ -87,7 +87,7 @@ async function fix_m3u8(stream,bp){
 		const o=t.includes('#EXTM3U')||t.includes('#EXT-X-VERSION')||t.includes('#EXTINF');
 		if(!o)stream.rewind();
 		else{
-			return t.split('\n').map(l=>{
+			t=t.split('\n').map(l=>{
 				if(l.trim()&&!l.startsWith('#')&&!l.startsWith('http')){
 					const u=new URL(l.trim(),bp).href;
 					return `/video?url=${encodeURIComponent(u)}`;
