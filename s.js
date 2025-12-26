@@ -30,12 +30,12 @@ const clean=async()=>{
 	let r=e.request,u=new URL(r.url);
 	if(r.method!='GET')return;
 
-	const ia=/\.(js|css|json|png|jpg|svg)$/.test(u.pathname);
+	const ia=/\.(js|css|json|png|jpg)$/.test(u.pathname);
 	if(ia&&u.hash){
 		u.hash='';
 		r=new Request(u);
 	}
-	let cc=/\.(js|css|png|jpg|svg)$/.test(u.pathname);
+	let cc=/\.(js|css|png|jpg)$/.test(u.pathname);
 	if(!((ia&&u.origin==self.location.origin)||(cc&&u.origin!=self.location.origin)))return;
 	e.respondWith((async()=>{
 		const c=await caches.open(CN),x=await c.match(r);
