@@ -21,7 +21,7 @@ async function video_proxy(req,res,next){
 		const url=req.query.url||req.body.url;
 		if(!url)return res.status(400).json({error:'视频链接不能为空'});
 		let u;
-		try{u=new URL(url)}catch(error){
+		try{u=new URL(decodeURIComponent(url))}catch(error){
 			return res.status(400).json({error:'视频链接不合法'});
 		}
 		if(!['http:','https:'].includes(u.protocol))return res.status(400).json({error:'Only HTTP and HTTPS protocols are supported'});
