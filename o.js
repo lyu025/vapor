@@ -2,10 +2,15 @@ const express=require('express');
 const WebSocket=require('ws');
 const axios=require('axios');
 const cors=require('cors');
+const https=require('https');
 const helmet=require('helmet');
 const morgan=require('morgan');
 const ffmpeg=require('fluent-ffmpeg');
 const rateLimit=require('express-rate-limit');
+
+const httpsAgent=new https.Agent({
+	rejectUnauthorized:false // 关闭SSL验证
+});
 
 const PORT=process.env.PORT||4000;
 
@@ -62,7 +67,7 @@ async function get_vinfo(url){
 		if(Date.now()-o.timestamp<CACHE_DURATION)return o.data;
 	}
 	const info=await axios.head(url,{
-		timeout:5000,
+		timeout:5000,httpsAgent,
 		headers:{'User-Agent':'Video-Service/1.0'}
 	}).catch(()=>null);
 	const vinfo={
@@ -113,8 +118,7 @@ app.get('/video/opt',vlimiter,async(req,res)=>{
 		console.log(url, nc, to, vinfo);
 		if(!nc){
 			const rep=await axios({
-				method:'GET',url,
-				responseType:'stream',
+				method:'GET',url,httpsAgent,responseType:'stream',
 				headers:{
 					'User-Agent':'Video-Proxy/1.0',
 					'Accept':'*/*'
@@ -130,7 +134,7 @@ app.get('/video/opt',vlimiter,async(req,res)=>{
 		}
 		await cqueue.add(async()=>{
 			const rep=await axios({
-				method:'GET',url,
+				method:'GET',url,httpsAgent,
 				responseType:'stream',
 				headers:{'User-Agent':'Video-Converter/1.0'}
 			});
