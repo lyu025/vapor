@@ -213,7 +213,7 @@ H.page_video=async function(){
 			'#video_website>[T="A"]'.N().classList.add('hide');
 			'#video_website>h2>#website_back'.N().classList.remove('hide');
 			const tm={电影:1,电视剧:2,连续剧:2,动漫:3,综艺:4};
-			const todo=async(C,t,area,year,director,actor,urls,brief,pic)=>{
+			const todo=async(C,t,area,year,director,actor,urls,brief,pic,fn)=>{
 				const r=this.db_get('select N,P,O from video where N=? AND X=?',[N,X],true);
 				if(!r)await this.db_set('replace into video(X,N,T,C,Z,Y,D,A,I,B,S)values(?,?,?,?,?,?,?,?,?,?,?)',[
 					X,N,tm[t],C,area,year,director,actor,pic,brief,JSON.stringify(urls)
@@ -227,7 +227,7 @@ H.page_video=async function(){
 				$.innerHTML=`<p><span>地区:&emsp;<em>${area}</em>&emsp;&emsp;&emsp;年份:&emsp;<em>${year}</em>&emsp;&emsp;&emsp;类型:&emsp;<em>${C}</em></span></p>
 					<p ${director.length>0?'':` class='hide'`}><span>导演: </span>${director.map(_=>`<span><em>${_}</em></span>`).join('')}</p>
 					<p><span>主演: </span>${actor.map(_=>`<span><em>${_}</em></span>`).join('')}</p><br>
-					<p vs>${urls.map(_=>`<span u='${_[1]}' onclick='H.X.video.website_play(this)'>${_[0]}</span>`).join('')}</p>
+					<p vs>${urls.map(_=>`<span u='${_[1]}' onclick='H.X.video.website_play(this)' fn='${fn?fn.replace('?',_[1]):''}'>${_[0]}</span>`).join('')}</p>
 					<video preload autoplay crossorigin='anonymous' controls></video>
 					<p sc><span se s onclick='H.X.video.website_option(1)'>╟ ${this.X.video.website.start}</span><span se e onclick='H.X.video.website_option(-1)'>-${this.X.video.website.end} ╢</span></p>
 					<p bf>${brief}</p>`;
@@ -266,8 +266,8 @@ H.page_video=async function(){
 						year=year.split('-')[0];
 						actor=actor.split(',').map(_=>_.trim()).filter(_=>_);
 						director=director.split(',').map(_=>_.trim()).filter(_=>_);
-						urls=urls.map(v=>[v.episodeTitle,v.episodeKey]);
-						todo(C,t,area,year,director,actor,urls,brief,pic);
+						urls=urls.map(v=>[v.episodeTitle,v.episodeId]);
+						todo(C,t,area,year,director,actor,urls,brief,pic,`H.X.video.website_pu_ayf("${I}","?")`);
 					});
 					break;
 			}
@@ -283,12 +283,24 @@ H.page_video=async function(){
 				JSON.stringify({start,end,curr:$.currentTime,u}),N,X
 			])
 		},
+		website_pu_ayf:async(vk,pi)=>{
+			const u=`https://api.yfsp.tv/api/video/getplaydata?mediaKey=${vk}&videoId=${pi}&videoType=1`;
+			console.log(u);
+			return await this.fetch(u,null,null,null,'json').then(_=>_.o.data.list.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution)).pop()).then(_=>_?_.mediaUrl:null);
+		},
 		website_play:async e=>{
-			const u=e.getAttribute('u');
+			const u=e.getAttribute('u'),fn=e.getAttribute('fn');
 			e.parentNode.childNodes.forEach(_=>_.classList[_==e?'add':'remove']('active'));
-			`#video_website video`.N().setAttribute('src',u);
 			this.X.video.website.u=u;
-			await H.X.video.website_option(0);
+			const todo=async url=>{
+				if(H.use_proxy)url='https://vapor-u1lk.onrender.com/video?&url='+encodeURIComponent(url);
+				`#video_website video`.N().setAttribute('src',url);
+				await H.X.video.website_option(0);
+			};
+			if(!fn)return await todo(u);
+			const url=await eval(fn);
+			console.log(url);
+			await todo(url);
 		},
 		website_collect:async e=>{
 			const {N,X}=this.X.video.website;

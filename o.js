@@ -345,13 +345,13 @@ class O{
 		r&&r.showNotification(title,x).catch(_=>console.log('推送消息 异常:',_));
 	}
 	toast(m,t='info'){
-		const $='div'.E(m,{class:'toast',style:`border-left-color:var(--${t})`});
+		const $='div'.E(m,{onclick:'this.remove()',class:'toast',style:`border-left-color:var(--${t})`});
 		this.T.appendChild($);
 		setTimeout(()=>{
 			$.style.opacity='0';
 			$.style.transform='translateX(100%)';
 			setTimeout(()=>$.remove(),300);
-		},3000);
+		},8000);
 	}
 	toggle_proxy(e){
 		e.style.fill=this.use_proxy?null:'green';
