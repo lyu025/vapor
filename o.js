@@ -205,7 +205,7 @@ async function video_proxy(req,res,next){
 		const cs=new CachedStream(response.data);
 		await new Promise(resolve=>cs.once('complete',resolve));
 		if(cs.is_m3u8()){
-			cs.rewrtie_m3u8_urls(url,`${req.protocol}://${req.get('host')}/video?url=`);
+			cs.rewrtie_m3u8_urls(url,`https://${req.get('host')}/video?url=`);
 			response.data=cs.createReadStream();
 		}
 		response.data.pipe(res);
