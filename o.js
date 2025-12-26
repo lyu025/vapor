@@ -1,10 +1,104 @@
+const{Readable}=require('stream');
 const express=require('express');
 const WebSocket=require('ws');
 const axios=require('axios');
 const https=require('https');
 const http=require('http');
-const {URL}=require('url');
+const{URL}=require('url');
 const cors=require('cors');
+
+
+class CachedStream extends Readable{
+	constructor(o,x={}){
+		super(x);
+		this._buffer=[];
+		this._error=null;
+		this._isEnded=false;
+		this._readPosition=0;
+		o.on('data',(c)=>{
+			this._buffer.push(c);
+			if(this._isReading){
+				this._isReading=false;
+				this.push(c);
+				this._readPosition++;
+			}
+		});
+		o.on('end',()=>{
+			this._isEnded=true;
+			if(this._isReading)this.push(null);
+		});
+		o.on('error',(error)=>{
+			this._error=error;
+			this.destroy(error);
+		});
+		this._isReading=false;
+	}
+	_read(size){
+		if(this._error){
+			this.destroy(this._error);
+			return;
+		}
+		if(this._readPosition<this._buffer.length){
+			const c=this._buffer[this._readPosition++];
+			this.push(c);
+		}else if(this._isEnded){
+			this.push(null);
+		}else{
+			this._isReading=true;
+		}
+	}
+	set_text(text,encoding='utf8'){
+		const o=Buffer.from(text,encoding);
+		this._chunks=[o];
+		this._buffer=o;
+		this._readPosition=0;
+		this._isEnded=true;
+		return this;
+	}
+	rewind(){
+		this._readPosition=0;
+		return this;
+	}
+	seek(position){
+		if(position>=0&&position<this._buffer.length)this._readPosition=position;
+		return this;
+	}
+	toBuffer(){
+		return Buffer.concat(this._buffer);
+	}
+	toString(encoding='utf8'){
+		return this.toBuffer().toString(encoding);
+	}
+	get size(){
+		return this._buffer.reduce((total,c)=>total+c.length,0);
+	}
+	get chunkCount(){
+		return this._buffer.length;
+	}
+	get ended(){
+		return this._isEnded;
+	}
+}
+
+async function fix_m3u8(stream,bp){
+	return new Promise((resolve)=>{
+		stream.rewind();
+		let t=stream.toString();
+		const o=t.includes('#EXTM3U')||t.includes('#EXT-X-VERSION')||t.includes('#EXTINF');
+		if(!o)stream.rewind();
+		else{
+			return t.split('\n').map(l=>{
+				if(l.trim()&&!l.startsWith('#')&&!l.startsWith('http')){
+					const u=new URL(l.trim(),bp).href;
+					return `/video?url=${encodeURIComponent(u)}`;
+				}
+				return l;
+			}).join('\n');
+			stream.set_text(t);
+		}
+		resolve(stream);
+	});
+}
 
 function get_agent(url,options={}){
 	const u=new URL(url);
@@ -16,6 +110,7 @@ function get_agent(url,options={}){
 	};
 	return x?new https.Agent(ops):new http.Agent(ops);
 }
+
 async function video_proxy(req,res,next){
 	try{
 		const url=req.query.url||req.body.url;
@@ -28,7 +123,7 @@ async function video_proxy(req,res,next){
 		const headers={
 			'User-Agent':'Video-Proxy/1.0','Accept':'*/*',
 			'Accept-Encoding':'identity',//避免压缩视频
-		};
+		},bp=new URL(u);
 		if(req.headers.range)headers['Range']=req.headers.range;
 		if(req.headers['if-range'])headers['If-Range']=req.headers['if-range'];
 		const agent=get_agent(url);
@@ -51,6 +146,10 @@ async function video_proxy(req,res,next){
 		nh['x-original-url']=url;
 		Object.keys(nh).forEach(k=>(nh[k])&&res.setHeader(k,nh[k]));
 		res.status(status);
+		if(url.includes('.m3u8')){
+			const cs=new CachedStream(response.data);
+			response.data=await fix_m3u8(cs,bp.origin+bp.pathname.substring(0,bp.pathname.lastIndexOf('/')+1));
+		}
 		response.data.pipe(res);
 		response.data.on('error',(error)=>{
 			console.error('Video stream error:',error.message);
