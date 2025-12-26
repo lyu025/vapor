@@ -170,8 +170,8 @@ app.get('/video/opt',vlimiter,async(req,res)=>{
 					'm':{videoBitrate:'1000k',audioBitrate:'128k'},
 					'h':{videoBitrate:'2500k',audioBitrate:'192k'}
 				};
-				const q=qm[q]||qm.m;
-				cmd.videoBitrate(q.videoBitrate).audioBitrate(q.audioBitrate);
+				const x=qm[q]||qm.m;
+				cmd.videoBitrate(x.videoBitrate).audioBitrate(x.audioBitrate);
 			}
 			const stream=cmd.pipe();
 			stream.pipe(res);
