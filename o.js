@@ -116,7 +116,7 @@ class CachedStream extends Readable{
 	_is_abs_url(url){
 		return url.startsWith('http://')||url.startsWith('https://');
 	}
-	createReadStream(options={}){
+	nread_stream(options={}){
 		const{encoding=this._textEncoding,...streamOptions}=options;
 		const buffer=this.toBuffer();
 		const stream=new Readable({
@@ -205,8 +205,8 @@ async function video_proxy(req,res,next){
 		const cs=new CachedStream(response.data);
 		await new Promise(resolve=>cs.once('complete',resolve));
 		if(cs.is_m3u8()){
-			cs.rewrtie_m3u8_urls(url,`https://${req.get('host')}/video?url=`);
-			response.data=cs.createReadStream();
+			cs.rewrtie_m3u8_urls(url,`/video?url=`);
+			response.data=cs.nread_stream();
 		}
 		response.data.pipe(res);
 		response.data.on('error',(error)=>{
