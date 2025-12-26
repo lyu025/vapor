@@ -1,4 +1,4 @@
-const{Readable}=require('stream');
+const{Readable,Transform}=require('stream');
 const express=require('express');
 const WebSocket=require('ws');
 const axios=require('axios');
@@ -7,105 +7,157 @@ const http=require('http');
 const{URL}=require('url');
 const cors=require('cors');
 
-
 class CachedStream extends Readable{
-	constructor(o,x={}){
-		super(x);
-		this._buffer=[];
-		this._error=null;
-		this._isEnded=false;
-		this._readPosition=0;
-		o.on('data',(c)=>{
-			this._buffer.push(c);
+	constructor(o,options={}){
+		super(options);
+		this._chunks=[];//存储所有数据块（数组）
+		this._completeBuffer=null;//完整的缓冲区缓存
+		this._isEnded=false;//原始流是否已结束
+		this._error=null;//错误信息
+		this._readPosition=0;//当前读取位置
+		this._textEncoding=options.encoding||'utf8';//文本编码
+		this._isReading=false;//是否正在读取
+		//监听原始流
+		o.on('data',(chunk)=>{
+			//将数据块存入数组
+			this._chunks.push(chunk);
+			//重置完整缓冲区缓存（因为有了新数据）
+			this._completeBuffer=null;
+			//如果有监听者在等待数据，推送它
 			if(this._isReading){
 				this._isReading=false;
-				this.push(c);
+				this.push(chunk);
 				this._readPosition++;
 			}
+			this.emit('chunk',chunk);
 		});
 		o.on('end',()=>{
 			this._isEnded=true;
 			if(this._isReading)this.push(null);
+			this.emit('complete',this.meta_data());
 		});
 		o.on('error',(error)=>{
 			this._error=error;
 			this.destroy(error);
+			this.emit('error',error);
 		});
-		this._isReading=false;
 	}
 	_read(size){
+		//如果有错误，传递错误
 		if(this._error){
 			this.destroy(this._error);
 			return;
 		}
-		if(this._readPosition<this._buffer.length){
-			const c=this._buffer[this._readPosition++];
-			this.push(c);
+		//如果还有缓冲数据可读
+		if(this._readPosition<this._chunks.length){
+			const chunk=this._chunks[this._readPosition++];
+			this.push(chunk);
 		}else if(this._isEnded){
+			//所有数据都已读完
 			this.push(null);
 		}else{
+			//等待更多数据
 			this._isReading=true;
 		}
 	}
-	set_text(text,encoding='utf8'){
+	toBuffer(){
+		if(!this._completeBuffer&&this._chunks.length>0)this._completeBuffer=Buffer.concat(this._chunks);
+		return this._completeBuffer||Buffer.alloc(0);
+	}
+	get_text(encoding=this._textEncoding){
+		return this.toBuffer().toString(encoding);
+	}
+	set_text(text,encoding=this._textEncoding){
 		const o=Buffer.from(text,encoding);
-		this._chunks=[o];
-		this._buffer=o;
+		this._chunks=[o];//设置为一个包含新 buffer 的数组
+		this._completeBuffer=o;
 		this._readPosition=0;
 		this._isEnded=true;
+		this._isReading=false;
+		this.emit('reset');
 		return this;
+	}
+	is_m3u8(){
+		const text=this.get_text('utf8',4096);//只检查前4KB
+		return [
+			'#EXTM3U',
+			'#EXT-X-VERSION',
+			'#EXT-X-TARGETDURATION',
+			'#EXTINF',
+			'#EXT-X-STREAM-INF'
+		].some(indicator=>text.includes(indicator));
+	}
+	rewrtie_m3u8_urls(baseUrl,proxyPrefix='/video?url='){
+		const text=this.get_text();
+		if(!this.is_m3u8())return this;
+		const lines=text.split('\n');
+		try{
+			const baseUrlObj=new URL(baseUrl);
+			const basePath=baseUrlObj.origin+baseUrlObj.pathname.substring(0,baseUrlObj.pathname.lastIndexOf('/')+1);
+			const rewrittenLines=lines.map(line=>{
+				const trimmed=line.trim();
+				if(!trimmed||trimmed.startsWith('#'))return line;
+				let url=trimmed;
+				if(!this._is_abs_url(url)){
+					try{
+						url=new URL(url,basePath).href;
+					}catch(error){
+						return line;
+					}
+				}
+				return `${proxyPrefix}${encodeURIComponent(url)}`;
+			});
+			return this.set_text(rewrittenLines.join('\n'));
+		}catch(error){
+			console.error('Error rewriting M3U8 URLs:',error);
+			return this;
+		}
+	}
+	_is_abs_url(url){
+		return url.startsWith('http://')||url.startsWith('https://');
+	}
+	createReadStream(options={}){
+		const{encoding=this._textEncoding,...streamOptions}=options;
+		const buffer=this.toBuffer();
+		const stream=new Readable({
+			...streamOptions,
+			read(size){
+				if(this._position>=buffer.length){
+					this.push(null);
+					return;
+				}
+				const chunk=buffer.slice(this._position,Math.min(this._position+size,buffer.length));
+				this._position+=chunk.length;
+				this.push(chunk);
+			}
+		});
+		stream._position=0;
+		return stream;
 	}
 	rewind(){
 		this._readPosition=0;
+		this._isReading=false;
 		return this;
 	}
-	seek(position){
-		if(position>=0&&position<this._buffer.length)this._readPosition=position;
-		return this;
-	}
-	toBuffer(){
-		return Buffer.concat(this._buffer);
-	}
-	toString(encoding='utf8'){
-		return this.toBuffer().toString(encoding);
-	}
-	get size(){
-		return this._buffer.reduce((total,c)=>total+c.length,0);
-	}
-	get chunkCount(){
-		return this._buffer.length;
-	}
-	get ended(){
-		return this._isEnded;
+	meta_data(){
+		const buffer=this.toBuffer();
+		return{
+			size:buffer.length,
+			chunkCount:this._chunks.length,
+			isComplete:this._isEnded,
+			is_m3u8:this.is_m3u8(),
+			encoding:this._textEncoding
+		};
 	}
 }
-
-async function fix_m3u8(stream,bp){
-	return new Promise((resolve)=>{
-		stream.rewind();
-		let t=stream.toString();
-		const o=t.includes('#EXTM3U')||t.includes('#EXT-X-VERSION')||t.includes('#EXTINF');
-		if(!o)stream.rewind();
-		else{
-			t=t.split('\n').map(l=>{
-				if(l.trim()&&!l.startsWith('#')&&!l.startsWith('http')){
-					const u=new URL(l.trim(),bp).href;
-					return `/video?url=${encodeURIComponent(u)}`;
-				}
-				return l;
-			}).join('\n');
-			stream.set_text(t);
-		}
-		resolve(stream);
-	});
-}
-
 function get_agent(url,options={}){
 	const u=new URL(url);
 	const x=u.protocol==='https:';
 	const ops={
 		rejectUnauthorized:false,//跳过SSL验证
-		keepAlive:true,maxSockets:50,timeout:30000,
+		keepAlive:true,
+		maxSockets:50,
+		timeout:30000,
 		...options
 	};
 	return x?new https.Agent(ops):new http.Agent(ops);
@@ -116,10 +168,14 @@ async function video_proxy(req,res,next){
 		const url=req.query.url||req.body.url;
 		if(!url)return res.status(400).json({error:'视频链接不能为空'});
 		let u;
-		try{u=new URL(decodeURIComponent(url))}catch(error){
+		try{
+			u=new URL(decodeURIComponent(url))
+		}catch(error){
 			return res.status(400).json({error:'视频链接不合法'});
 		}
-		if(!['http:','https:'].includes(u.protocol))return res.status(400).json({error:'Only HTTP and HTTPS protocols are supported'});
+		if(!['http:','https:'].includes(u.protocol))return res.status(400).json({
+			error:'Only HTTP and HTTPS protocols are supported'
+		});
 		const headers={
 			'User-Agent':'Video-Proxy/1.0','Accept':'*/*',
 			'Accept-Encoding':'identity',//避免压缩视频
@@ -146,15 +202,20 @@ async function video_proxy(req,res,next){
 		nh['x-original-url']=url;
 		Object.keys(nh).forEach(k=>(nh[k])&&res.setHeader(k,nh[k]));
 		res.status(status);
-		if(url.includes('.m3u8')){
-			const cs=new CachedStream(response.data);
-			response.data=await fix_m3u8(cs,bp.origin+bp.pathname.substring(0,bp.pathname.lastIndexOf('/')+1));
+		const cs=new CachedStream(response.data);
+		await new Promise(resolve=>cs.once('complete',resolve));
+		if(cs.is_m3u8()){
+			cs.rewrtie_m3u8_urls(url,`${req.protocol}://${req.get('host')}/video?url=`);
+			response.data=cs.createReadStream();
 		}
 		response.data.pipe(res);
 		response.data.on('error',(error)=>{
-			console.error('Video stream error:',error.message);
+			console.error('视频流传输错误:',error.message);
 			if(!res.headersSent){
-				res.status(500).json({error:'Stream error',message:error.message});
+				res.status(500).json({
+					error:'流传输错误',
+					message:error.message
+				});
 			}else{
 				res.end();//如果头部已经发送，只能结束响应
 			}
@@ -162,7 +223,9 @@ async function video_proxy(req,res,next){
 		req.on('close',()=>(response.data.destroy)&&response.data.destroy());
 		//请求超时处理
 		req.setTimeout(120000,()=>{
-			if(!res.headersSent)res.status(504).json({error:'Request timeout'});
+			if(!res.headersSent)res.status(504).json({
+				error:'Request timeout'
+			});
 			if(response.data.destroy)response.data.destroy();
 		});
 	}catch(error){
@@ -178,18 +241,18 @@ async function video_proxy(req,res,next){
 	}
 }
 
-const PORT=process.env.PORT||4000;
 
+const PORT=process.env.PORT||4000;
 const app=express();
 app.use(cors());
 app.get('/',(req,res)=>{
 	res.send('WebSocket 代理服务运行中 ...');
 });
 app.get('/video',video_proxy);
-
 const server=app.listen(PORT,()=>{
 	console.log(`服务运行端口为 ${PORT}`);
 });
+
 
 const wss=new WebSocket.Server({server});
 wss.on('connection',(ws)=>{
@@ -202,12 +265,12 @@ wss.on('connection',(ws)=>{
 					const response=await fetch(url,{
 						method:options?.method||'GET',
 						headers:options?.headers||{},
-						body:options?.body,
-						...options
+						body:options?.body,...options
 					});
 					const text=await response.text();
 					ws.send(JSON.stringify({
-						id:data.id,type:'fetch-response',
+						id:data.id,
+						type:'fetch-response',
 						payload:{
 							ok:response.ok,
 							status:response.status,
@@ -225,10 +288,10 @@ wss.on('connection',(ws)=>{
 				}
 			}
 		}catch(error){
-			console.error('Error processing message:',error);
+			console.error('运行时错误:',error);
 		}
 	});
 	ws.on('close',()=>{
-		console.log('Client disconnected');
+		console.log('客户端已断开');
 	});
 });
