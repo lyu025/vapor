@@ -292,7 +292,7 @@ H.page_video=async function(){
 			e.parentNode.childNodes.forEach(_=>_.classList[_==e?'add':'remove']('active'));
 			this.X.video.website.u=u;
 			const todo=async url=>{
-				if(url&&H.use_proxy)url='https://vapor-u1lk.onrender.com/video?url='+encodeURIComponent(url);
+				if(H.use_proxy&&url&&url.includes('.m3u8'))url=`${H.proxy}o?u=${encodeURIComponent(url)}`;
 				`#video_website video`.N().setAttribute('src',url||'');
 				await H.X.video.website_option(0);
 			};
