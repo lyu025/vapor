@@ -227,6 +227,7 @@ class O{
 		if(body)x.body=body;
 		if(headers)x.headers=headers;
 		if(this.use_proxy)url=`${this.proxy}o?u=${encodeURIComponent(url)}`;
+		console.log(url);
 		let e,o=await fetch(url,x).then(_=>_.text()).catch(_=>(e=_.message));
 		if(e)return {ok:false,e:'请求异常: '+e};
 		if(otype=='json'){

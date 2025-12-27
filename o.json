@@ -25,5 +25,6 @@
 			"purpose":"any maskable"
 		}
 	],
-	"crossorigin":"use-credentials"
+	"crossorigin":"use-credentials",
+	"permissions": ["cross-origin-isolated"]
 }
