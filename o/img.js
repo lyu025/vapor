@@ -34,11 +34,10 @@ H.page_img=function(){
 			const $m='#img_icons .grid>#more'.N();
 			$m&&$m.remove();
 			Object.entries({q,sortType:'updated_at',page:p,pageSize:100,sType:'',fills:'',fromCollection:-1,t:Date.now(),ctoken:'null'}).forEach(([k,v])=>x.append(k,v));
-			this.fetch(u,'POST',x.toString(),{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},'json').then(_=>{
-				let {ok,o,e}=_;
-				if(!ok)return this.toast(e,'error');
+			fetch(u,{method:'POST',body:x.toString(),headers:{'x-up':this.use_proxy,'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}}).then(_=>_.json()).then(_=>{
+				if(!_.data)return this.toast('请求返回数据为空','error');
 				const r=/viewBox\s*=\s*["']\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*["']/i;
-				o=(o?.data?.icons||[]).map(v=>{
+				const o=(_.data?.icons||[]).map(v=>{
 					let s=v.show_svg,m=s.match(r),x=m.length>4?(m[3]+'x'+m[4]):'';
 					s=s.replace(/ +(xlmns|style|class|version)=['"][^'"]+['"]/ig,'').replace(/(\<path [^\>]+)\>[\t\r\n ]*<\/path\>[\t\r\n ]*/ig,'$1/>').replace(/ +\/\>/g,'/>').replace(/ +fill=""/g,'');
 					return `<div onclick='H.X.img.copy(this)'><i>${x}</i>${s}<div>${v.name}</div></div>`;

@@ -2,7 +2,8 @@
 importScripts('./x.js');
 
 const CN='vapor';
-const CC=['/','/index.html','/512.png','/192.png',...'json,woff2,css,svg'.split(',').map(_=>'/o.'+_)];
+const PP='https://corsproxy.io/?url=';
+const CC=['/','/index.html','/512.png','/192.png',...'json,woff2,css'.split(',').map(_=>'/o.'+_)];
 
 const csize=async(c)=>{
 	const s=await c.keys();
@@ -28,29 +29,84 @@ const clean=async()=>{
 
 'fetch'.B(e=>{
 	let r=e.request,u=new URL(r.url);
-	if(r.method!='GET')return;
-
+	
+	if(r.method!='GET'&&u.origin==self.location.origin)return;
+	if(r.cache=='no')r.cache='no-store';
 	const ia=/\.(js|css|json|png|jpg|svg)$/.test(u.pathname);
-	if(ia&&u.hash){
-		u.hash='';
-		r=new Request(u);
+	
+	if(u.origin==self.location.origin){
+		if(!ia)return;
+		if(u.hash&&!u.pathname=='/o.svg')r=new Request(u.pathname);
 	}
-	let cc=/\.(js|css|png|jpg|svg)$/.test(u.pathname);
-	if(!((ia&&u.origin==self.location.origin)||(cc&&u.origin!=self.location.origin)))return;
-	e.respondWith((async()=>{
-		const c=await caches.open(CN),x=await c.match(r);
-		if(x)return x;
+	
+	const hp=r.url.startsWith(PP);
+	if(r.headers.get('x-up')==='true'&&!hp)r=new Request(PP+encodeURIComponent(r.url),{
+		duplex:'half',method:r.method,headers:r.headers,body:r.body
+	});
+	
+	const todo=async(nc=false)=>{
+		const c=await caches.open(CN);
+		if(!nc&&!r.cache=='no-store'){
+			const x=await c.match(r);
+			if(x)return x;
+		}
 		try{
 			const o=await fetch(r);
-			if(o.ok)c.put(r,o.clone());
+			if(nc&&o.ok&&u.pathname.endsWith('.m3u8')){
+				const oo=await (o.clone()).text();
+				if(!r.use_proxy||!oo.includes('#EXTM3U'))return;
+				const base=new URL(hp?decodeURIComponent(u.query.url):r.url);
+				const basePath=base.pathname.replace(/\/[^/]*$/,'/');
+				const baseOrigin=base.origin;
+				const baseProtocol=base.protocol;
+				const nn=oo.replace(/(^|\n)([^#\n\r]+\.(ts|m3u8|mp4|aac|vtt|webvtt|jpg|png|m4s|mpd|key)(?:\?[^\n\r]*)?)(?=\r?\n|$)/gmi,(match,lineStart,filePath)=>{
+						const trimmed=filePath.trim();
+						if(!trimmed)return match;
+						try{
+								let absoluteUrl;
+								if(/^https?:\/\//i.test(trimmed)){
+										absoluteUrl=trimmed;
+								}else if(/^\/\//.test(trimmed)){
+										absoluteUrl=`${baseProtocol}//${trimmed.substring(2)}`;
+								}else if(/^\//.test(trimmed)){
+										absoluteUrl=`${baseOrigin}${trimmed}`;
+								}else if(/^\.\.\//.test(trimmed)){
+										const pathParts=basePath.split('/').filter(Boolean);
+										const relativeParts=trimmed.split('/');
+										for(const part of relativeParts){
+												if(part==='..'){
+														pathParts.pop();
+												}else if(part!=='.'){
+														pathParts.push(part);
+												}
+										}
+										absoluteUrl=`${baseOrigin}/${pathParts.join('/')}`;
+								}else if(/^\.\//.test(trimmed)){
+										absoluteUrl=`${baseOrigin}${basePath}${trimmed.substring(2)}`;
+								}else{
+										absoluteUrl=`${baseOrigin}${basePath}${trimmed}`;
+								}
+								const finalUrl=PP+encodeURIComponent(absoluteUrl);
+								return `${lineStart}${finalUrl}`;
+						}catch(e){
+								return match;
+						}
+				});
+				return nn;
+			}
+			if(o.ok&&!r.no_cache)c.put(r,o.clone());
 			return o;
 		}catch(_){
-			return new Response('网络错误',{status:503});
+			console.log(789,_);
+			return new Response(JSON.stringify({error:'网络错误'}),{status:503});
 		}
-		const o=await fetch(r);
-		if(o.ok)c.put(r,o.clone());
-		return o;
-	})());
+	};
+	
+	if(u.origin==self.location.origin){
+		e.respondWith(todo());
+		return;
+	}
+	e.respondWith(todo(true));
 });
 
 'push'.B(e=>{

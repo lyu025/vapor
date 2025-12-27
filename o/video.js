@@ -8,7 +8,7 @@ H.page_video=async function(){
 	this.db_table(this.page,`
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		X VARCHAR(10) NOT NULL, -- 平台
-		T INTEGER CHECK(T IN (1,2,3,4)), -- 主类: 1.电影 2.电视剧 3.动漫 4.综艺
+		T INTEGER CHECK(T IN (1,2,3,4)), -- 主类: 1.电影 2.电视剧 3.综艺 4.动漫 
 		C VARCHAR(15) NOT NULL, -- 子类
 		Z VARCHAR(24) NOT NULL, -- 地区
 		Y VARCHAR(4) NOT NULL, -- 年份
@@ -70,10 +70,7 @@ H.page_video=async function(){
 		},
 		website_init:async e=>{
 			const X=e.getAttribute('X'),N=e.getAttribute('N');
-			const $='iframe'.E('',{style:'height:60vw;position:absolute;top:20vh;width:90vw;z-index:4555666',id:'if_website',src:'',onload:'H.X.video.website.load(this)',crossOrigin:'anonymous'});
-			'#if_website'.N()?.remove();
-			document.body.append($);
-			this.X.video.website={X,$,load:_=>null};
+			this.X.video.website={X};
 			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
 			$t.textContent=N;
 			'#video_website>[T="A"]'.N().classList.add('hide');
@@ -101,14 +98,9 @@ H.page_video=async function(){
 			let C={};
 			switch(X){
 				case 'ole':
-					this.X.video.website.load=async $i=>{
-						$i.contentDocument.body.innerHTNL="<video src='https://vip.lzcdn2.com/20220427/4666_328feee8/index.m3u8'/>";
-						alert("gvbbbv");
-					};
-					H.X.video.website.$.src='https://www.olehdtv.com/template/conch/asset/css/white.css';
-					return
-					this.fetch('https://api.olelive.com/v1/pub/vod/list/type',null,null,null,'json').then(async _=>{
-						for(let x of _.o.data.filter(_=>_.typeId<5)){
+					fetch('https://api.olelive.com/v1/pub/vod/list/type',{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(async _=>{
+						if(!_.data)this.toast('请求失败','error');
+						for(let x of _.data.filter(_=>_.typeId<5)){
 							C=x.children
 								.map(_=>(_.typeId+'').startsWith(x.typeId+'')?[_.typeId+'',_.typeName]:null)
 								.filter(_=>_).reduce((x,[k,v])=>{x[k]=v;return x},{});
@@ -121,22 +113,11 @@ H.page_video=async function(){
 					});
 					break;
 				case 'ayf':
-					this.X.video.website.load=async $i=>{
-						const fetch=$i.contentWindow.fetch;
-						
-						
-						const o=await fetch('https://api.yfsp.tv/api/list/getfiltertagsdata?SecondaryCode=movie').then(_=>_.json());
-						console.log(775,o);
-						alert("gvbbbv");
-					};
-					H.X.video.website.$.src='https://m.yfsp.tv/retrievePassword?RegType=1';
-					return
-					
 					C={movie:'电影',drama:'连续剧',variety:'综艺',anime:'动漫'};
 					for(let k in C){
 						O[k]={N:C[k],Z:[],Y:[],C:{},S:{}};
-						let x=await this.fetch(`https://api.yfsp.tv/api/list/getfiltertagsdata?SecondaryCode=${k}`,null,null,null,'json').then(_=>_.o?.data?.list||[]);
-						if(x.length<1)return;
+						let x=await fetch(`https://api.yfsp.tv/api/list/getfiltertagsdata?SecondaryCode=${k}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>_?.data?.list||[]);
+						if(x.length<1)return this.toast('请求失败','error');
 						x.forEach((_,i)=>{
 							if(i>4)return;
 							for(let v of _.list){
@@ -152,11 +133,10 @@ H.page_video=async function(){
 					C={dianying:'电影',dianshiju:'连续剧',zongyi:'综艺',dongman:'动漫'};
 					for(let k in C){
 						O[k]={N:C[k],Z:[['','全部']],Y:[['','全部']],C:{},S:{}};
-						let x=H.kk=await this.fetch(`https://dandanzan.org/${k}/`,null,null,null,'text');
-						if(!x.ok)return;
-						x.o.matchAll(new RegExp(`href="\\/${k}\\/\\?genre=([a-z\\-]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>(O[k].C[_[1]]=_[2]));
-						x.o.matchAll(new RegExp(`href="\\/${k}\\/\\?country=([a-z]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Z.push([_[1],_[2]]));
-						x.o.matchAll(new RegExp(`href="\\/${k}\\/\\?year=([0-9a-z_]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Y.push([_[1],_[2]]));
+						let x=await fetch(`https://dandanzan.org/${k}/`,{headers:{'x-up':this.use_proxy}}).then(_=>_.text());
+						x.matchAll(new RegExp(`href="\\/${k}\\/\\?genre=([a-z\\-]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>(O[k].C[_[1]]=_[2]));
+						x.matchAll(new RegExp(`href="\\/${k}\\/\\?country=([a-z]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Z.push([_[1],_[2]]));
+						x.matchAll(new RegExp(`href="\\/${k}\\/\\?year=([0-9a-z_]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Y.push([_[1],_[2]]));
 						O[k].S={'':'时间',click:'人气',rating:'评分'};
 					}
 					await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
@@ -191,14 +171,13 @@ H.page_video=async function(){
 			switch(this.X.video.website.X){
 				case 'ole':
 					url=`https://api.olelive.com/v1/pub/vod/list/true/3/0/${encodeURIComponent(X.Z)}/${X.T}/${X.C}/${X.Y}/${X.S}/${p}/20`;
-					this.fetch(url+`?_vv=${(new Date).vv()}`,null,null,null,'json').then(({ok,o,e:err})=>{
-						if(!ok)return this.toast(err,'error');
+					fetch(url+`?_vv=${(new Date).vv()}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
 						const {data:{list,total}}=o;
 						if(!list||list.length<1)return;
 						const x=list.map(({id,name:n,pic,score,remarks})=>{
 							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
 							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
-							return NF.test(N)?null:'div'.E(`<img src='${II}' s='https://static.olelive.com/${pic}'/><score>${score}</score><tip>${remarks?remarks.trim():''}</tip><div>${N}</div>`,{X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
+							return NF.test(N)?null:'div'.E(`<img src='${II}' s='https://static.olelive.com/${pic}'/><score>${score}</score><tip>${remarks?remarks.trim():''}</tip><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
 						}).filter(_=>_);
 						if(x.length<1)return;
 						$w.append(...x);
@@ -209,14 +188,13 @@ H.page_video=async function(){
 					break;
 				case 'ayf':
 					url=`https://api.yfsp.tv/api/list/getconditionfilterdata?titleid=${X.T}&ids=${X.S},${X.C},${X.Z},,${X.Y}&page=${p}&size=24`;
-					this.fetch(url,null,null,null,'json').then(({ok,o,e:err})=>{
-						if(!ok)return this.toast(err,'error');
+					fetch(url,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
 						const {list}=o?.data||{};
 						if(!list||list.length<1)return;
 						const x=list.map(({mediaKey:id,title:n,coverImgUrl:pic,score})=>{
 							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
 							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
-							return NF.test(N)?null:'div'.E(`<img src='${II}' s='${pic}'/><score>${score}</score><div>${N}</div>`,{X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
+							return NF.test(N)?null:'div'.E(`<img src='${II}' s='${pic}'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
 						}).filter(_=>_);
 						if(x.length<1)return;
 						$w.append(...x);
@@ -227,16 +205,26 @@ H.page_video=async function(){
 					break;
 				case 'ddz':
 					url=`https://dandanzan.org/${X.T}?page=${p}${X.S?`&ob=${X.S}`:''}${X.C?`&genre=${X.C}`:''}${X.Z?`&country=${X.Z}`:''}${X.Y?`&year=${X.Y}`:''}`;
-					this.fetch(url,null,null,null,'text').then(({ok,o,e:err})=>{
-						if(!ok)return this.toast(err,'error');
-						console.log(o);
+					fetch(url,{headers:{'x-up':this.use_proxy}}).then(_=>_.text()).then(_=>{
+						const x=[],reg=/\/(\d+)\.html"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<span class="rate">([\d.]+)<\/span>/g;
+						while((m=reg.exec(_))!==null){
+							const [,id,n,score]=m;
+							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
+							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
+							if(!NF.test(N))x.push('div'.E(`<img src='${II}' s='https://dandanzan.org/thumbnail/${id}.jpg'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'}));
+						}
+						if(x.length<1)return;
+						$w.append(...x);
+						$w.setAttribute('p',p+1);
+					}).then(()=>{
+						`#video_website`.N().classList.remove('wait');
 					});
-			
+					break;
 			}
 			
 		},
 		website_info:async e=>{
-			const X=this.X.video.website.X=e.getAttribute('X'),N=e.getAttribute('N'),[I,NN]=N.split('$$');
+			const X=this.X.video.website.X=e.getAttribute('X'),T=e.getAttribute('T'),C=e.getAttribute('C'),N=e.getAttribute('N'),[I,NN]=N.split('$$');
 			this.X.video.website.N=N;
 			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
 			$t.textContent=NN;
@@ -255,11 +243,12 @@ H.page_video=async function(){
 			$.classList.remove('hide');
 			'#video_website>[T="A"]'.N().classList.add('hide');
 			'#video_website>h2>#website_back'.N().classList.remove('hide');
-			const tm={电影:1,电视剧:2,连续剧:2,动漫:3,综艺:4};
-			const todo=async(C,t,area,year,director,actor,urls,brief,pic,fn,np=false)=>{
+			
+			const tm={movie:1,dianying:1,drama:2,dianshiju:2,zongyi:3,variety:3,anime:4,dongman:4};
+			const todo=async(C,area,year,director,actor,urls,brief,pic,fn,np=false)=>{
 				const r=this.db_get('select N,P,O from video where N=? AND X=?',[N,X],true);
 				if(!r)await this.db_set('replace into video(X,N,T,C,Z,Y,D,A,I,B,S)values(?,?,?,?,?,?,?,?,?,?,?)',[
-					X,N,tm[t],C,area,year,director,actor,pic,brief,JSON.stringify(urls)
+					X,N,tm[T]||T,C,area,year,director,actor,pic,brief,JSON.stringify(urls)
 				]);
 				'#video_website>h2>#website_collect>use'.N().setAttribute('xlink:href',r&&r.O?'o.svg#collect_ok':'o.svg#collect_no');
 				'#video_website>h2>#website_collect'.N().classList.remove('hide');
@@ -291,28 +280,42 @@ H.page_video=async function(){
 			};
 			switch(X){
 				case 'ole':
-					this.fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,null,null,null,'json').then(({ok,o,err})=>{
-						if(!ok)return this.toast(err,'error');
-						let {typeIdName:C,typeId1Name:t,area,year,director,actor,urls,content:brief,pic}=o.data;
+					fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
+						let {typeIdName:C,area,year,director,actor,urls,content:brief,pic}=o.data;
 						actor=actor.split(' / ').map(_=>_.trim()).filter(_=>_);
 						director=director.split(' / ').map(_=>_.trim()).filter(_=>_);
 						pic=`https://static.olelive.com/${pic}`;
 						urls=urls.map(_=>[_.title,_.url]);
-						todo(C,t,area,year,director,actor,urls,brief,pic,null,true);
+						todo(C,area,year,director,actor,urls,brief,pic,null,true);
 					});
 					break;
 				case 'ayf':
-					this.fetch(`https://api.yfsp.tv/api/video/videodetails?mediaKey=${I}`,null,null,null,'json').then(({ok,o,err})=>{
-						if(!ok)return this.toast(err,'error');
+					fetch(`https://api.yfsp.tv/api/video/videodetails?mediaKey=${I}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
 						console.log(o.data.detailInfo);
-						let {contentType:C,typeName:t,regional:area,postTime:year,director,starring:actor,episodes:urls,introduce:brief,coverImgUrl:pic}=o.data.detailInfo;
+						let {contentType:C,regional:area,postTime:year,director,starring:actor,episodes:urls,introduce:brief,coverImgUrl:pic}=o.data.detailInfo;
 						year=year.split('-')[0];
 						actor=actor.split(',').map(_=>_.trim()).filter(_=>_);
 						director=director.split(',').map(_=>_.trim()).filter(_=>_);
 						urls=urls.map(v=>[v.episodeTitle,v.episodeId]);
-						todo(C,t,area,year,director,actor,urls,brief,pic,`H.X.video.website_pu_ayf("${I}","?")`);
+						todo(C,area,year,director,actor,urls,brief,pic,`H.X.video.website_pu_ayf("${I}","?")`);
 					});
 					break;
+				case 'ddz':
+					fetch(`https://dandanzan.org/${C}/${I}.html`,{headers:{'x-up':this.use_proxy}}).then(_=>_.text()).then(async _=>{
+						const $o=_.H();
+						const year=$o.querySelector('header.product-header>span')?.innerText.replace(/\D/g,'')||'';
+						const [director,actor,C,area,,brief]=Array.from($o.querySelectorAll('header.product-header .product-excerpt>span')).map(_=>{
+							const $a=_.querySelectorAll('a');
+							if($a.length>0)return Array.from($a).map(_=>_.innerText.trim()).filter(_=>_);
+							return _.innerText.trim();
+						});
+						const urls=await fetch(`https://dandanzan.org/fetch_plays/${I}/${C}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>{
+							return _.video_plays.map(x=>[x.src_site,x.play_data]);
+						}).catch(_=>[]);
+						todo(C.join(' / '),area.pop(),year,director,actor,urls,brief,`https://dandanzan.org/image/${I}.jpg`);
+					});
+					break;
+			
 			}
 		},
 		website_option:async(e)=>{
@@ -328,20 +331,19 @@ H.page_video=async function(){
 		},
 		website_pu_ayf:async(vk,pi)=>{
 			const u=`https://api.yfsp.tv/api/video/getplaydata?mediaKey=${vk}&videoId=${pi}&videoType=1`;
-			return await this.fetch(u,null,null,null,'json').then(_=>_.o?.data?.list?.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution))?.pop()).then(_=>_?_.mediaUrl:null);
+			return await fetch(u,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>_?.data?.list?.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution))?.pop()).then(_=>_?_.mediaUrl:null);
 		},
 		website_play:async e=>{
 			const u=e.getAttribute('u'),fn=e.getAttribute('fn'),np=e.getAttribute('np')==1;
 			e.parentNode.childNodes.forEach(_=>_.classList[_==e?'add':'remove']('active'));
 			this.X.video.website.u=u;
 			const todo=async url=>{
-				if(np&&url&&url.includes('.m3u8'))url=`${H.proxy}o?u=${encodeURIComponent(url)}`;
+				if(np&&url&&url.includes('.m3u8'))url=`https://corsproxy.io/?url=${encodeURIComponent(url)}`;
 				`#video_website video`.N().setAttribute('src',url||'');
 				await H.X.video.website_option(0);
 			};
 			if(!fn)return await todo(u);
 			const url=await eval(fn);
-			console.log(url);
 			await todo(url);
 		},
 		website_collect:async e=>{
@@ -385,12 +387,12 @@ H.page_video=async function(){
 			
 			#video_website>[T='V']>p{line-height:1.2;font-size:.9rem;padding:0 .8rem;margin:0;border-bottom:1px solid var(--h-bd)}
 			#video_website>[T='V']>p>span{display:block;float:left;padding:0 4px;margin-right:4px;line-height:1.8}
-			#video_website>[T='V']>p[vs]{padding-bottom:.8rem}
+			#video_website>[T='V']>p[vs]{padding-bottom:.8rem;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center;justify-content:center;text-align:center;line-height:1.05}
 			#video_website>[T='V']>video{display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}
 			#video_website>[T='V']>p[sc]{margin-top:-1px;border-radius:0 0 4px 4px}
 			#video_website>[T='V']>p>[se]{display:block;line-height:30px;text-align:left;width:auto}
 			#video_website>[T='V']>p>[se]:nth-child(2){float:right;text-align:right}
-			#video_website>[T='V']>p[vs]>span[u],#video_website>[T='V']>p[sc],#video_website>[T='V']>p[bf]{background:var(--fg);color:var(--bg);opacity:.32}
+			#video_website>[T='V']>p[vs]>span[u],#video_website>[T='V']>p[sc],#video_website>[T='V']>p[bf]{background:var(--fg);color:var(--bg);opacity:.32;border-radius:3px}
 			#video_website>[T='V']>p[bf]{font-size:.9rem;line-height:1.5;border-radius:2px;padding:.8rem;margin-top:1rem}
 			#video_website>[T='V']>p[vs]>span.active{opacity:.6}
 			

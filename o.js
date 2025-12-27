@@ -3,7 +3,6 @@ class O{
 		this.app_name='vapor';
 		this.page=localStorage.getItem('page')||'home';
 		this.theme=localStorage.getItem('theme')||'dark';
-		this.proxy='https://proxy-hy47.onrender.com/';
 		this.use_proxy=localStorage.getItem('use_proxy')==='1';
 		this.P={
 			home:'首页',video:'影视天地',music:'音乐天地',
@@ -222,20 +221,6 @@ class O{
 			this.toast(m+'复制到剪切板 异常: '+_.message,'error');
 		}finally{$.remove()}
 	}
-	async fetch(url,m,body,headers,otype){
-		const x={method:m=='POST'?'POST':'GET'};
-		if(body)x.body=body;
-		if(headers)x.headers=headers;
-		if(this.use_proxy)url=`${this.proxy}o?u=${encodeURIComponent(url)}`;
-		console.log(url);
-		let e,o=await fetch(url,x).then(_=>_.text()).catch(_=>(e=_.message));
-		if(e)return {ok:false,e:'请求异常: '+e};
-		if(otype=='json'){
-			if(!/^\s*(\{.*\}|\[.*\])\s*$/.test(o))return {ok:false,e:'请求返回数据Json解析异常!'};
-			o=JSON.parse(o);
-		}
-		return {ok:true,o,e};
-	}
 	observer(){
 		const ov=new IntersectionObserver((s,o)=>{
 			let $=null,mf,p;
@@ -366,11 +351,11 @@ class O{
 		},800);
 	}
 	async monitor(){
-		'#state_net'.N().innerHTML=(navigator.onLine?'green':'red').V()+(navigator.onLine?'已连接':'已断开');
-		'#state_push'.N().innerHTML=('PushManager' in window?'green':'red').V()+('PushManager' in window?'已支持':'不支持');
-		'#state_cache'.N().innerHTML=('caches' in window?'green':'red').V()+('caches' in window?'已支持':'不支持');
-		'#state_vibrate'.N().innerHTML=('vibrate' in navigator?'green':'red').V()+('vibrate' in navigator?'已支持':'不支持');
-		'#state_location'.N().innerHTML=('geolocation' in navigator?'green':'red').V()+('geolocation' in navigator?'已支持':'不支持');
+		'#state_net'.N().innerHTML='dot'.V('',{f:navigator.onLine?'#66B610':'red'})+(navigator.onLine?'已连接':'已断开');
+		'#state_push'.N().innerHTML='dot'.V('',{f:'PushManager' in window?'#66B610':'red'})+('PushManager' in window?'已支持':'不支持');
+		'#state_cache'.N().innerHTML='dot'.V('',{f:'caches' in window?'#66B610':'red'})+('caches' in window?'已支持':'不支持');
+		'#state_vibrate'.N().innerHTML='dot'.V('',{f:'vibrate' in navigator?'#66B610':'red'})+('vibrate' in navigator?'已支持':'不支持');
+		'#state_location'.N().innerHTML='dot'.V('',{f:'geolocation' in navigator?'#66B610':'red'})+('geolocation' in navigator?'已支持':'不支持');
 		if(performance.memory){
 			const m=performance.memory;
 			const um=Math.round(m.usedJSHeapSize/1024/1024);

@@ -6,6 +6,8 @@ String.prototype.E=function(html,attrs){
 	if(html)o.innerHTML=html;
 	return o;
 };
+// HTML代码转DOM
+String.prototype.H=function(){return (new DOMParser()).parseFromString(this,'text/html')};
 // 图标代码
 String.prototype.V=function(_,o){return `<svg${_?` onclick='H.${_}(this)'`:''}${o&&o.s?` width='${o.s}' height='${o.s}'`:''}${o&&o.c?` class='${o.c}'`:''}${o&&o.id?` id='${o.id}'`:''} ${o&&o.f?` style='fill:${o.f}'`:''} ><use xlink:href='o.svg#${this.trim()}'/></svg>`}
 // 获取节点
