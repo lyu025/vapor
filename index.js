@@ -121,10 +121,6 @@ class App extends Page{
 		this.page=this.cache('page')||'home'
 		this.theme=this.cache('theme')||'dark'
 		this.use_proxy=this.cache('use_proxy')==='1'
-		'beforeinstallprompt'.bind(e=>{
-			e.preventDefault()
-			this.install_prompt=e
-		})
 	}
 	constructor(){
 		if(App.#o)return
@@ -143,7 +139,7 @@ class App extends Page{
 			this.N('header',
 				this.N('svg',{path:'menu',id:'n_menu',click:'Vapor.toggle("menu",this)'}),
 				this.N('div',{id:'title'},'...'),
-				this.N('svg',{path:'download',id:'install',click:'Vapor.install()',h:!this.install_prompt}),
+				this.N('svg',{path:'download',id:'install',click:'Vapor.install()',h:true}),
 				this.N('svg',{path:'clean',click:'Vapor.clean()'}),
 				this.N('svg',{path:`proxy_${this.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
 				this.N('svg',{path:'theme',click:'Vapor.toggle("theme",this)'}),
@@ -161,6 +157,11 @@ class App extends Page{
 		];
 	}
 	events(){
+		'beforeinstallprompt'.bind(e=>{
+			e.preventDefault()
+			this.install_prompt=e
+			this.E('install').d_attr('hide')
+		})
 		'error'.bind(e=>{
 			e.preventDefault()
 			let t=e.message.split('Error: ')
