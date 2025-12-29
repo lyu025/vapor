@@ -36,7 +36,9 @@ class Page{
 				toast.error(`Tag <svg> 创建失败`,`引用的图标名称不合法`)
 				return null
 			}
-			for(let k in a)if(((k=='a'||k=='h')&&a[k])&&k!='id'&&k!='path')o[m[k]||k]=a[k]
+			if(('h' in a)&&!a.h)delete a.h
+			if(('a' in a)&&!a.a)delete a.a
+			for(let k in a)if(k!='id'&&k!='path')o[m[k]||k]=a[k]
 			if('f' in a)o.style=(o.style?`${o.style};`:'')+'fill;'+a.f
 			const z='http://www.w3.org/2000/svg'
 			const u=document.createElementNS(z,'use')
