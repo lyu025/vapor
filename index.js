@@ -5,6 +5,7 @@ class Page{
 	constructor(id){
 		if(id in Page.Ntree)return toast.error(`页面 <${id}> 已经存在，初始失败`)
 		this.id=id
+		this.pp='https://corsproxy.io/?url='
 
 		Page.Ntree[this.id]={}
 		Page.Pdata[this.id]={}
@@ -139,7 +140,7 @@ class App extends Page{
 			this.N('header',
 				this.N('svg',{path:'menu',id:'n_menu',click:'Vapor.toggle("menu",this)'}),
 				this.N('div',{id:'title'},'...'),
-				this.N('svg',{path:'download',id:'install',click:'Vapor.install()',h:true}),
+				this.N('svg',{path:'download',id:'install',click:'Vapor.install(this)',h:true}),
 				this.N('svg',{path:'clean',click:'Vapor.clean()'}),
 				this.N('svg',{path:`proxy_${this.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
 				this.N('svg',{path:'theme',click:'Vapor.toggle("theme",this)'}),
@@ -179,6 +180,43 @@ class App extends Page{
 			this.E('wait').style.opacity=0
 			setTimeout(()=>this.E('wait').remove(),300)
 		},1600)
+
+		const ov=new IntersectionObserver((s,o)=>{
+			let $=null,mf,p;
+			for(let e of s)if(e.target.parentNode&&e.target.parentNode.classList.contains('grid')&&(e.intersectionRatio>=0.7)){
+				o.unobserve($=e.target);
+				p=$.parentNode.g_attr('p');
+				mf=$.parentNode.g_attr('more');
+				break;
+			}
+			if(mf&&/^\d+$/.test(p))eval(mf+'(null,'+p+')');
+		},{threshold:0.7});
+
+		const oi=new IntersectionObserver((s,o)=>{
+			for(let e of s)if((e.target.nodeName=='IMG')&&(e.intersectionRatio>=0.7)){
+				const sa=e.target.g_attr('src'),sb=e.target.g_attr('ss');
+				if(sb&&sa!=sb){
+					e.target.s_attr({src:sb});
+					e.target.s_attr({_:''});
+					o.unobserve(e.target);
+				}
+			}
+		},{threshold:0.7});
+
+		const oo=new MutationObserver(s=>{
+			for(let e of s){
+				const $s=Array.from(e.addedNodes);
+				const x=e.target.classList.contains('grid');
+				if(!(x&&$s.length>0))continue;
+				for(let $ of $s){
+					const i=$.node('img[ss]:not(img[_])')
+					i&&oi.observe(i)
+				}
+				const $=$s[$s.length-1];
+				ov.observe($);
+			}
+		});
+		oo.observe(document.body,{subtree:true,childList:true,attributeFilter:['_']});
 	}
 	toggle(t,e){
 		if(t=='menu')this.tclass(this.E('menu'),'open')
@@ -381,39 +419,6 @@ class O{
 			this.toast(`分页查询失败: ${e.message}`,'error');
 			throw e;
 		}
-	}
-	observer(){
-		const ov=new IntersectionObserver((s,o)=>{
-			let $=null,mf,p;
-			for(let e of s)if(e.target.parentNode&&e.target.parentNode.classList.contains('grid')&&(e.intersectionRatio>=0.7)){
-				o.unobserve($=e.target);
-				p=$.parentNode.getAttribute('p');
-				mf=$.parentNode.getAttribute('more');
-				break;
-			}
-			if(mf&&/^\d+$/.test(p))eval(mf+'(null,'+p+')');
-		},{threshold:0.7});
-		const oi=new IntersectionObserver((s,o)=>{
-			for(let e of s)if((e.target.nodeName=='IMG')&&(e.intersectionRatio>=0.7)){
-				const sa=e.target.getAttribute('src'),sb=e.target.getAttribute('s');
-				if(sb&&sa!=sb){
-					e.target.setAttribute('src',sb);
-					e.target.setAttribute('_','');
-					o.unobserve(e.target);
-				}
-			}
-		},{threshold:0.7});
-		const oo=new MutationObserver(s=>{
-			for(let e of s){
-				const $s=Array.from(e.addedNodes);
-				const x=e.target.classList.contains('grid');
-				if(!(x&&$s.length>0))continue;
-				const $=$s[$s.length-1];
-				$s.map(_=>_.querySelector('img[s]:not(img[_])')).forEach(_=>_?oi.observe(_):null);
-				ov.observe($);
-			}
-		});
-		oo.observe(document.body,{subtree:true,childList:true,attributeFilter:['_']});
 	}
 	script(_,onload){
 		if(`script[src='${_}']`.N())return eval(onload);

@@ -106,18 +106,6 @@ async function files_watcher(){
 				const cache=await caches.open(CNAME)
 				if(should_cache_req(r,o))await cache_req(e.clientId,cache,r,o)
 				return _
-			}).catch(async({message:err})=>{
-				const c=await self.clients.get(e.clientId)
-				if(c)c.postMessage({
-					type:'SW_NET_ERROR',
-					message:err,data:r.url,
-					timestamp:Date.now()
-				})
-				return new Response('',{
-					status:503,
-					statusText:'Service Unavailable',
-					headers:{'Content-Type':'text/plain'}
-				})
 			})
 		})
 	)
