@@ -166,7 +166,7 @@ class App extends Page{
 		'unhandledrejection'.bind(e=>{
 			e.preventDefault()
 			const {message,stack}=e.reason
-			toast.error(...stack.replaceAll(location.origin+'/','').replace(' ','&nbsp;').split('\n'));
+			toast.error(...(stack?.replaceAll(location.origin+'/','')?.replaceAll(' ','&nbsp;')?.split('\n')||[]));
 		})
 		'beforeinstallprompt'.bind(e=>{
 			e.preventDefault()
