@@ -10,7 +10,7 @@ class News extends Page{
 	}
 	constructor(){
 		if(News.#o)return
-		super('home')
+		super('news')
 	}
 	nodes(){
 		return[

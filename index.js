@@ -116,6 +116,11 @@ class App extends Page{
 	};
 	define(){
 		this.install_prompt=null
+		window.addEventListener('beforeinstallprompt',e=>{
+			e.preventDefault()
+			alert(455)
+			this.install_prompt=e
+		});
 		this.page=this.cache('page')||'home'
 		this.theme=this.cache('theme')||'dark'
 		this.use_proxy=this.cache('use_proxy')==='1'
@@ -137,7 +142,7 @@ class App extends Page{
 			this.N('header',
 				this.N('svg',{path:'menu',id:'n_menu',click:'Vapor.toggle("menu",this)'}),
 				this.N('div',{id:'title'},'...'),
-				this.N('svg',{path:'download',id:'install',click:'Vapor.install()',h:true}),
+				this.N('svg',{path:'download',id:'install',click:'Vapor.install()',h:!this.install_prompt}),
 				this.N('svg',{path:'clean',click:'Vapor.clean()'}),
 				this.N('svg',{path:`proxy_${this.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
 				this.N('svg',{path:'theme',click:'Vapor.toggle("theme",this)'}),
@@ -155,12 +160,7 @@ class App extends Page{
 		];
 	}
 	events(){
-		'beforeinstallprompt'.bind(e=>{
-			e.preventDefault()
-			alert(455)
-			this.install_prompt=e
-			this.E('install').d_attr('hide')
-		})
+		/*
 		'error'.bind(e=>{
 			e.preventDefault()
 			let t=e.message.split('Error: ')
@@ -174,6 +174,7 @@ class App extends Page{
 			const {message,stack}=e.reason
 			toast.error(...(stack||'').replaceAll(location.origin+'/','').trim().split('\n'));
 		})
+		*/
 		setTimeout(()=>{
 			this.E('wait').style.opacity=0
 			setTimeout(()=>this.E('wait').remove(),300)
@@ -217,7 +218,7 @@ class App extends Page{
 		this.E('title').innerHTML=App.menus[p]
 		this.E('menu').classList.remove('open')
 		this.E('main').nodes('section').forEach(_=>_[_.id==('page_'+this.page)?'d_attr':'s_attr']('hide'))
-		if(!(p in App.pages))this.script(`pages/${p}.js`,`App.pages.${p}=${fucase(p)}.open()`)
+		if(!(p in App.pages))this.script(`pages/${p}.js`,`const $=${fucase(p)}?.open();$&&(App.pages.${p}=$)`)
 		setTimeout(()=>this.loader.s_attr('hide'),1000)
 	}
 }
@@ -225,7 +226,7 @@ class App extends Page{
 'DOMContentLoaded'.bind(()=>(window.Vapor=App.open()),document)
 'load'.bind(async()=>{
 	try{
-		const r=await navigator.serviceWorker.register('sw.js',{updateViaCache:'none'})
+		const r=await navigator.serviceWorker.register('sw.js')
 		'message'.bind(e=>{
 			const {type,message,data}=e.data
 			switch(type){
@@ -252,7 +253,7 @@ class App extends Page{
 			}
 		},navigator.serviceWorker);
 		setInterval(()=>r.update(),2000);
-	}catch(_){toast.error('SW 注册失败',_)}
+	}catch(_){console.error('SW 注册失败',_)}
 });
 
 
