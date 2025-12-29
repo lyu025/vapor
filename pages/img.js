@@ -6,8 +6,8 @@ class Img extends Page{
 	}
 	define(){
 		this.icons_can_copy=this.cache('icons_can_copy')==='1'
-		this.vector_img=null
 		this.vector_is_run=false
+		this.vector_img=null
 	}
 	constructor(){
 		if(Img.#o)return
@@ -74,7 +74,7 @@ class Img extends Page{
 						this.N('div','值越小精度越高，值越大简化程度越高'),
 					),
 					this.N('div',{c:'todo'},
-						this.N('span',{click:'App.pages.img.vector_upload(this)'},this.N('svg',{path:'upload'}),'上传图片'),
+						this.N('span',{click:'App.pages.img.upload("vector",this)'},this.N('svg',{path:'upload'}),'上传图片'),
 						this.N('span',{click:'App.pages.img.vector_copy(this)'},this.N('svg',{path:'copy_ok'}),'复制Svg代码'),
 						this.N('div',{click:'App.pages.img.vector_build(this)'},'生成Svg图片'),
 					),
@@ -87,8 +87,22 @@ class Img extends Page{
 						this.N('div',{i:'y',a:true}),this.N('div',{i:'s'}),
 						this.N('textarea',{i:'c',readonly:true}),
 					),
-					
 				),
+			),
+			this.N('card',{id:'code',cc:'code'},
+				this.N('h2',this.N('svg',{path:'code'}),'编解码'),
+				this.N('div',{c:'row'},
+					this.N('textarea',{id:'cd_text',placeholder:'请输入要处理的文本...'}),
+					this.N('div',{c:'upload',click:'App.pages.img.upload("code",this)'},'┼'),
+					this.N('textarea',{id:'cd_output',readonly:true,placeholder:'这里显示处理完成的结果...'}),
+					this.N('div',{c:'grid',s:'--gc:3'},
+						this.N('div',{click:'App.pages.img.md5(this)'},'MD5加密'),
+						this.N('div',{click:'App.pages.img.b64_ec(this)'},'Base64加密'),
+						this.N('div',{click:'App.pages.img.b64_dc(this)'},'Base64解密'),
+						this.N('div',{click:'App.pages.img.do_more(this)'},'更多功能'),
+					
+					),
+				)
 			),
 		];
 	}
@@ -123,8 +137,26 @@ class Img extends Page{
 			'ᝰ>[cc="vector"]>div>.output>*:not(ᝰ>[cc="vector"]>div>.output>*:first-child)[active]{display:flex;align-items:center}',
 			'ᝰ>[cc="vector"]>div>.output>*:not(ᝰ>[cc="vector"]>div>.output>*:first-child)>*{display:block;width:100%;height:100%;object:contain}',
 			`ᝰ>[cc="vector"]>div>.output>div:not(ᝰ>[cc="vector"]>div>.output>*:first-child){background:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj48cmVjdCB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9IiNmMGYwZjAiLz48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iI2YwZjBmMCIvPjwvc3ZnPg==') repeat}`,
+			'ᝰ>[cc="code"]>.row>textarea{display:block;height:160px;width:100%;background:rgba(180,180,180,.3);line-height:1.1;font-size:.9rem;box-shadow:0 0 3px rgba(140,140,140,.6);border-radius:3px;padding:6px;margin-bottom:4px}',
+			'ᝰ>[cc="code"]>.row>.upload{height:60px;text-align:center;background:rgba(80,80,80,.4);color:var(--bg);line-height:40px;font-size:30px;box-shadow:0 0 3px rgba(140,140,140,.6);padding:10px;margin-bottom:4px}',
+			'ᝰ>[cc="code"]>.row>.grid>*{aspect-ratio:unset;text-align:center;height:auto;line-height:1.6;font-size:1.2rem}',
+			
 		]
 	}
+	
+	md5(){
+		
+	}
+	b64_ec(){
+		
+	}
+	b64_dc(){
+		
+	}
+	do_more(){
+		
+	}
+	
 	icons_toggle_copy(e){
 		this.cache('icons_can_copy',(this.icons_can_copy=!this.icons_can_copy)?'1':'0')
 		e.firstChild.s_attr({'xlink:href':'assets/icon.svg#'+(this.icons_can_copy?'copy_ok':'copy_no')})
@@ -173,23 +205,25 @@ class Img extends Page{
 		e.parentNode.nodes('div').forEach(v=>v[v==e?'s_attr':'d_attr']('active'))
 		e.parentNode.parentNode.nodes('[i]').forEach(v=>v[v.g_attr('i')==_?'s_attr':'d_attr']('active'))
 	}
-	vector_upload(e){
+	upload(_,e){
 		const $='input'.elem({type:'file'})
 		$.onchange=e=>{
 			if($.files.length<1)return;
 			const f=$.files[0];
-			if (!['image/jpeg','image/png','image/webp'].includes(f.type)){
+			if(!['image/jpeg','image/png','image/webp'].includes(f.type)){
 				toast.error('请选择有效的图片格式 (JPEG, PNG, WebP)')
 				return
 			}
-			if (f.size>8*1024*1024) {
+			if(f.size>8*1024*1024) {
 				toast.error('文件大小不能超过8MB')
 				return
 			}
 			const r=new FileReader()
 			r.onload=x=>{
-				this.E('vector').node('[i="y"]').html(`<img src='${x.target.result}'/>`)
-				this.vector_img=this.E('vector').node('[i="y"]').node('img')
+				if(_=='vector'){
+					this.E('vector').node('[i="y"]').html(`<img src='${x.target.result}'/>`)
+					this.vector_img=this.E('vector').node('[i="y"]').node('img')
+				}
 			}
 			r.readAsDataURL(f)
 			this.E('vector').node('[i="c"]').value=''
