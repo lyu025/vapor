@@ -1,18 +1,19 @@
-@font-face{font-family:SiYuanHeiTi;src:url('o.woff2') format('woff2')}
+@import url("https://fontsapi.zeoseven.com/53/main/result.css");
 :root{
-	font-family:SiYuanHeiTi;font-weight:bold;font-size:12px;
+	font-family:'ToneOZ-Tsuipita-TC';font-size:14px;-webkit-font-smoothing:antialiased;
 	line-break:anywhere;line-height:1;-webkit-overflow-scrolling:touch!important;-webkit-tap-highlight-color:none;
 	overscroll-behavior:none!important;scroll-behavior:smooth!important;
 	--primary:#1079ff;--success:#10b981;--warn:#f59e0b;--error:#ef4444;
 	--bg:#000;--fg:#fff;--h-bg:#111;--m-bg:#181818;--g-bg:rgba(255,255,255,.1);--g-hv:rgba(255,255,255,.3);--h-bd:#222
 }
-*{box-sizing:border-box;outline:none;margin:0;padding:0}
+*{box-sizing:border-box;outline:none;margin:0;padding:0;-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent}
+
 [theme='light']{--bg:#fff;--fg:#000;--h-bg:#eee;--m-bg:#e2e2e2;--g-bg:rgba(0,0,0,.1);--g-hv:rgba(0,0,0,.3);--h-bd:#ddd}
 ::placeholder{color:#444}
 
 body{background:var(--bg);color:var(--fg);min-height:100vh;transition:background 0.3s,color 0.3s}
-.hide{display:none!important}
-svg{fill:var(--fg)}
+[hide]{display:none!important}
+svg{fill:var(--fg);}
 
 wait{
 	display:flex;flex-direction:column;text-align:center;background:var(--bg);
@@ -31,12 +32,14 @@ header>svg{display:block;width:30px;height:30px;cursor:pointer}
 header>div{flex:1;font-size:1.4rem;font-weight:600;margin:0 1rem}
 header>svg:nth-last-child(3),header>svg:nth-last-child(2),header>svg:last-child{float:right;margin-left:2rem}
 
+@keyframes menu_open{from{opacity:0;left:-240px}to{opacity:1;left:0}}
+@keyframes menu_close{from{opacity:1;left:0}to{opacity:0;left:-240px}}
 nav{
-	display:flex;flex-direction:column;width:240px;height:100%;
+	display:flex;flex-direction:column;width:240px;height:100%;animation:menu_close .4s ease-in;
 	background:var(--h-bg);border-right:1px solid var(--h-bd);padding-bottom:11rem;
 	position:fixed;top:calc(2rem + 24px);bottom:0;left:-240px;z-index:400;transition:left 0.3s;
 }
-nav.open{left:0}
+nav.open{left:0;animation:menu_open .4s ease-out}
 nav>.top{display:flex;padding:2rem 0 1rem 1.4rem}
 nav>.top>img{display:block;width:80px;height:80px;border-radius:50%}
 nav>.top>div{flex:1;font-weight:600;padding:2rem 1rem}
@@ -47,17 +50,17 @@ nav>.core>div{
 	font-size:1.2rem;color:var(--fg);transition:background 0.2s;
 }
 nav>.core>div:hover{background:rgba(99,102,241,0.1)}
-nav>.core>div.active{background:rgba(99,102,241,0.2);border-left:3px solid var(--primary)}
+nav>.core>div[active]{background:rgba(99,102,241,0.2);border-left:3px solid var(--primary)}
 nav>.core>div>svg{width:20px;height:20px;display:inline-block;margin-right:.5rem}
 
 main{position:fixed;top:calc(2rem + 32px);bottom:calc(2rem + 56px);left:0;right:0;overflow-y:auto}
 main>svg{
 	display:block;height:30vw;transform:translate(-50%,-60%);
-	position:absolute;top:50%;left:50%;z-index:100;
+	position:absolute;top:50%;left:50%;z-index:1000000000;
 }
-main>section{display:none;animation:fadeIn 0.3s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-main>section.active{display:block;min-height:calc(100vh - 4rem - 120px)}
+
+@keyframes page{from{opacity:0}to{opacity:1}}
+main>section{display:block;animation:page 1.2s ease-in;min-height:calc(100vh - 4rem - 120px)}
 
 section>card{display:block;margin-top:2rem}
 section>card>h2{
@@ -100,9 +103,6 @@ section>card .grid>*:hover{
 	transform:translateY(-2px);
 	box-shadow:0 4px 8px var(--g-hv),0 8px 16px var(--g-hv),0 16px 32px var(--g-hv);
 }
-#home>card>div{line-height:2rem}
-#home>card>div label{margin:0 1rem}
-#home>card>div svg{display:inline;width:10px;height:10px;margin-right:1rem}
 
 footer{
 	display:flex;padding:0.5rem;
@@ -115,17 +115,17 @@ footer>div{
 	border:none;color:var(--fg);display:flex;flex-direction:column;
 	align-items:center;gap:0.25rem;cursor:pointer;font-size:0.75rem;
 }
-footer>div.active{color:var(--primary)}
+footer>div[active]{color:var(--primary)}
 footer>div>svg{display:block;width:40px;height:40px}
 
-#toast{position:fixed;top:calc(2rem + 30px);right:0;z-index:9999}
-.toast{
+#app_toast{position:fixed;top:calc(2rem + 34px);right:0;z-index:9999}
+#app_toast>div{
 	background:var(--m-bg);color:var(--fg);
 	padding:1rem 1.5rem;border-radius:2px;
 	margin-bottom:0.5rem;
 	box-shadow:0 4px 12px rgba(0,0,0,0.15);
-	animation:slideIn 0.3s ease;
+	animation:toast 0.3s ease;
 	border-left:4px solid var(--primary);
 	max-width:300px;
 }
-@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes toast{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}

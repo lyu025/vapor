@@ -1,3 +1,105 @@
+class Video extends Page{
+	static #o=null;
+	static open(){
+		if (!this.#o)this.#o=new Video();
+		return this.#o
+	}
+	define(){
+		this.w={}
+		this.wm={ole:'欧乐影院',ayf:'爱一帆',ddz:'蛋蛋赞',ydq:'影视大全'}
+		this.fs=JSON.parse(this.cache('favorite_videos')||'[]')
+	}
+	constructor(){
+		if(Video.#o)return
+		super('video')
+	}
+	nodes(){
+		return[
+			this.N('card',{id:'favorite',cc:'favorite'},
+				this.N('h2',this.N('svg',{path:'icon'}),'收藏夹',this.N('svg',{path:'trash',h:true,click:'App.pages.video.favorite_flush(this)'})),
+				this.N('div',{id:'favorite_list',c:'grid',s:'--gc:4'},
+					...this.fs.map(_=>this.N('div',{X:_.X,N:_.N,click:'App.pages.video.website_info(this)'},this.N('img',{src:this.pholder,s:_.I}),this.N('div',_.N.split('$$').pop()))),
+				)
+			),
+			this.N('card',{id:'website',cc:'website'},
+				this.N('h2',this.N('svg',{path:'website'}),'媒体源',
+					this.N('svg',{path:'back',h:true,click:'App.pages.video.website_back(this)'}),
+					this.N('svg',{path:'collect_no',h:true,click:'App.pages.video.website_collect(this)'}),
+				),
+				this.N('div',{id:'wb_home',T:'A',c:'grid',s:'--gc:2'},
+					...Object.keys(this.wm).map(_=>this.N('div',{X:_,N:this.wm[_],click:`App.pages.video.website_filters("${_}",this)`},this.N('svg',{path:_})))
+				),
+				this.N('div',{id:'wb_filters',T:'F',h:true}),
+				this.N('div',{id:'wb_list',T:'W',h:true,c:'grid',s:'--gc:4',more:'App.pages.video.website_list'}),
+				this.N('div',{id:'wb_info',T:'V',h:true,c:'row'}),
+			),
+		]
+	}
+	styles(){
+		return[
+			'ᝰ>[cc="favorite"]>h2>#favorite_flush{margin-left:auto;width:22px;height:22px}',
+			'ᝰ>[cc="favorite"]>.grid>div{display:flex;flex-direction:column;position:relative}',
+			'ᝰ>[cc="favorite"]>.grid>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}',
+			'ᝰ>[cc="favorite"]>.grid>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}',
+		
+			'ᝰ>[cc="website"]>h2>#website_back{margin-left:auto;width:22px;height:22px}',
+			'ᝰ>[cc="website"]>h2>#website_collect{margin-left:1rem;width:22px;height:22px}',
+			'ᝰ>[cc="website"]>[T="A"]>*{aspect-ratio:22/9;padding:2rem}',
+			'ᝰ>[cc="website"]>[T="A"]>div>svg{width:100%;height:100%;object-fit:contain}',
+			
+			'ᝰ>[cc="website"]>[T="F"]{position:sticky;top:36px;z-index:100000;min-height:60px;background:var(--bg);display:flex;flex-direction:column}',
+			'ᝰ>[cc="website"]>[T="F"]:empty:after{content:"正在加载筛选项，请耐心等待一下 ...";display:block;width:100%;position:absolute;top:50%;left:0;z-index:10;transform:translateY(-50%);font-size:.8rem;text-align:center}',
+			'ᝰ>[cc="website"]>[T="F"]>div{display:block;white-space:nowrap;min-width:100%;overflow-x:auto;overflow-y:hidden}',
+			'ᝰ>[cc="website"]>[T="F"]>div::-webkit-scrollbar{height:4px}',
+			'ᝰ>[cc="website"]>[T="F"]>div>*{border-bottom:2px solid rgba(0,0,0,0);display:inline-block;width:auto;padding:0 1rem;line-height:24px;font-size:.9rem}',
+			'ᝰ>[cc="website"]>[T="F"]>div>.active{border-bottom-color:var(--h-bd);font-size:1rem}',
+			
+			'ᝰ>[cc="website"]>[T="W"]>div{position:relative}',
+			'ᝰ>[cc="website"]>[T="W"]>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}',
+			'ᝰ>[cc="website"]>[T="W"]>div>score{position:absolute;top:8px;left:8px;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.06rem var(--fg)}',
+			'ᝰ>[cc="website"]>[T="W"]>div>tip{position:absolute;top:50%;left:12px;right:12px;transform:translateY(-60%);text-align:center;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.01rem var(--bg)}',
+			'ᝰ>[cc="website"]>[T="W"]>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}',
+			
+			'ᝰ>[cc="website"]>[T="V"]{display:flex;flex-direction:column;min-height:30vh}',
+			'ᝰ>[cc="website"]>[T="V"]>svg{width:24%;margin:1rem auto;object-fit:contain;flex:1}',
+			
+			'ᝰ>[cc="website"]>[T="V"]>p{line-height:1.2;font-size:.9rem;padding:0 .8rem;margin:0;border-bottom:1px solid var(--h-bd)}',
+			'ᝰ>[cc="website"]>[T="V"]>p>span{display:block;float:left;padding:0 4px;margin-right:4px;line-height:1.8}',
+			'ᝰ>[cc="website"]>[T="V"]>p[vs]{padding-bottom:.8rem;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center;justify-content:center;text-align:center;line-height:1.05}',
+			'ᝰ>[cc="website"]>[T="V"]>video{display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}',
+			'ᝰ>[cc="website"]>[T="V"]>p[sc]{margin-top:-1px;border-radius:0 0 4px 4px}',
+			'ᝰ>[cc="website"]>[T="V"]>p>[se]{display:block;line-height:30px;text-align:left;width:auto}',
+			'ᝰ>[cc="website"]>[T="V"]>p>[se]:nth-child(2){float:right;text-align:right}',
+			'ᝰ>[cc="website"]>[T="V"]>p[vs]>span[u],ᝰ>[cc="website"]>[T="V"]>p[sc],ᝰ>[cc="website"]>[T="V"]>p[bf]{background:var(--fg);color:var(--bg);opacity:.32;border-radius:3px}',
+			'ᝰ>[cc="website"]>[T="V"]>p[bf]{font-size:.9rem;line-height:1.5;border-radius:2px;padding:.8rem;margin-top:1rem}',
+			'ᝰ>[cc="website"]>[T="V"]>p[vs]>span.active{opacity:.6}',
+		]
+	}
+	favorite_flush(e){
+	
+	}
+	website_back(e){
+	
+	}
+	website_collect(e){
+	
+	}
+	website_filters(e){
+	
+	}
+	website_list(e){
+	
+	}
+	website_info(e){
+	
+	}
+	
+}
+
+
+
+
+/*
 H.page_video=async function(){
 	if(this.M.classList.contains('loaded'))return;
 
@@ -175,7 +277,7 @@ H.page_video=async function(){
 						const {data:{list,total}}=o;
 						if(!list||list.length<1)return;
 						const x=list.map(({id,name:n,pic,score,remarks})=>{
-							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
+							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
 							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
 							return NF.test(N)?null:'div'.E(`<img src='${II}' s='https://static.olelive.com/${pic}'/><score>${score}</score><tip>${remarks?remarks.trim():''}</tip><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
 						}).filter(_=>_);
@@ -192,7 +294,7 @@ H.page_video=async function(){
 						const {list}=o?.data||{};
 						if(!list||list.length<1)return;
 						const x=list.map(({mediaKey:id,title:n,coverImgUrl:pic,score})=>{
-							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
+							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
 							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
 							return NF.test(N)?null:'div'.E(`<img src='${II}' s='${pic}'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
 						}).filter(_=>_);
@@ -209,7 +311,7 @@ H.page_video=async function(){
 						const x=[],reg=/\/(\d+)\.html"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<span class="rate">([\d.]+)<\/span>/g;
 						while((m=reg.exec(_))!==null){
 							const [,id,n,score]=m;
-							let N=n.trim().replace(/\s*[】]\s*/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
+							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
 							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
 							if(!NF.test(N))x.push('div'.E(`<img src='${II}' s='https://dandanzan.org/thumbnail/${id}.jpg'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'}));
 						}
@@ -359,42 +461,6 @@ H.page_video=async function(){
 	const img=`https://static.olelive.com/upload/vod/20251215-1/e0ac3d0e9e6900a61a42ff747eccb699.jpg`;
 	this.M.innerHTML=`
 		<style>
-			#video_favorite>h2>#favorite_flush{margin-left:auto;width:22px;height:22px}
-			#video_favorite>.grid>div{display:flex;flex-direction:column;position:relative}
-			#video_favorite>.grid>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}
-			#video_favorite>.grid>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}
-		
-			#video_website>h2>#website_back{margin-left:auto;width:22px;height:22px}
-			#video_website>h2>#website_collect{margin-left:1rem;width:22px;height:22px}
-			#video_website>[T='A']>*{aspect-ratio:22/9;padding:2rem}
-			#video_website>[T='A']>div>svg{width:100%;height:100%;object-fit:contain}
-			
-			#video_website>[T='F']{position:sticky;top:36px;z-index:100000;min-height:60px;background:var(--bg);display:flex;flex-direction:column}
-			#video_website>[T='F']:empty:after{content:'正在加载筛选项，请耐心等待一下 ...';display:block;width:100%;position:absolute;top:50%;left:0;z-index:10;transform:translateY(-50%);font-size:.8rem;text-align:center}
-			#video_website>[T='F']>div{display:block;white-space:nowrap;min-width:100%;overflow-x:auto;overflow-y:hidden}
-			#video_website>[T='F']>div::-webkit-scrollbar{height:4px}
-			#video_website>[T='F']>div>*{border-bottom:2px solid rgba(0,0,0,0);display:inline-block;width:auto;padding:0 1rem;line-height:24px;font-size:.9rem}
-			#video_website>[T='F']>div>.active{border-bottom-color:var(--h-bd);font-size:1rem}
-			
-			#video_website>[T='W']>div{position:relative}
-			#video_website>[T='W']>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}
-			#video_website>[T='W']>div>score{position:absolute;top:8px;left:8px;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.06rem var(--fg)}
-			#video_website>[T='W']>div>tip{position:absolute;top:50%;left:12px;right:12px;transform:translateY(-60%);text-align:center;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.01rem var(--bg)}
-			#video_website>[T='W']>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}
-			
-			#video_website>[T='V']{display:flex;flex-direction:column;min-height:30vh}
-			#video_website>[T='V']>svg{width:24%;margin:1rem auto;object-fit:contain;flex:1}
-			
-			#video_website>[T='V']>p{line-height:1.2;font-size:.9rem;padding:0 .8rem;margin:0;border-bottom:1px solid var(--h-bd)}
-			#video_website>[T='V']>p>span{display:block;float:left;padding:0 4px;margin-right:4px;line-height:1.8}
-			#video_website>[T='V']>p[vs]{padding-bottom:.8rem;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center;justify-content:center;text-align:center;line-height:1.05}
-			#video_website>[T='V']>video{display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}
-			#video_website>[T='V']>p[sc]{margin-top:-1px;border-radius:0 0 4px 4px}
-			#video_website>[T='V']>p>[se]{display:block;line-height:30px;text-align:left;width:auto}
-			#video_website>[T='V']>p>[se]:nth-child(2){float:right;text-align:right}
-			#video_website>[T='V']>p[vs]>span[u],#video_website>[T='V']>p[sc],#video_website>[T='V']>p[bf]{background:var(--fg);color:var(--bg);opacity:.32;border-radius:3px}
-			#video_website>[T='V']>p[bf]{font-size:.9rem;line-height:1.5;border-radius:2px;padding:.8rem;margin-top:1rem}
-			#video_website>[T='V']>p[vs]>span.active{opacity:.6}
 			
 			
 		</style>
@@ -412,3 +478,5 @@ H.page_video=async function(){
 	this.M.classList.add('loaded');
 	setTimeout(()=>'main>svg'.N().classList.add('hide'),800);
 }
+
+*/

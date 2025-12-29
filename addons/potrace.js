@@ -1,4 +1,4 @@
-H.Potrace=(function(){
+(function(){
 	function Point(x,y){
 		this.x=x;
 		this.y=y;
@@ -845,5 +845,5 @@ H.Potrace=(function(){
 		svg+=`' fill='${fillc}'${fillrule}/>`;
 		return only_path?svg:(svg+'</svg>');
 	}
-	return{load,config,process,get_svg};
+	window.potrace={load,config,process,get_svg};
 })();
