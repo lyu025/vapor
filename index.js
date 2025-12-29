@@ -155,6 +155,12 @@ class App extends Page{
 		];
 	}
 	events(){
+		'beforeinstallprompt'.bind(e=>{
+			e.preventDefault()
+			alert(455)
+			this.install_prompt=e
+			this.E('install').d_attr('hide')
+		})
 		'error'.bind(e=>{
 			e.preventDefault()
 			let t=e.message.split('Error: ')
@@ -166,12 +172,7 @@ class App extends Page{
 		'unhandledrejection'.bind(e=>{
 			e.preventDefault()
 			const {message,stack}=e.reason
-			toast.error(...(stack||'').replaceAll(location.origin+'/','').replaceAll(' ','&nbsp;').split('\n'));
-		})
-		'beforeinstallprompt'.bind(e=>{
-			e.preventDefault()
-			this.install_prompt=e
-			this.E('install').d_attr('hide')
+			toast.error(...(stack||'').replaceAll(location.origin+'/','').trim().split('\n'));
 		})
 		setTimeout(()=>{
 			this.E('wait').style.opacity=0
