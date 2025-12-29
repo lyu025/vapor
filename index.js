@@ -166,7 +166,7 @@ class App extends Page{
 		'unhandledrejection'.bind(e=>{
 			e.preventDefault()
 			const {message,stack}=e.reason
-			toast.error(...(stack?.replaceAll(location.origin+'/','')?.replaceAll(' ','&nbsp;')?.split('\n')||[]));
+			toast.error(...(stack||'').replaceAll(location.origin+'/','').replaceAll(' ','&nbsp;').split('\n')));
 		})
 		'beforeinstallprompt'.bind(e=>{
 			e.preventDefault()
@@ -194,7 +194,7 @@ class App extends Page{
 		if(!this.install_prompt)return
 		this.install_prompt.prompt()
 		this.install_prompt.userChoice.then(_=>{
-			alert(JSON.stringify(_));
+			if(_.outcome!='accepted')return
 			this.install_prompt=null
 			e.remove()
 		})
