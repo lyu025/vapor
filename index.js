@@ -116,14 +116,13 @@ class App extends Page{
 	};
 	define(){
 		this.install_prompt=null
-		window.addEventListener('beforeinstallprompt',e=>{
-			e.preventDefault()
-			alert(455)
-			this.install_prompt=e
-		});
 		this.page=this.cache('page')||'home'
 		this.theme=this.cache('theme')||'dark'
 		this.use_proxy=this.cache('use_proxy')==='1'
+		'beforeinstallprompt'.bind(e=>{
+			e.preventDefault()
+			this.install_prompt=e
+		})
 	}
 	constructor(){
 		if(App.#o)return
@@ -160,7 +159,6 @@ class App extends Page{
 		];
 	}
 	events(){
-		/*
 		'error'.bind(e=>{
 			e.preventDefault()
 			let t=e.message.split('Error: ')
@@ -174,7 +172,6 @@ class App extends Page{
 			const {message,stack}=e.reason
 			toast.error(...(stack||'').replaceAll(location.origin+'/','').trim().split('\n'));
 		})
-		*/
 		setTimeout(()=>{
 			this.E('wait').style.opacity=0
 			setTimeout(()=>this.E('wait').remove(),300)
@@ -226,7 +223,7 @@ class App extends Page{
 'DOMContentLoaded'.bind(()=>(window.Vapor=App.open()),document)
 'load'.bind(async()=>{
 	try{
-		const r=await navigator.serviceWorker.register('sw.js')
+		const r=await navigator.serviceWorker.register('sw.js',{updateViaCache:'none'})
 		'message'.bind(e=>{
 			const {type,message,data}=e.data
 			switch(type){
@@ -253,7 +250,7 @@ class App extends Page{
 			}
 		},navigator.serviceWorker);
 		setInterval(()=>r.update(),2000);
-	}catch(_){console.error('SW 注册失败',_)}
+	}catch(_){toast.error('SW 注册失败',_)}
 });
 
 
