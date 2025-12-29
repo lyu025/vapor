@@ -39,7 +39,7 @@ String.prototype.bind=function(_){self.addEventListener(this,_)}
 		Promise.all([ // 预缓存关键资源
 			caches.open(CNAME).then(c=>c.addAll(ASSETS)),
 			self.skipWaiting() // 立即激活
-		]).then(()=>console.log('[SW] 安装完成'))
+		]).then(()=>console.log('[SW] 安装完成')).catch(_=>console.log(_))
 	)
 })
 
