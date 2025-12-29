@@ -3,7 +3,7 @@
 const VERSION='v1.0.0'
 
 // 缓存名称
-const CNAME=`Vapor-${VERSION}`
+const CNAME=`vapor-${VERSION}`
 
 // 代理前缀
 const PROXY='https://corsproxy.io/';
@@ -11,15 +11,15 @@ const PROXY='https://corsproxy.io/';
 // 预缓存资源（关键路径）
 const ASSETS=[
 	'/',
+	'/index.html',
 	'/mf.json',
-	'/assets/style.css',
+	'/sw.js',
+	'/index.js',
+	'/addons/tools.js',
 	'/assets/icon.svg',
 	'/assets/512.png',
 	'/assets/192.png',
-	'/addons/tools.js',
-	'/sw.js',
-	'/index.js',
-	'/index.html',
+	'/assets/style.css',
 ]
 
 
