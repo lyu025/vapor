@@ -47,13 +47,18 @@ class Fxb{
 			let [,ibrief]=_.split(' class="article__lead_photo__caption">')
 			if(ibrief)ibrief=ibrief.split('<div').shift()
 			let [,x]=_.split(' class="article__writeup">')
-			if(x)x=x.split('div class="clear"></div><div class="facebook-philstar-embed"').shift()
+			if(x)x=x.split('<div class="clear"></div><div class="facebook-philstar-embed"').shift()
 			if(!x)return null
-			const box=`<div id='o'>${x}</div>`.html().nodes('#o>*').map(v=>{
+			const box=Array.from(`<div id='o'>${x}</div>`.html().node('#o').childNodes).map(v=>{
 				let o,t=_type(v).replace(/(html|element)/g,'')
-				const text=v.innerText.trim(),html=v.html().trim()
+				let text=t=='text'?v.textContent.trim():v.innerText,html=t=='text'?'':v.innerHTML
+				if(text)text=text.trim()
+				if(html)html=html.trim()
 				switch(t){
 					case 'br':break
+					case 'text':
+						if(text)o=`<p>&emsp;&emsp;${text}</p>`
+						break
 					case 'heading':
 						if(!text||html=='<br>')break
 						o=`<strong>${text}</strong>`
@@ -61,12 +66,12 @@ class Fxb{
 					default:
 						if(!text||html=='<br>')break
 						if(v.childNodes.length==1&&v.firstChild.tagName=='STRONG')o=`<strong>${text}</strong>`
-						else o=`<p>${text}</p>`
+						else o=`<p>&emsp;&emsp;${text}</p>`
 						break
 				}
 				return o
 			}).filter(Boolean)
-			if(ibrief)box.unshift(`<p>${ibrief}</p>`)
+			if(ibrief)box.unshift(`<p>&emsp;&emsp;${ibrief}</p>`)
 			if(img)box.unshift(`<img src='${img}'/>`)
 			return o_parser({title,time,box})
 		})

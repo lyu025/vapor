@@ -103,6 +103,15 @@ class Page{
 	link(_){
 		return this.use_proxy?`${this.pp}${encodeURIComponent(_)}`:_
 	}
+	async trans(_){
+		if(_&&_type(_,'string'))_=[_]
+		if(!_type(_,'array'))return []
+		if(_.length<1)return []
+		const o=[[_,'auto','zh-CN'],'te_lib']
+		const url='https://translate-pa.googleapis.com/v1/translateHtml'
+		const headers={'x-up':'true','Content-Type':'application/json+protobuf','X-Goog-Api-Key':'AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520'}
+		return await fetch(url,{method:'POST',body:JSON.stringify(o),headers}).then(_=>_.json()).then(x=>x.shift())
+	}
 }
 class App extends Page{
 	static name='vapor'

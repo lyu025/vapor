@@ -35,11 +35,16 @@ class Flw{
 			let [,x]=_.split(' class="message"')
 			if(x)x=x.split('<!--[diy=main2x]-->').shift()
 			if(!x)return null
-			const box=`<div id='o'${x.replace(/<\/div>$/,'')}`.html().nodes('#o>*').map(v=>{
+			const box=Array.from(`<div id='o'${x.replace(/<\/div>$/,'')}`.html().node('#o').childNodes).map(v=>{
 				let o,t=_type(v).replace(/(html|element)/g,'')
-				const text=v.innerText.trim(),html=v.html().trim()
+				let text=t=='text'?v.textContent.trim():v.innerText,html=t=='text'?'':v.innerHTML
+				if(text)text=text.trim()
+				if(html)html=html.trim()
 				switch(t){
 					case 'br':break
+					case 'text':
+						if(text)o=`<p>&emsp;&emsp;${text}</p>`
+						break
 					case 'div':
 						const img=v.node('img')
 						if(img){
@@ -60,6 +65,7 @@ class Flw{
 				}
 				return o
 			}).filter(Boolean)
+			if(box[0]&&box[0].startsWith('<p>&emsp;&emsp;'))box[0]=box[0].replace('<p>&emsp;&emsp;','<p>')
 			return o_parser({title,time,box})
 		})
 	}

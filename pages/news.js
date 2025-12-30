@@ -100,14 +100,20 @@ class News extends Page{
 			e.parentNode.childNodes.forEach(_=>_[_==e?'s_attr':'d_attr']('active'))
 		}
 		this.E('website').classList.add('wait')
-		const T=this.w.T,next=await eval(fucase(this.w.X)).list(()=>this.w.T==T,o=>{
-			const $=o.map(({id,url,title,brief,img,time,red})=>{
+		const T=this.w.T,next=await eval(fucase(this.w.X)).list(()=>this.w.T==T,async o=>{
+			let oo
+			if(this.w.X=='fxb'){
+				const x=[]
+				o.forEach(({title,brief})=>x.push(title,brief))
+				oo=await this.trans(x)
+			}
+			const $=o.map(({id,url,title,brief,img,time,red},i)=>{
 				const tt=this.N('div',red?this.N('svg',{path:'important'}):'')
-				tt.innerHTML+=title
+				tt.innerHTML+=oo?oo[i*2]:title
 				return this.N('div',{i:id,click:'App.pages.news.website_info(this)'},
-					tt,brief?this.N('brief',brief):'',
+					tt,brief?this.N('brief',oo?oo[i*2+1]:brief):'',
 					img?this.N('div',{c:'imgs'},this.N('img',{src:this.pholder,ss:this.link(img)})):'',
-					time?this.N('time',time):'',
+					time?this.N('time',oo?oo[i*2+2]:time):'',
 				)
 			})
 			this.E('wb_list').append(...$)
@@ -115,6 +121,7 @@ class News extends Page{
 		if(next=='✘')return
 		this.E('wb_list').s_attr({p:next})
 		this.E('website').classList.remove('wait')
+		if(this.E('wb_list').childNodes.length<10)App.pages.news.website_list(null,next)
 	}
 	async website_info(e){
 		const id=e.g_attr('i'),T=this.w.T
@@ -123,14 +130,26 @@ class News extends Page{
 		this.E('wb_list').s_attr('hide')
 		this.E('wb_home').s_attr('hide')
 		this.E('wb_info').html(this.loader).d_attr('hide')
-		eval(fucase(this.w.X)).info(()=>this.w.T==T,({title,time,box})=>{
+		eval(fucase(this.w.X)).info(()=>this.w.T==T,async({title,time,box})=>{
+			let oo
+			if(this.w.X=='fxb'){
+				oo=await this.trans([title,...box])
+				for(let i in oo)if(i>0){
+					const v=oo[i].trim()
+					if(!v.startsWith('<'))oo[i]=(i==1?'<p>':'<p>&emsp;&emsp;')+v+'</p>'
+					else if(!v.split('>')[1].startsWith('&emsp;')){
+						const [vf,...ov]=v.split('>')
+						oo[i]=vf+(i==1?'>':'>&emsp;&emsp;')+ov.join('>')
+					}
+				}
+			}
 			this.E('wb_info').append(
-				this.N('title',title),
+				this.N('title',oo?oo.shift():title),
 				this.N('time',time),
 				this.N('div'),
 			)
 			this.E('wb_info').node('.news_loader').remove()
-			this.E('wb_info').node('div').innerHTML=box.join('').trim()
+			this.E('wb_info').node('div').innerHTML=(oo||box).join('').trim()
 		},id)
 	}
 }
