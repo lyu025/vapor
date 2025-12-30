@@ -15,9 +15,10 @@ class Flw{
 			const o=$.map(_=>{
 				const id=_.split('">').shift().trim()
 				const title=_.split('<h3 class="">')[1].split('<').shift().trim()
+				const time=_.split('<p class="time bbw1">')[1].split('</p>').shift().trim()
 				const brief=_.split('<div class="art-title">')[1].split('</div>').shift().replace(/[\r\n\s]/g,'').replace(/^(【[^】]+】|[^：]+报：) */,'')
 				if(!id||!title)return null
-				return {id,title,brief}
+				return {id,title,time,brief}
 			}).filter(Boolean)
 			o_parser(o)
 			return o.length<1?'..':(page+1)

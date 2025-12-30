@@ -25,10 +25,16 @@ class Fxb{
 				if(!reg)return null
 				let [,title]=v.split(reg)
 				if(title)title=title.split('</a>').shift().trim()
+				let [by,time]=v.split(/ *<\/a> *\| */)
+				if(by&&time){
+					by=by.split('>').pop().trim()
+					time='○ '+by+' ◇ '+time.split('<').shift().trim()
+				}else time=''
+				console.log(time);
 				let [,brief]=v.split(/<div class="news_summary" *><a href="[^"]+" *>/)
 				if(brief)brief=brief.split('</a>').shift().trim()
 				if(!id||!url||!title)return null
-				return {id:url,title,brief}
+				return {id:url,title,time,brief}
 			}).filter(Boolean)
 			o_parser(o)
 			return next

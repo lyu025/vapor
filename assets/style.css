@@ -53,14 +53,14 @@ nav>.core>div:hover{background:rgba(99,102,241,0.1)}
 nav>.core>div[active]{background:rgba(99,102,241,0.2);border-left:3px solid var(--primary)}
 nav>.core>div>svg{width:20px;height:20px;display:inline-block;margin-right:.5rem}
 
-main{position:fixed;top:calc(2rem + 32px);bottom:calc(2rem + 56px);left:0;right:0;overflow-y:auto}
+main{position:fixed;top:calc(2rem + 32px);bottom:calc(2rem + 60px);left:0;right:0;overflow-y:auto}
 main>svg{
 	display:block;height:30vw;transform:translate(-50%,-60%);
 	position:absolute;top:50%;left:50%;z-index:1000000000;
 }
 
 @keyframes page{from{opacity:0}to{opacity:1}}
-main>section{display:block;animation:page 1.2s ease-in;min-height:calc(100vh - 4rem - 120px)}
+main>section{display:block;animation:page 1.2s ease-in;min-height:calc(100vh - 4rem - 130px)}
 
 section>card{display:block;margin-top:2rem}
 section>card>h2{

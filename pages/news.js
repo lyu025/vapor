@@ -113,7 +113,7 @@ class News extends Page{
 				return this.N('div',{i:id,click:'App.pages.news.website_info(this)'},
 					tt,brief?this.N('brief',oo?oo[i*2+1]:brief):'',
 					img?this.N('div',{c:'imgs'},this.N('img',{src:this.pholder,ss:this.link(img)})):'',
-					time?this.N('time',oo?oo[i*2+2]:time):'',
+					time?this.N('time',time):'',
 				)
 			})
 			this.E('wb_list').append(...$)
