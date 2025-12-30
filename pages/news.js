@@ -61,17 +61,20 @@ class News extends Page{
 		]
 	}
 	website_back(e){
+		this.E('website').classList.remove('wait')
 		if(!this.E('wb_info').h_attr('hide')){
 			this.E('wb_info').s_attr('hide').html('')
 			this.E('wb_filters').d_attr('hide')
 			this.E('wb_list').d_attr('hide')
 			return
 		}
+		this.E('website').node('h2').childNodes[1].textContent='媒体源'
 		this.E('wb_filters').s_attr('hide').html('')
 		this.E('wb_info').s_attr('hide').html('')
 		this.E('wb_list').s_attr('hide').html('')
 		this.E('wb_home').d_attr('hide')
 		e.s_attr('hide')
+		this.w={}
 	}
 	async website_filters(X){
 		const ct=eval(`typeof ${fucase(X)}`)
@@ -150,7 +153,7 @@ class News extends Page{
 				this.N('time',time),
 				this.N('div'),
 			)
-			this.E('wb_info').node('.news_loader').remove()
+			this.E('wb_info').node('.news_loader')?.remove()
 			this.E('wb_info').node('div').innerHTML=(oo||box).join('').trim()
 		},id)
 	}

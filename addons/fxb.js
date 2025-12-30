@@ -30,7 +30,6 @@ class Fxb{
 					by=by.split('>').pop().trim()
 					time='○ '+by+' ◇ '+time.split('<').shift().trim()
 				}else time=''
-				console.log(time);
 				let [,brief]=v.split(/<div class="news_summary" *><a href="[^"]+" *>/)
 				if(brief)brief=brief.split('</a>').shift().trim()
 				if(!id||!url||!title)return null
