@@ -16,7 +16,7 @@ class Jssj{
 		return await fetch(url,{headers:Jssj.#h,credentials:'include'}).then(_=>_.json()).then(({data})=>{
 			if(!is_run())return '✘'
 			const o=data.map(({id,time,data:{content:title,pic:img,source:from},important:red})=>{
-				return title?{id,time,title,img:img||'',from:from||'',red:!!red}:null
+				return title?{id:'',time,title,img:img||'',from:from||'',red:!!red}:null
 			}).filter(Boolean)
 			o.sort((a,b)=>b.time.localeCompare(a.time))
 			o_parser(o)

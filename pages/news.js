@@ -124,8 +124,10 @@ class News extends Page{
 		if(this.E('wb_list').childNodes.length<10)App.pages.news.website_list(null,next)
 	}
 	async website_info(e){
-		const id=e.g_attr('i'),T=this.w.T
-		if(this.w.X=='jssj'||this.w.X=='cls')return
+		const id=e.g_attr('i').trim()
+		console.log(id);
+		if(!id)return
+		const T=this.w.T
 		this.E('wb_filters').s_attr('hide')
 		this.E('wb_list').s_attr('hide')
 		this.E('wb_home').s_attr('hide')

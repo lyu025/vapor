@@ -16,15 +16,58 @@ class Cls{
 				const s=new Date(parseInt(`${parseInt(ctime)}`.substring(0,10))*1000);
 				const Y=s.getFullYear(),M=s.getMonth()+1,D=s.getDate(),H=s.getHours(),I=s.getMinutes(),S=s.getSeconds();
 				const time=`${Y}-${(M+'').padStart(2,'0')}-${(D+'').padStart(2,'0')} ${(H+'').padStart(2,'0')}:${(I+'').padStart(2,'0')}:${(S+'').padStart(2,'0')}`;
-				if(aid){
-					id=aid
-					brief=abrief
-				}
+				id=data.roll_data||!aid?'':`${tid.replace(/s$/,'')}/${aid}`
 				if(title)title=title.replace(/^【[^】]+】/,'').trim()
 				return title?{id,time,title,img}:null
 			}).filter(Boolean)
 			o_parser(o)
 			return list.length>0?list.pop().sort_score:'..'
+		})
+	}
+	static async info(is_run,o_parser,id){
+		const url=`https://m.cls.cn/${id}`;
+		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+			if(!is_run())return
+			let [,title]=_.split('class="f-s-26 f-f-pm l-h-123077 title-box">')
+			if(title)title=title.split('</div>').shift().trim()
+			if(!title)return null
+			let [,time]=_.split('class="f-s-13 flex-shrink-0 time">')
+			if(time)time=time.split('</div>').shift().trim()
+			let [,x]=_.split('<div class="content"')
+			if(x)x=x.split('<div class="w-100p bottom-tips-box">').shift()
+			if(!x)return null
+			const box=Array.from(`<div id='o'${x.replace(/<\/div>$/,'')}`.html().node('#o').childNodes).map(v=>{
+				let o,t=_type(v).replace(/(html|element)/g,'')
+				let text=t=='text'?v.textContent.trim():v.innerText,html=t=='text'?'':v.innerHTML
+				if(text)text=text.trim()
+				if(html)html=html.trim()
+				switch(t){
+					case 'br':break
+					case 'text':
+						if(text)o=`<p>&emsp;&emsp;${text}</p>`
+						break
+					case 'div':
+						const img=v.node('img')
+						if(img){
+							const src=img.g_attr('src')
+							if(src)o=`<img src='${Flw.#u}${src.replace('forum.php','')}'/>`
+						}
+						if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
+						break
+					case 'heading':
+						if(!text||html=='<br>')break
+						o=`<strong>${text}</strong>`
+						break
+					default:
+						if(!text||html=='<br>')break
+						if(v.childNodes.length==1&&v.firstChild.tagName=='STRONG')o=`<strong>${text}</strong>`
+						else o=`<p>&emsp;&emsp;${text}</p>`
+						break
+				}
+				return o
+			}).filter(Boolean)
+			if(box[0]&&box[0].startsWith('<p>&emsp;&emsp;'))box[0]=box[0].replace('<p>&emsp;&emsp;','<p>')
+			return o_parser({title,time,box})
 		})
 	}
 }
