@@ -6,6 +6,7 @@ class Page{
 		if(id in Page.Ntree)return toast.error(`页面 <${id}> 已经存在，初始失败`)
 		this.id=id
 		this.pp='https://corsproxy.io/?url='
+		this.use_proxy=this.cache('use_proxy')==='1'
 
 		Page.Ntree[this.id]={}
 		Page.Pdata[this.id]={}
@@ -97,7 +98,10 @@ class Page{
 	}
 	script(_,onload){
 		if(`script[src='${_}']`.node())return eval(onload)
-		'head'.node().append('script'.elem('',{src:_,onload}))
+		'head'.node().append('script'.elem('',{src:_,onload,type:'text/javascript',async:''}))
+	}
+	link(_){
+		return this.use_proxy?`${this.pp}${encodeURIComponent(_)}`:_
 	}
 }
 class App extends Page{
@@ -121,7 +125,6 @@ class App extends Page{
 		this.install_prompt=null
 		this.page=this.cache('page')||'home'
 		this.theme=this.cache('theme')||'dark'
-		this.use_proxy=this.cache('use_proxy')==='1'
 	}
 	constructor(){
 		if(App.#o)return
