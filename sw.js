@@ -80,25 +80,30 @@ async function flush_caches(){
 		if(!/\.(js|css|json|png|jpg|svg)$/.test(pathname))return
 		if(hash&&!pathname=='/assets/icon.svg')r=new Request(pathname)
 	}
-	const is_proxy=origin==PROXY;
+	const is_proxy=origin==PROXY
 	if(r.headers.get('x-up')==='true'&&!is_proxy)r=new Request(PROXY+'?url='+encodeURIComponent(r.url),{
 		duplex:'half',method:r.method,headers:r.headers,body:r.body
 	})
 	e.respondWith(
-		caches.match(r).then(o=>{
+		caches.match(r).then(async o=>{
 			if(o)return o
 			return fetch(r).then(async _=>{
-				if(_.ok&&r.url.includes('.m3u8')){
-					let o=_.clone()
-					let text=await (_.clone()).text();
+				if(_.ok&&is_proxy&&r.url.includes('.m3u8')){
+					let text=await (_.clone()).text()
 					if(text.includes('#EXTM3U')){
-						const ntext=M3U8.proxy(text,r.url,PROXY)
-						return new Response(ntext,{status:200,statusText:'OK',headers:{'Content-Type':'application/vnd.apple.mpegurl'}})
+						text=M3U8.proxy(text,r.url,PROXY)
+						const blob=new Blob([text],{type:'application/vnd.apple.mpegurl'})
+						const headers=new Headers({
+							'Content-Type':'application/vnd.apple.mpegurl',
+							'Content-Length':blob.size.toString(),
+							'Access-Control-Allow-Origin':'*',
+						})
+						return new Response(text,{status:200,statusText:'OK',headers})
 					}
 					return _
 				}
 				// 检查是否需要缓存
-				const cache=await caches.open(CNAME)
+				const cache=await caches.open(CNAME),o=_.clone()
 				if(should_cache_req(r,o))await cache_req(e.clientId,cache,r,o)
 				return _
 			})
