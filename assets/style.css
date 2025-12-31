@@ -1,12 +1,15 @@
-@import url("https://fontsapi.zeoseven.com/53/main/result.css");
+@font-face{font-family:'maocao';src:url('maocao.ttf') format('truetype')}
+@font-face{font-family:'xingshu';src:url('xingshu.ttf') format('truetype')}
+@font-face{font-family:'yozai';src:url('yozai.ttf') format('truetype')}
+
 :root{
-	font-family:'ToneOZ-Tsuipita-TC';font-size:14px;-webkit-font-smoothing:antialiased;
-	line-break:anywhere;line-height:1;-webkit-overflow-scrolling:touch!important;-webkit-tap-highlight-color:none;
+	line-break:anywhere;line-height:1;-webkit-overflow-scrolling:touch!important;
+	-webkit-tap-highlight-color:none;-webkit-font-smoothing:antialiased;
 	overscroll-behavior:none!important;scroll-behavior:smooth!important;
-	--primary:#1079ff;--success:#10b981;--warn:#f59e0b;--error:#ef4444;
+	--ff:'yozai';--fs:1rem;--primary:#1079ff;--success:#10b981;--warn:#f59e0b;--error:#ef4444;
 	--ph:#ddd;--bg:#000;--fg:#fff;--h-bg:#111;--m-bg:#181818;--g-bg:rgba(255,255,255,.1);--g-hv:rgba(255,255,255,.3);--h-bd:#222
 }
-*{box-sizing:border-box;outline:none;margin:0;padding:0;-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent}
+*{font-family:var(--ff);font-size:var(--fs);box-sizing:border-box;outline:none;margin:0;padding:0;-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent}
 
 [theme='light']{--ph:#555;--bg:#fff;--fg:#000;--h-bg:#eee;--m-bg:#e2e2e2;--g-bg:rgba(0,0,0,.1);--g-hv:rgba(0,0,0,.3);--h-bd:#ddd}
 ::placeholder{color:var(--ph)}

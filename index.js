@@ -1,12 +1,10 @@
 class Page{
 	static Pdata={} // 页面数据
 	static Ntree={} // 节点树
-
+	static use_proxy=false
 	constructor(id){
 		if(id in Page.Ntree)return toast.error(`页面 <${id}> 已经存在，初始失败`)
 		this.id=id
-		this.pp='https://corsproxy.io/?url='
-		this.use_proxy=this.cache('use_proxy')==='1'
 
 		Page.Ntree[this.id]={}
 		Page.Pdata[this.id]={}
@@ -101,7 +99,7 @@ class Page{
 		'head'.node().append('script'.elem('',{src:_,onload,type:'text/javascript',async:''}))
 	}
 	link(_){
-		return this.use_proxy?`${this.pp}${encodeURIComponent(_)}`:_
+		return Page.use_proxy?`https://corsproxy.io?url=${encodeURIComponent(_)}`:_
 	}
 	async trans(_){
 		if(_&&_type(_,'string'))_=[_]
@@ -117,7 +115,7 @@ class App extends Page{
 	static name='vapor'
 	static #o=null;
 	static open(){
-		if (!this.#o)this.#o=new App();
+		if(!this.#o)this.#o=new App();
 		return this.#o
 	}
 	static pages={}
@@ -134,6 +132,7 @@ class App extends Page{
 		this.install_prompt=null
 		this.page=this.cache('page')||'home'
 		this.theme=this.cache('theme')||'dark'
+		Page.use_proxy=this.cache('use_proxy')==='1'
 	}
 	constructor(){
 		if(App.#o)return
@@ -154,7 +153,7 @@ class App extends Page{
 				this.N('div',{id:'title'},'...'),
 				this.N('svg',{path:'download',id:'install',click:'Vapor.install(this)',h:true}),
 				this.N('svg',{path:'clean',click:'Vapor.clean()'}),
-				this.N('svg',{path:`proxy_${this.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
+				this.N('svg',{path:`proxy_${Page.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
 				this.N('svg',{path:'theme',click:'Vapor.toggle("theme",this)'}),
 			),
 			this.N('nav',{id:'menu'},
@@ -233,8 +232,8 @@ class App extends Page{
 	toggle(t,e){
 		if(t=='menu')this.tclass(this.E('menu'),'open')
 		else if(t=='proxy'){
-			this.cache('use_proxy',(this.use_proxy=!this.use_proxy)?'1':'0');
-			e.firstChild.s_attr({'xlink:href':this.use_proxy?'assets/icon.svg#proxy_on':'assets/icon.svg#proxy_off'});
+			this.cache('use_proxy',(Page.use_proxy=!Page.use_proxy)?'1':'0');
+			e.firstChild.s_attr({'xlink:href':Page.use_proxy?'assets/icon.svg#proxy_on':'assets/icon.svg#proxy_off'});
 		}else if(t=='theme'){
 			this.theme=this.theme=='dark'?'light':'dark'
 			this.cache('theme',this.theme)

@@ -6,7 +6,7 @@ class Video extends Page{
 	}
 	define(){
 		this.w={}
-		this.wm={yzi:'影资',ayf:'爱一帆',ddz:'蛋蛋赞',ydq:'影视大全'}
+		this.wm={ymt:'茅台',yhn:'红牛',yhy:'虎牙',ydb:'豆瓣'}
 		this.ph=`data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCA0MTkuNTI4IDU5NS4yNzYiPg0KPHJlY3QgeD0iLTkuOTM2IiB5PSItOS43NjYiIHN0eWxlPSJmaWxsOiM3NzciIHdpZHRoPSI0MzkuMTQ5IiBoZWlnaHQ9IjYxMy43ODciLz4NCjxnPg0KCTxnPg0KCQk8cmVjdCB4PSI0Mi4zNzUiIHk9IjgwLjEzNCIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjIwNS4yNzciIGhlaWdodD0iMTguMzgzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgNDIuMzc1NSA5Mi4yMDQpIiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTdweCI+WU9VIEFSRSBJTlZJVEVEIFRPPC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNDIuMzc1IiB5PSIxMTIuNTE3IiBzdHlsZT0iZmlsbDpub25lIiB3aWR0aD0iMzE3LjA1IiBoZWlnaHQ9IjExMS44MyIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQyLjM3NTUgMTUwLjg1NjMpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPlRIRSBHUkFORCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1MCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPk9QRU5JTkc8L3RzcGFuPjwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjQwLjM4NCIgeT0iNDQwLjExMyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjEyNy4xMTciIGhlaWdodD0iMTIyLjA2NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQwLjM4MzggNTA0LjcwODQpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6I0ZGRkZGRjtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjkwLjk4MThweCI+MDI8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1NC41ODkiIHN0eWxlPSJmaWxsOiNGRkZGRkY7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tQmxhY2snO2ZvbnQtc2l6ZTo2MS40MTI3cHgiPlNFUDwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNDQxLjY2NiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE4MC4xMDYiIGhlaWdodD0iODYuMDQzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjAxLjYxNzQgNDUwLjE4NjEpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPkpvaW4gdXMgZm9yIGV4Y2x1c2l2ZSBzdXJwcmlzZXMsIDwvdHNwYW4+PHRzcGFuIHg9IjAiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLVNlbWlCb2xkJztmb250LXNpemU6MTJweCI+YWN0aXZpdGllcywgYW5kIHJlZnJlc2htZW50czwvdHNwYW4+PHRzcGFuIHg9IjEzNy4wMzUiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTJweCI+4oCUZG9u4oCZdCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSIzOCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPm1pc3Mgb3V0ITwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNTUyLjM5NyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE2NS41NTMiIGhlaWdodD0iOS42NSIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU2MC45MTY5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPk9uZSBTdC4gOSBMQSAsQ0EgMTIzNDwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjIwMS42MTciIHk9IjUzNC40MTgiIHN0eWxlPSJmaWxsOm5vbmUiIHdpZHRoPSIxNTkuNDI2IiBoZWlnaHQ9IjExLjg0NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU0Mi45MzgyKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPnd3dy55b3Vyd2Vic2l0ZS5jb208L3RleHQ+DQoJPC9nPg0KCTxwb2x5bGluZSBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS13aWR0aDoyO3N0cm9rZS1taXRlcmxpbWl0OjEwIiBwb2ludHM9IjQ0LjcwMiw0MDMuMjI1IDQ0LjcwMiwyNTQuNDUzIA0KCQkxOTAuNTMsNDA0Ljg0MyAxOTIuNzczLDI1NC40NTMgMzc3LjEyOCw0MjAuNDc0IDM3Ny4xMjgsODEuMTU1IAkiLz4NCgk8Zz4NCgkJCTxlbGxpcHNlIHRyYW5zZm9ybT0ibWF0cml4KDAuMjQ3MSAtMC45NjkgMC45NjkgMC4yNDcxIC0zNS44MDc1IDUyMi45NTEpIiBzdHlsZT0iZmlsbDojRkZGRkZGIiBjeD0iMzE4LjYwNiIgY3k9IjI4NC41MTciIHJ4PSIzMi41NTMiIHJ5PSIzOS44MyIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMC45Njk5IDAuMjQzMyAtMC4yNDMzIDAuOTY5OSAyOTYuOTM3MSAyNzQuMDEzKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1SZWd1bGFyJztmb250LXNpemU6MTNweCI+MDI6MDBQTTwvdGV4dD4NCgkJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDAuOTY5OSAwLjI0MzMgLTAuMjQzMyAwLjk2OTkgMjkyLjg5MSAyODkuNTg4OCkiIHN0eWxlPSJmaWxsOiMzNjM2MzQ7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tUmVndWxhcic7Zm9udC1zaXplOjEzcHgiPjA1OjAwUE08L3RleHQ+DQoJPC9nPg0KCTxnPg0KCQk8cGF0aCBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS1taXRlcmxpbWl0OjEwIiBkPSJNMjU4LjYwMyw1NC4xNDJoLTk3LjY3OGMtNS44MTEsMC0xMC41MjEtNC43MTEtMTAuNTIxLTEwLjUyMQ0KCQkJbDAsMGMwLTUuODExLDQuNzExLTEwLjUyMSwxMC41MjEtMTAuNTIxaDk3LjY3OGM1LjgxMSwwLDEwLjUyMiw0LjcxMSwxMC41MjIsMTAuNTIxbDAsMA0KCQkJQzI2OS4xMjQsNDkuNDMxLDI2NC40MTQsNTQuMTQyLDI1OC42MDMsNTQuMTQyeiIvPg0KCQk8Zz4NCgkJCTxyZWN0IHg9IjE2MS4wNzgiIHk9IjM5LjQzMiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9Ijk3LjM3MiIgaGVpZ2h0PSI5LjE5MSIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAxNzYuNzIyMSA0Ny45NTE5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPlZJQ1RPUiAmYW1wO1ZJQzwvdGV4dD4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjwvc3ZnPg0K`
 		this.loader=`<svg class='news_loader' viewBox='0 0 50 50'><path d='M25,5 a20,20 0 1,1 -20,20' stroke='var(--fg)' stroke-width='1' fill='none' stroke-linecap='round'><animate attributeName='stroke-dasharray' values='10,60;60,10;10,60' dur='1.5s' repeatCount='indefinite'/><animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='1s' repeatCount='indefinite'/></path></svg>`
 	}
@@ -23,6 +23,7 @@ class Video extends Page{
 			),
 			this.N('card',{id:'website',cc:'website'},
 				this.N('h2',this.N('svg',{path:'website'}),'媒体源',
+					this.N('input',{id:'wb_search',type:'search',placeholder:'请输入搜索内容...',h:true,k:'q',onsearch:'App.pages.video.website_list(this)'}),
 					this.N('svg',{id:'wb_back',path:'back',h:true,click:'App.pages.video.website_back(this)'}),
 					this.N('svg',{id:'wb_collect',path:'collect_no',h:true,click:'App.pages.video.website_collect(this)'}),
 				),
@@ -38,12 +39,12 @@ class Video extends Page{
 	styles(){
 		return[
 			'ᝰ>[cc="favorite"]>h2>svg:last-child{margin-left:auto;width:22px;height:22px}',
-			'ᝰ>[cc="favorite"]>.grid>div{position:relative}',
+			'ᝰ>[cc="favorite"]>.grid>div{position:relative;aspect-ratio:unset;height:auto}',
 			'ᝰ>[cc="favorite"]>.grid>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/13.5;flex:1}',
-			'ᝰ>[cc="favorite"]>.grid>div>title{display:block;padding:.4rem .8rem;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.7rem;flex:1}',
+			'ᝰ>[cc="favorite"]>.grid>div>title{display:block;padding:.2rem 0;display:flex;align-items:center;justify-content:center;line-height:1;height:1.6rem;text-align:center;font-size:.54rem;flex:1}',
 			
-			'ᝰ>[cc="website"]>h2>svg:nth-child(2){margin-left:auto;width:22px;height:22px}',
-			'ᝰ>[cc="website"]>h2>svg:nth-child(3){margin-left:1rem;width:22px;height:22px}',
+			'ᝰ>[cc="website"]>h2>svg:nth-child(3){margin-left:auto;width:22px;height:22px}',
+			'ᝰ>[cc="website"]>h2>svg:nth-child(4){margin-left:1rem;width:22px;height:22px}',
 			'ᝰ>[cc="website"]>[T="A"]>*{aspect-ratio:22/9;padding:0 3rem}',
 			'ᝰ>[cc="website"]>[T="A"]>div>svg{width:100%;height:100%;object-fit:contain}',
 			
@@ -54,11 +55,11 @@ class Video extends Page{
 			'ᝰ>[cc="website"]>[T="F"]>div>*{border-bottom:2px solid rgba(0,0,0,0);display:inline-block;width:auto;padding:0 1rem;line-height:24px;font-size:.9rem}',
 			'ᝰ>[cc="website"]>[T="F"]>div>[active]{border-bottom-color:var(--h-bd);font-size:1rem}',
 			
-			'ᝰ>[cc="website"]>[T="W"]>div{position:relative}',
+			'ᝰ>[cc="website"]>[T="W"]>div{position:relative;aspect-ratio:unset;height:auto}',
 			'ᝰ>[cc="website"]>[T="W"]>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/13.5;flex:1}',
 			'ᝰ>[cc="website"]>[T="W"]>div>score{position:absolute;top:8px;left:8px;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.06rem var(--fg)}',
 			'ᝰ>[cc="website"]>[T="W"]>div>tip{position:absolute;top:50%;left:12px;right:12px;transform:translateY(-60%);text-align:center;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.01rem var(--bg)}',
-			'ᝰ>[cc="website"]>[T="W"]>div>title{display:block;padding:.4rem .8rem;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.7rem;flex:1}',
+			'ᝰ>[cc="website"]>[T="W"]>div>title{display:block;padding:.2rem 0;display:flex;align-items:center;justify-content:center;line-height:1;height:1.6rem;text-align:center;font-size:.54rem;flex:1}',
 			
 			'ᝰ>[cc="website"]>[T="V"]{display:flex;flex-direction:column;min-height:30vh}',
 			'ᝰ>[cc="website"]>[T="V"]>svg{width:24%;margin:1rem auto;object-fit:contain;flex:1}',
@@ -81,12 +82,11 @@ class Video extends Page{
 		this.E('fv_list').html('')
 		for(let x in this.wm){
 			const o=JSON.parse(this.cache(`${x}_favorites`)||'{}')
-			console.log(o);
 			for(let i in o){
 				ie=false
-				this.E('fv_list').append(this.N('div',{i,x,click:'App.pages.video.website_info(this,true)'},
-					this.N('img',{src:this.ph,ss:o[i].c}),
-					this.N('title',o[i].n)
+				this.E('fv_list').append(this.N('div',{i,x,o:JSON.stringify(o[i]),click:'App.pages.video.website_info(this,true)'},
+					this.N('img',{src:this.ph,ss:o[i].cover}),
+					this.N('title',o[i].title)
 				))
 			}
 		}
@@ -98,10 +98,10 @@ class Video extends Page{
 		toast.success('收藏夹已清空')
 	}
 	website_collect(e){
-		const {i,n,c}=this.E('wb_info').g_attr('i','n','c')
+		const i=this.E('wb_info').g_attr('i'),o=this.w.s[i]
 		const fo=JSON.parse(this.cache(`${this.w.X}_favorites`)||'{}')
 		if(i in fo)delete fo[i]
-		else fo[i]={n,c}
+		else fo[i]=o
 		this.cache(`${this.w.X}_favorites`,JSON.stringify(fo))
 		this.E('wb_collect').firstChild.s_attr({'xlink:href':i in fo?'/assets/icon.svg#collect_ok':'/assets/icon.svg#collect_no'})
 		this.favorite_load()
@@ -115,10 +115,14 @@ class Video extends Page{
 			this.E('wb_collect').s_attr('hide')
 			this.E('wb_list').d_attr('hide').node('[i="'+id+'"]').scrollIntoView({block:'center'})
 			this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
+			this.E('website').node('h2').childNodes[2].d_attr('hide')
+			this.E('website').node('h2').childNodes[4].s_attr('hide')
 			return
 		}
 		this.E('website').node('h2').childNodes[1].textContent='媒体源'
+		this.E('website').node('h2').childNodes[2].s_attr('hide')
 		this.E('website').node('h2').childNodes[3].s_attr('hide')
+		this.E('website').node('h2').childNodes[4].s_attr('hide')
 		this.E('wb_filters').s_attr('hide').html('')
 		this.E('wb_info').s_attr('hide').html('')
 		this.E('wb_list').s_attr('hide').html('')
@@ -139,6 +143,7 @@ class Video extends Page{
 		this.E('wb_info').s_attr('hide').html('')
 		this.E('wb_filters').html('').d_attr('hide')
 		this.E('website').node('h2').childNodes[1].textContent=this.wm[X]
+		this.E('website').node('h2').childNodes[2].d_attr('hide')
 		eval(fucase(X)).filters(()=>this.w.X==X,s=>{
 			this.w={X,o:{},_:s}
 			const ts=Object.keys(s),t=this.w.o.type=ts[0]
@@ -174,7 +179,8 @@ class Video extends Page{
 		if(e){
 			this.w.s={}
 			this.E('wb_list').s_attr({p:1}).html('')
-			const k=e.g_attr('k'),t=e.g_attr('v')
+			const iin=e.tagName=='INPUT'
+			const k=e.g_attr('k'),t=iin?e.value.trim():e.g_attr('v')
 			if(k=='type'&&t!=this.w.o.type){
 				this.E('wb_filters').nodes('[k="subt"],[k="area"],[k="year"],[k="sort"]').forEach(_=>_.remove())
 				this.w.o={type:t}
@@ -202,13 +208,14 @@ class Video extends Page{
 				if($y)this.E('wb_filters').append(this.N('div',...$y))
 				if($s)this.E('wb_filters').append(this.N('div',...$s))
 			}else this.w.o[k]=t
-			e.parentNode.childNodes.forEach(_=>_[_==e?'s_attr':'d_attr']('active'))
+			if(!iin)e.parentNode.childNodes.forEach(_=>_[_==e?'s_attr':'d_attr']('active'))
 		}
 		const fo=JSON.stringify(this.w.o)
 		this.E('website').classList.add('wait')
 		const filters=this.w.o,next=await eval(fucase(this.w.X)).list(()=>fo==JSON.stringify(filters),x=>{
 			const {id,title,cover,score,tip,links}=x
-			if(links)this.w.s[id]=x
+			if(!links)return null
+			this.w.s[id]=x
 			const o={i:id,click:'App.pages.video.website_info(this)'}
 			return this.N('div',o,
 				this.N('img',{src:this.ph,ss:this.link(cover)}),
@@ -222,14 +229,11 @@ class Video extends Page{
 		this.E('website').classList.remove('wait')
 	}
 	website_info(e,ifv=false){
+		this.E('website').node('h2').childNodes[2].s_attr('hide')
 		const id=this.w.id=e.g_attr('i').trim()
 		if(ifv){
 			this.w.X=e.g_attr('x')
-			const ct=eval(`typeof ${fucase(this.w.X)}`)
-			if(ct=='undefined'){
-				this.script(`/addons/${this.w.X}.js`,`App.pages.video.E("fv_list").node("[i='${id}']").click()`)
-				return
-			}
+			this.w.s={[id]:JSON.parse(e.g_attr('o'))}
 			this.E('wb_back').d_attr('hide')
 			this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
 			this.E('wb_info').s_attr('fv')
@@ -263,13 +267,14 @@ class Video extends Page{
 			)
 			const V=this.E('wb_info').node('video')
 			V.ondurationchange=()=>{
-				if(!V.isConnected||V.duration<250)return
+				if(!V.isConnected||isNaN(V.duration)||V.duration<250)return
 				V.playbackRate=1.25
 				V.currentTime=Math.max(this.w.curr,this.w.start)
 			}
 			V.ontimeupdate=()=>{
-				if(!V.isConnected||V.duration<250)return
+				if(!V.isConnected||isNaN(V.duration)||V.duration<250)return
 				if(V.duration-V.currentTime>this.w.end)return
+				console.log(11,V.duration,V.currentTime,this.w);
 				const $=this.E('wb_info').node('links>[active]'),$n=$?$.nextElementSibling:null
 				$n&&$n.click()
 			}
@@ -293,12 +298,12 @@ class Video extends Page{
 	async website_play(e){
 		const cu=this.w.u=e.g_attr('u'),uu=e.g_attr('uu')
 		const {u,curr,start,end}=JSON.parse(this.cache(`${this.w.X}_history_${this.w.id}`)||'{}')
-		const o=u!=cu?{u:cu,curr:0,start:0,end:0}:{u,curr,start,end}
+		const o=u!=cu?{u:cu,curr:0,start,end}:{u,curr,start,end}
 		this.cache(`${this.w.X}_history_${this.w.id}`,JSON.stringify(o))
 		this.E('wb_info').nodes('links>[active]').forEach(_=>_.d_attr('active'))
 		e.s_attr('active')
 		const V=this.E('wb_info').node('video')
-		V.currentTime=0
+		console.log(this.link(uu),this.link(o.u));
 		if(uu&&uu.startsWith('http'))return V.s_attr({src:this.link(uu)})
 		if(o.u.startsWith('http'))return V.s_attr({src:this.link(o.u)})
 		await eval(fucase(this.w.X)).src(()=>this.w.u==o.u,(cu,nu)=>{
