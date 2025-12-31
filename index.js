@@ -140,6 +140,21 @@ class App extends Page{
 		this.$.s_attr({theme:this.theme})
 		;`meta[name='theme-color']`.node().s_attr({content:this.theme=='dark'?'#000':'#fff'})
 		if(!navigator||!navigator.serviceWorker)return toast.error('系统不支持SW')
+		const {ff,fs,np,nd}=JSON.parse(this.cache('setting')||'{}')
+		if(ff)document.documentElement.style.setProperty('--ff',ff)
+		if(!isNaN(fs)&&fs>0)document.documentElement.style.setProperty('--fs',fs+'px')
+		if(np){
+			Page.use_proxy=false
+			this.cache('use_proxy','0')
+			this.E('use_proxy').s_attr('hide')
+		}
+		if(nd){
+			this.theme='light'
+			this.E('theme').s_attr('hide')
+			this.cache('theme',this.theme)
+			this.$.s_attr({theme:this.theme})
+			;`meta[name='theme-color']`.node().s_attr({content:'#fff'})
+		}
 		this.E('main').innerHTML=`<svg viewBox='0 0 50 50'><defs><linearGradient id='svg_loader' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#60A5FA' stop-opacity='0.2'></stop><stop offset='50%' stop-color='#60A5FA' stop-opacity='0.8'></stop><stop offset='100%' stop-color='#60A5FA' stop-opacity='0.2'></stop><animate attributeName='x1' values='0%;100%;0%' dur='3s' repeatCount='indefinite'></animate></linearGradient></defs><g><path d='M15,15 L35,15 L35,35 L15,35 Z' fill='none' stroke='url(#svg_loader)' stroke-width='2'><animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='3s' repeatCount='indefinite'></animateTransform></path><path d='M10,20 L30,20 L30,40 L10,40 Z' fill='none' stroke='url(#svg_loader)' stroke-width='2' opacity='0.5'><animateTransform attributeName='transform' type='rotate' from='360 25 25' to='0 25 25' dur='3s' repeatCount='indefinite'></animateTransform></path></g></svg>`
 		this.loader=this.E('main').node('svg').s_attr('hide')
 		this.jump_to(this.page)
@@ -153,8 +168,8 @@ class App extends Page{
 				this.N('div',{id:'title'},'...'),
 				this.N('svg',{path:'download',id:'install',click:'Vapor.install(this)',h:true}),
 				this.N('svg',{path:'clean',click:'Vapor.clean()'}),
-				this.N('svg',{path:`proxy_${Page.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
-				this.N('svg',{path:'theme',click:'Vapor.toggle("theme",this)'}),
+				this.N('svg',{id:'use_proxy',path:`proxy_${Page.use_proxy?'on':'off'}`,click:'Vapor.toggle("proxy",this)'}),
+				this.N('svg',{id:'theme',path:'theme',click:'Vapor.toggle("theme",this)'}),
 			),
 			this.N('nav',{id:'menu'},
 				this.N('div',{c:'top'},
