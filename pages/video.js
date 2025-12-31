@@ -66,7 +66,7 @@ class Video extends Page{
 			
 			'ᝰ>[cc="website"]>[T="V"]>title{display:block;line-height:1.1;font-size:1.1rem;padding:1rem .8rem;font-weight:bold;border-bottom:1px dotted var(--ph)}',
 			'ᝰ>[cc="website"]>[T="V"]>p{line-height:1.2;font-size:.9rem;padding:.8rem;margin:0;border-bottom:1px dotted var(--ph)}',
-			'ᝰ>[cc="website"]>[T="V"]>video{aspect-ratio:16/9;object-fit:cover;display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}',
+			'ᝰ>[cc="website"]>[T="V"]>video{aspect-ratio:16/9;object-fit:contain;display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}',
 			'ᝰ>[cc="website"]>[T="V"]>div{display:flex;margin-top:-1px;border-radius:0 0 4px 4px;background:rgba(180,180,180,.3)}',
 			'ᝰ>[cc="website"]>[T="V"]>div>*{flex:1;line-height:30px;text-align:left}',
 			'ᝰ>[cc="website"]>[T="V"]>div>*:nth-child(2){text-align:right}',
@@ -108,16 +108,20 @@ class Video extends Page{
 	}
 	website_back(e){
 		this.E('website').classList.remove('wait')
-		if(!this.E('wb_info').h_attr('hide')&&!this.E('wb_info').h_attr('fv')){
+		if(!this.E('wb_info').h_attr('hide')){
 			const id=this.E('wb_info').g_attr('i')
-			this.E('wb_info').s_attr('hide').d_attr('i').html('')
-			this.E('wb_filters').d_attr('hide')
-			this.E('wb_collect').s_attr('hide')
-			this.E('wb_list').d_attr('hide').node('[i="'+id+'"]').scrollIntoView({block:'center'})
-			this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
-			this.E('website').node('h2').childNodes[2].d_attr('hide')
-			this.E('website').node('h2').childNodes[4].s_attr('hide')
-			return
+			const {u,curr,start,end}=JSON.parse(this.cache(`${this.w.X}_history_${id}`)||'{}')
+			this.cache(`${this.w.X}_history_${id}`,JSON.stringify({u,start,end,curr:this.E('wb_info').node('video').currentTime}))
+			if(!this.E('wb_info').h_attr('fv')){
+				this.E('wb_info').s_attr('hide').d_attr('i').html('')
+				this.E('wb_filters').d_attr('hide')
+				this.E('wb_collect').s_attr('hide')
+				this.E('wb_list').d_attr('hide').node('[i="'+id+'"]').scrollIntoView({block:'center'})
+				this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
+				this.E('website').node('h2').childNodes[2].d_attr('hide')
+				this.E('website').node('h2').childNodes[4].s_attr('hide')
+				return
+			}
 		}
 		this.E('website').node('h2').childNodes[1].textContent='媒体源'
 		this.E('website').node('h2').childNodes[2].s_attr('hide')
@@ -274,7 +278,6 @@ class Video extends Page{
 			V.ontimeupdate=()=>{
 				if(!V.isConnected||isNaN(V.duration)||V.duration<250)return
 				if(V.duration-V.currentTime>this.w.end)return
-				console.log(11,V.duration,V.currentTime,this.w);
 				const $=this.E('wb_info').node('links>[active]'),$n=$?$.nextElementSibling:null
 				$n&&$n.click()
 			}
@@ -303,7 +306,6 @@ class Video extends Page{
 		this.E('wb_info').nodes('links>[active]').forEach(_=>_.d_attr('active'))
 		e.s_attr('active')
 		const V=this.E('wb_info').node('video')
-		console.log(this.link(uu),this.link(o.u));
 		if(uu&&uu.startsWith('http'))return V.s_attr({src:this.link(uu)})
 		if(o.u.startsWith('http'))return V.s_attr({src:this.link(o.u)})
 		await eval(fucase(this.w.X)).src(()=>this.w.u==o.u,(cu,nu)=>{
