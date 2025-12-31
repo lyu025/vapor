@@ -79,7 +79,7 @@ section>card>h2>input{
 }
 section>card>h2>.fold{margin-left:auto;width:16px;height:16px}
 
-section>card.wait::after{
+section>card[wait]::after{
 	content:'加载中，请耐心等待 ...';font-size:.6rem;margin-top:.5rem;
 	display:block;line-height:.8rem;height:1rem;text-align:center;
 }

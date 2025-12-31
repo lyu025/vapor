@@ -62,7 +62,7 @@ class News extends Page{
 		]
 	}
 	website_back(e){
-		this.E('website').classList.remove('wait')
+		this.E('website').d_attr('wait')
 		if(!this.E('wb_info').h_attr('hide')){
 			const id=this.E('wb_info').g_attr('i')
 			this.E('wb_info').s_attr('hide').d_attr('i').html('')
@@ -104,7 +104,7 @@ class News extends Page{
 			this.E('wb_list').s_attr({p:1}).html('')
 			e.parentNode.childNodes.forEach(_=>_[_==e?'s_attr':'d_attr']('active'))
 		}
-		this.E('website').classList.add('wait')
+		this.E('website').s_attr('wait')
 		const T=this.w.T,next=await eval(fucase(this.w.X)).list(()=>this.w.T==T,async o=>{
 			let oo
 			if(this.w.X=='fxb'){
@@ -126,8 +126,8 @@ class News extends Page{
 			this.E('wb_list').append(...$)
 		},this.w.T,p)
 		if(next=='✘')return
+		this.E('website').d_attr('wait')
 		this.E('wb_list').s_attr({p:next})
-		this.E('website').classList.remove('wait')
 	}
 	async website_info(e){
 		const x=e.g_attr('x').trim()
