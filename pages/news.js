@@ -43,6 +43,7 @@ class News extends Page{
 			'ᝰ>[cc="website"]>[T="F"]>div>[active]{border-bottom-color:var(--h-bd);font-size:1rem}',
 			
 			'ᝰ>[cc="website"]>[T="W"]>div{display:flex;flex-direction:column;height:auto;aspect-ratio:unset;border:.02rem solid var(--h-bd);box-shadow:4px 2px rgba(100,100,100,.3)}',
+			'ᝰ>[cc="website"]>[T="W"]>div[in="1"]{border:.02rem solid var(--success);box-shadow:4px 2px var(--success)}',
 			'ᝰ>[cc="website"]>[T="W"]>div>div:first-child{font-size:1.1rem;padding:8px 0 2px 3px;line-height:1.2;background:rgba(200,200,200,.1)}',
 			'ᝰ>[cc="website"]>[T="W"]>div>div:first-child>svg{display:block;float:left;width:28px;height:16px;object-fit:contain;margin-right:5px}',
 			'ᝰ>[cc="website"]>[T="W"]>div>brief{display:block;border-radius:2px;background:rgba(150,150,150,.1);color:var(--success);font-size:.8rem;line-height:1.05;padding:4px}',
@@ -63,9 +64,10 @@ class News extends Page{
 	website_back(e){
 		this.E('website').classList.remove('wait')
 		if(!this.E('wb_info').h_attr('hide')){
-			this.E('wb_info').s_attr('hide').html('')
+			const id=this.E('wb_info').g_attr('i')
+			this.E('wb_info').s_attr('hide').d_attr('i').html('')
 			this.E('wb_filters').d_attr('hide')
-			this.E('wb_list').d_attr('hide')
+			this.E('wb_list').d_attr('hide').node('[i="'+id+'"]').scrollIntoView({block:'center'})
 			return
 		}
 		this.E('website').node('h2').childNodes[1].textContent='媒体源'
@@ -110,10 +112,12 @@ class News extends Page{
 				o.forEach(({title,brief})=>x.push(title,brief))
 				oo=await this.trans(x)
 			}
-			const $=o.map(({id,url,title,brief,img,time,red},i)=>{
+			const sid=(this.cache(`news_${this.w.X}_${this.w.T}`)||'')+','
+			const $=o.map(({x,id,ni,url,title,brief,img,time,red},i)=>{
 				const tt=this.N('div',red?this.N('svg',{path:'important'}):'')
 				tt.innerHTML+=oo?oo[i*2]:title
-				return this.N('div',{i:id,click:'App.pages.news.website_info(this)'},
+				const n=sid===','?true:!(sid+',').includes(`,${x},`)
+				return this.N('div',{i:id,x,in:n?'1':'0',ni,click:'App.pages.news.website_info(this)'},
 					tt,brief?this.N('brief',oo?oo[i*2+1]:brief):'',
 					img?this.N('div',{c:'imgs'},this.N('img',{src:this.pholder,ss:this.link(img)})):'',
 					time?this.N('time',time):'',
@@ -124,17 +128,19 @@ class News extends Page{
 		if(next=='✘')return
 		this.E('wb_list').s_attr({p:next})
 		this.E('website').classList.remove('wait')
-		if(this.E('wb_list').childNodes.length<10)App.pages.news.website_list(null,next)
 	}
 	async website_info(e){
-		const id=e.g_attr('i').trim()
-		console.log(id);
-		if(!id)return
-		const T=this.w.T
+		const x=e.g_attr('x').trim()
+		const xs=this.cache(`news_${this.w.X}_${this.w.T}`)||''
+		this.cache(`news_${this.w.X}_${this.w.T}`,`${xs},${x}`)
+		e.d_attr('in')
+		if(e.g_attr('ni')=='1')return
+		const id=e.g_attr('i').trim(),T=this.w.T
 		this.E('wb_filters').s_attr('hide')
 		this.E('wb_list').s_attr('hide')
 		this.E('wb_home').s_attr('hide')
-		this.E('wb_info').html(this.loader).d_attr('hide')
+		this.E('wb_info').html(this.loader).d_attr('hide').s_attr({i:id})
+		
 		eval(fucase(this.w.X)).info(()=>this.w.T==T,async({title,time,box})=>{
 			let oo
 			if(this.w.X=='fxb'){
@@ -153,8 +159,14 @@ class News extends Page{
 				this.N('time',time),
 				this.N('div'),
 			)
+			this.E('wb_info').node('title').scrollIntoView({block:'start'})
+			const list=oo||box
+			if(this.use_proxy)for(let i in list)if(list[i].includes('<img src')){
+				const [a,x]=list[i].split(`<img src='`),[u,...m]=x.split("'")
+				list[i]=`${a}<img src='${this.link(u)}'${m.join("'")}`
+			}
 			this.E('wb_info').node('.news_loader')?.remove()
-			this.E('wb_info').node('div').innerHTML=(oo||box).join('').trim()
+			this.E('wb_info').node('div').innerHTML=list.join('').trim()
 		},id)
 	}
 }

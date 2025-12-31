@@ -33,7 +33,7 @@ class Fxb{
 				let [,brief]=v.split(/<div class="news_summary" *><a href="[^"]+" *>/)
 				if(brief)brief=brief.split('</a>').shift().trim()
 				if(!id||!url||!title)return null
-				return {id:url,title,time,brief}
+				return {x:id,ni:'0',id:url,title,time,brief}
 			}).filter(Boolean)
 			o_parser(o)
 			return next
@@ -64,14 +64,15 @@ class Fxb{
 					case 'text':
 						if(text)o=`<p>&emsp;&emsp;${text}</p>`
 						break
-					case 'heading':
-						if(!text||html=='<br>')break
-						o=`<strong>${text}</strong>`
-						break
 					default:
 						if(!text||html=='<br>')break
-						if(v.childNodes.length==1&&v.firstChild.tagName=='STRONG')o=`<strong>${text}</strong>`
-						else o=`<p>&emsp;&emsp;${text}</p>`
+						const img=v.node('img')
+						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
+						else if(img){
+							const src=img.g_attr('src')
+							if(src)o=`<img src='${src}'/>`
+							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
+						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
 				}
 				return o

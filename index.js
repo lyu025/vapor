@@ -32,14 +32,14 @@ class Page{
 			return null
 		}
 		if(nid)o.id=nid
+		if(('h' in a)&&!a.h)delete a.h
+		if(('a' in a)&&!a.a)delete a.a
 		let $,m={a:'active',s:'style',h:'hide',c:'class',click:'onclick'}
 		if(tag=='svg'){
 			if(!_type(a.path,'string')||a.path.trim()==''){
 				toast.error(`Tag <svg> 创建失败`,`引用的图标名称不合法`)
 				return null
 			}
-			if(('h' in a)&&!a.h)delete a.h
-			if(('a' in a)&&!a.a)delete a.a
 			for(let k in a)if(k!='id'&&k!='path')o[m[k]||k]=a[k]
 			if('f' in a)o.style=(o.style?`${o.style};`:'')+'fill;'+a.f
 			const z='http://www.w3.org/2000/svg'
@@ -165,7 +165,7 @@ class App extends Page{
 				this.N('div',{c:'core'},...Object.keys(App.menus).map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this)'},this.N('svg',{path:p}),App.menus[p]))),
 			),
 			this.N('main',{id:'main'}),
-			this.N('footer',{id:'footer'},...['home','img','record','news','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
+			this.N('footer',{id:'footer'},...['home','video','record','news','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
 			this.N('div',{id:'toast'}),
 		];
 	}

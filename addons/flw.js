@@ -18,7 +18,7 @@ class Flw{
 				const time=_.split('<p class="time bbw1">')[1].split('</p>').shift().trim()
 				const brief=_.split('<div class="art-title">')[1].split('</div>').shift().replace(/[\r\n\s]/g,'').replace(/^(【[^】]+】|[^：]+报：) */,'')
 				if(!id||!title)return null
-				return {id,title,time,brief}
+				return {x:id,ni:'0',id,title,time,brief}
 			}).filter(Boolean)
 			o_parser(o)
 			return o.length<1?'..':(page+1)
@@ -46,22 +46,15 @@ class Flw{
 					case 'text':
 						if(text)o=`<p>&emsp;&emsp;${text}</p>`
 						break
-					case 'div':
-						const img=v.node('img')
-						if(img){
-							const src=img.g_attr('src')
-							if(src)o=`<img src='${Flw.#u}${src.replace('forum.php','')}'/>`
-						}
-						if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
-						break
-					case 'heading':
-						if(!text||html=='<br>')break
-						o=`<strong>${text}</strong>`
-						break
 					default:
 						if(!text||html=='<br>')break
-						if(v.childNodes.length==1&&v.firstChild.tagName=='STRONG')o=`<strong>${text}</strong>`
-						else o=`<p>&emsp;&emsp;${text}</p>`
+						const img=v.node('img')
+						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
+						else if(img){
+							const src=img.g_attr('src')
+							if(src)o=`<img src='${Flw.#u}${src.replace('forum.php','')}'/>`
+							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
+						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
 				}
 				return o

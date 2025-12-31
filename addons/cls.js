@@ -16,9 +16,10 @@ class Cls{
 				const s=new Date(parseInt(`${parseInt(ctime)}`.substring(0,10))*1000);
 				const Y=s.getFullYear(),M=s.getMonth()+1,D=s.getDate(),H=s.getHours(),I=s.getMinutes(),S=s.getSeconds();
 				const time=`${Y}-${(M+'').padStart(2,'0')}-${(D+'').padStart(2,'0')} ${(H+'').padStart(2,'0')}:${(I+'').padStart(2,'0')}:${(S+'').padStart(2,'0')}`;
-				id=data.roll_data||!aid?'':`${tid.replace(/s$/,'')}/${aid}`
+				const nid=data.list?`${tid.replace(/s$/,'')}/${aid}`:''
 				if(title)title=title.replace(/^【[^】]+】/,'').trim()
-				return title?{id,time,title,img}:null
+				if(tid=='themes')img=''
+				return title?{x:id||aid,ni:data.list?'0':'1',id:nid,time,title,img}:null
 			}).filter(Boolean)
 			o_parser(o)
 			return list.length>0?list.pop().sort_score:'..'
@@ -46,22 +47,15 @@ class Cls{
 					case 'text':
 						if(text)o=`<p>&emsp;&emsp;${text}</p>`
 						break
-					case 'div':
-						const img=v.node('img')
-						if(img){
-							const src=img.g_attr('src')
-							if(src)o=`<img src='${Flw.#u}${src.replace('forum.php','')}'/>`
-						}
-						if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
-						break
-					case 'heading':
-						if(!text||html=='<br>')break
-						o=`<strong>${text}</strong>`
-						break
 					default:
 						if(!text||html=='<br>')break
-						if(v.childNodes.length==1&&v.firstChild.tagName=='STRONG')o=`<strong>${text}</strong>`
-						else o=`<p>&emsp;&emsp;${text}</p>`
+						const img=v.node('img')
+						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
+						else if(img){
+							const src=img.g_attr('src')
+							if(src)o=`<img src='${src}'/>`
+							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
+						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
 				}
 				return o

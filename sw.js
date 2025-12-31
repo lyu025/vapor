@@ -1,4 +1,6 @@
 
+importScripts('./addons/m3u8.js')
+
 // 缓存版本
 const VERSION='v1.0.0'
 
@@ -49,7 +51,6 @@ String.prototype.bind=function(_){self.addEventListener(this,_)}
 	event.waitUntil(
 		Promise.all([
 			flush_caches(), // 清理缓存
-			files_watcher(), // 文件监听
 			self.clients.claim() // 控制所有客户端
 		]).then(()=>{
 			console.log('[SW] 已激活并控制客户端')
@@ -68,12 +69,6 @@ async function flush_caches(){
 			return caches.delete(_)
 		})
 	)
-}
-
-// 文件监听
-async function files_watcher(){
-	console.log("------");
-	
 }
 
 // 网络请求拦截
@@ -97,8 +92,8 @@ async function files_watcher(){
 					let o=_.clone()
 					let text=await (_.clone()).text();
 					if(text.includes('#EXTM3U')){
-						text=M3U8.proxy(text,req.url,PROXY)
-						return new Response(text,{status:_.status,statusText:_.statusText,headers:_.headers})
+						const ntext=M3U8.proxy(text,r.url,PROXY)
+						return new Response(ntext,{status:200,statusText:'OK',headers:{'Content-Type':'application/vnd.apple.mpegurl'}})
 					}
 					return _
 				}

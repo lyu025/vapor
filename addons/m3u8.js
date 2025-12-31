@@ -23,7 +23,7 @@ class M3U8{
 					url=`${origin}/${x.join('/')}`;
 				}else if(/^\.\//.test(text))url=`${origin}${pathname}${text.substring(2)}`;
 				else url=`${origin}${pathname}${text}`;
-				return line_start+proxy_prefix+encodeURIComponent(url);
+				return line_start+proxy_prefix+'?url='+encodeURIComponent(url);
 			}catch(_){
 				return match;
 			}

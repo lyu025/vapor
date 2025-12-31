@@ -10,6 +10,11 @@ window.fucase=_=> {
 	if(!_type(_,'string'))return''
 	return _.charAt(0).toUpperCase()+_.slice(1).toLowerCase()
 }
+// 视频时间进度
+Number.prototype.time=function(){
+	const s=Math.abs(Math.floor(this)),h=Math.floor(s/3600),m=Math.floor((s%3600)/60),rs=Math.floor(s%60),fh=h>0?String(h).padStart(2,'0')+':':'',fm=String(m).padStart(2,'0'),fs=String(rs).padStart(2,'0');
+	return s==0?'00:00':`${this>0?'':'-'}${fh}${fm}:${fs}`
+}
 
 // 设置节点特定属性
 Element.prototype.s_attr=function(){

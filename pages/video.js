@@ -7,27 +7,27 @@ class Video extends Page{
 	define(){
 		this.w={}
 		this.wm={ole:'欧乐影院',ayf:'爱一帆',ddz:'蛋蛋赞',ydq:'影视大全'}
-		this.fs=JSON.parse(this.cache('favorite_videos')||'[]')
+		this.ph=`data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCA0MTkuNTI4IDU5NS4yNzYiPg0KPHJlY3QgeD0iLTkuOTM2IiB5PSItOS43NjYiIHN0eWxlPSJmaWxsOiM3NzciIHdpZHRoPSI0MzkuMTQ5IiBoZWlnaHQ9IjYxMy43ODciLz4NCjxnPg0KCTxnPg0KCQk8cmVjdCB4PSI0Mi4zNzUiIHk9IjgwLjEzNCIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjIwNS4yNzciIGhlaWdodD0iMTguMzgzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgNDIuMzc1NSA5Mi4yMDQpIiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTdweCI+WU9VIEFSRSBJTlZJVEVEIFRPPC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNDIuMzc1IiB5PSIxMTIuNTE3IiBzdHlsZT0iZmlsbDpub25lIiB3aWR0aD0iMzE3LjA1IiBoZWlnaHQ9IjExMS44MyIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQyLjM3NTUgMTUwLjg1NjMpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPlRIRSBHUkFORCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1MCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPk9QRU5JTkc8L3RzcGFuPjwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjQwLjM4NCIgeT0iNDQwLjExMyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjEyNy4xMTciIGhlaWdodD0iMTIyLjA2NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQwLjM4MzggNTA0LjcwODQpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6I0ZGRkZGRjtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjkwLjk4MThweCI+MDI8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1NC41ODkiIHN0eWxlPSJmaWxsOiNGRkZGRkY7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tQmxhY2snO2ZvbnQtc2l6ZTo2MS40MTI3cHgiPlNFUDwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNDQxLjY2NiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE4MC4xMDYiIGhlaWdodD0iODYuMDQzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjAxLjYxNzQgNDUwLjE4NjEpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPkpvaW4gdXMgZm9yIGV4Y2x1c2l2ZSBzdXJwcmlzZXMsIDwvdHNwYW4+PHRzcGFuIHg9IjAiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLVNlbWlCb2xkJztmb250LXNpemU6MTJweCI+YWN0aXZpdGllcywgYW5kIHJlZnJlc2htZW50czwvdHNwYW4+PHRzcGFuIHg9IjEzNy4wMzUiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTJweCI+4oCUZG9u4oCZdCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSIzOCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPm1pc3Mgb3V0ITwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNTUyLjM5NyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE2NS41NTMiIGhlaWdodD0iOS42NSIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU2MC45MTY5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPk9uZSBTdC4gOSBMQSAsQ0EgMTIzNDwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjIwMS42MTciIHk9IjUzNC40MTgiIHN0eWxlPSJmaWxsOm5vbmUiIHdpZHRoPSIxNTkuNDI2IiBoZWlnaHQ9IjExLjg0NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU0Mi45MzgyKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPnd3dy55b3Vyd2Vic2l0ZS5jb208L3RleHQ+DQoJPC9nPg0KCTxwb2x5bGluZSBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS13aWR0aDoyO3N0cm9rZS1taXRlcmxpbWl0OjEwIiBwb2ludHM9IjQ0LjcwMiw0MDMuMjI1IDQ0LjcwMiwyNTQuNDUzIA0KCQkxOTAuNTMsNDA0Ljg0MyAxOTIuNzczLDI1NC40NTMgMzc3LjEyOCw0MjAuNDc0IDM3Ny4xMjgsODEuMTU1IAkiLz4NCgk8Zz4NCgkJCTxlbGxpcHNlIHRyYW5zZm9ybT0ibWF0cml4KDAuMjQ3MSAtMC45NjkgMC45NjkgMC4yNDcxIC0zNS44MDc1IDUyMi45NTEpIiBzdHlsZT0iZmlsbDojRkZGRkZGIiBjeD0iMzE4LjYwNiIgY3k9IjI4NC41MTciIHJ4PSIzMi41NTMiIHJ5PSIzOS44MyIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMC45Njk5IDAuMjQzMyAtMC4yNDMzIDAuOTY5OSAyOTYuOTM3MSAyNzQuMDEzKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1SZWd1bGFyJztmb250LXNpemU6MTNweCI+MDI6MDBQTTwvdGV4dD4NCgkJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDAuOTY5OSAwLjI0MzMgLTAuMjQzMyAwLjk2OTkgMjkyLjg5MSAyODkuNTg4OCkiIHN0eWxlPSJmaWxsOiMzNjM2MzQ7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tUmVndWxhcic7Zm9udC1zaXplOjEzcHgiPjA1OjAwUE08L3RleHQ+DQoJPC9nPg0KCTxnPg0KCQk8cGF0aCBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS1taXRlcmxpbWl0OjEwIiBkPSJNMjU4LjYwMyw1NC4xNDJoLTk3LjY3OGMtNS44MTEsMC0xMC41MjEtNC43MTEtMTAuNTIxLTEwLjUyMQ0KCQkJbDAsMGMwLTUuODExLDQuNzExLTEwLjUyMSwxMC41MjEtMTAuNTIxaDk3LjY3OGM1LjgxMSwwLDEwLjUyMiw0LjcxMSwxMC41MjIsMTAuNTIxbDAsMA0KCQkJQzI2OS4xMjQsNDkuNDMxLDI2NC40MTQsNTQuMTQyLDI1OC42MDMsNTQuMTQyeiIvPg0KCQk8Zz4NCgkJCTxyZWN0IHg9IjE2MS4wNzgiIHk9IjM5LjQzMiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9Ijk3LjM3MiIgaGVpZ2h0PSI5LjE5MSIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAxNzYuNzIyMSA0Ny45NTE5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPlZJQ1RPUiAmYW1wO1ZJQzwvdGV4dD4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjwvc3ZnPg0K`
+		this.loader=`<svg class='news_loader' viewBox='0 0 50 50'><path d='M25,5 a20,20 0 1,1 -20,20' stroke='var(--fg)' stroke-width='1' fill='none' stroke-linecap='round'><animate attributeName='stroke-dasharray' values='10,60;60,10;10,60' dur='1.5s' repeatCount='indefinite'/><animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='1s' repeatCount='indefinite'/></path></svg>`
 	}
 	constructor(){
 		if(Video.#o)return
 		super('video')
+		this.favorite_load()
 	}
 	nodes(){
 		return[
 			this.N('card',{id:'favorite',cc:'favorite'},
 				this.N('h2',this.N('svg',{path:'icon'}),'收藏夹',this.N('svg',{path:'trash',h:true,click:'App.pages.video.favorite_flush(this)'})),
-				this.N('div',{id:'favorite_list',c:'grid',s:'--gc:4'},
-					...this.fs.map(_=>this.N('div',{X:_.X,N:_.N,click:'App.pages.video.website_info(this)'},this.N('img',{src:this.pholder,s:_.I}),this.N('div',_.N.split('$$').pop()))),
-				)
+				this.N('div',{id:'fv_list',c:'grid',s:'--gc:4'})
 			),
 			this.N('card',{id:'website',cc:'website'},
 				this.N('h2',this.N('svg',{path:'website'}),'媒体源',
-					this.N('svg',{path:'back',h:true,click:'App.pages.video.website_back(this)'}),
-					this.N('svg',{path:'collect_no',h:true,click:'App.pages.video.website_collect(this)'}),
+					this.N('svg',{id:'wb_back',path:'back',h:true,click:'App.pages.video.website_back(this)'}),
+					this.N('svg',{id:'wb_collect',path:'collect_no',h:true,click:'App.pages.video.website_collect(this)'}),
 				),
 				this.N('div',{id:'wb_home',T:'A',c:'grid',s:'--gc:2'},
-					...Object.keys(this.wm).map(_=>this.N('div',{X:_,N:this.wm[_],click:`App.pages.video.website_filters("${_}",this)`},this.N('svg',{path:_})))
+					...Object.keys(this.wm).map(_=>this.N('div',{X:_,N:this.wm[_],click:`App.pages.video.website_filters("${_}")`},this.N('svg',{path:_})))
 				),
 				this.N('div',{id:'wb_filters',T:'F',h:true}),
 				this.N('div',{id:'wb_list',T:'W',h:true,c:'grid',s:'--gc:4',more:'App.pages.video.website_list'}),
@@ -37,13 +37,13 @@ class Video extends Page{
 	}
 	styles(){
 		return[
-			'ᝰ>[cc="favorite"]>h2>#favorite_flush{margin-left:auto;width:22px;height:22px}',
-			'ᝰ>[cc="favorite"]>.grid>div{display:flex;flex-direction:column;position:relative}',
-			'ᝰ>[cc="favorite"]>.grid>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}',
-			'ᝰ>[cc="favorite"]>.grid>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}',
-		
-			'ᝰ>[cc="website"]>h2>#website_back{margin-left:auto;width:22px;height:22px}',
-			'ᝰ>[cc="website"]>h2>#website_collect{margin-left:1rem;width:22px;height:22px}',
+			'ᝰ>[cc="favorite"]>h2>svg:last-child{margin-left:auto;width:22px;height:22px}',
+			'ᝰ>[cc="favorite"]>.grid>div{position:relative}',
+			'ᝰ>[cc="favorite"]>.grid>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/13.5;flex:1}',
+			'ᝰ>[cc="favorite"]>.grid>div>title{display:block;padding:.4rem .8rem;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.7rem;flex:1}',
+			
+			'ᝰ>[cc="website"]>h2>svg:nth-child(2){margin-left:auto;width:22px;height:22px}',
+			'ᝰ>[cc="website"]>h2>svg:nth-child(3){margin-left:1rem;width:22px;height:22px}',
 			'ᝰ>[cc="website"]>[T="A"]>*{aspect-ratio:22/9;padding:2rem}',
 			'ᝰ>[cc="website"]>[T="A"]>div>svg{width:100%;height:100%;object-fit:contain}',
 			
@@ -52,431 +52,251 @@ class Video extends Page{
 			'ᝰ>[cc="website"]>[T="F"]>div{display:block;white-space:nowrap;min-width:100%;overflow-x:auto;overflow-y:hidden}',
 			'ᝰ>[cc="website"]>[T="F"]>div::-webkit-scrollbar{height:4px}',
 			'ᝰ>[cc="website"]>[T="F"]>div>*{border-bottom:2px solid rgba(0,0,0,0);display:inline-block;width:auto;padding:0 1rem;line-height:24px;font-size:.9rem}',
-			'ᝰ>[cc="website"]>[T="F"]>div>.active{border-bottom-color:var(--h-bd);font-size:1rem}',
+			'ᝰ>[cc="website"]>[T="F"]>div>[active]{border-bottom-color:var(--h-bd);font-size:1rem}',
 			
 			'ᝰ>[cc="website"]>[T="W"]>div{position:relative}',
-			'ᝰ>[cc="website"]>[T="W"]>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/14;flex:1}',
+			'ᝰ>[cc="website"]>[T="W"]>div>img{display:block;width:100%;object-fit:cover;aspect-ratio:9/13.5;flex:1}',
 			'ᝰ>[cc="website"]>[T="W"]>div>score{position:absolute;top:8px;left:8px;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.06rem var(--fg)}',
 			'ᝰ>[cc="website"]>[T="W"]>div>tip{position:absolute;top:50%;left:12px;right:12px;transform:translateY(-60%);text-align:center;z-index:20;display:block;font-size:.8rem;-webkit-text-stroke:.01rem var(--bg)}',
-			'ᝰ>[cc="website"]>[T="W"]>div>div{padding:0 .8rem;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.5rem}',
+			'ᝰ>[cc="website"]>[T="W"]>div>title{display:block;padding:.4rem .8rem;display:flex;align-items:center;justify-content:center;line-height:1;text-align:center;font-size:.7rem;flex:1}',
 			
 			'ᝰ>[cc="website"]>[T="V"]{display:flex;flex-direction:column;min-height:30vh}',
 			'ᝰ>[cc="website"]>[T="V"]>svg{width:24%;margin:1rem auto;object-fit:contain;flex:1}',
 			
-			'ᝰ>[cc="website"]>[T="V"]>p{line-height:1.2;font-size:.9rem;padding:0 .8rem;margin:0;border-bottom:1px solid var(--h-bd)}',
-			'ᝰ>[cc="website"]>[T="V"]>p>span{display:block;float:left;padding:0 4px;margin-right:4px;line-height:1.8}',
-			'ᝰ>[cc="website"]>[T="V"]>p[vs]{padding-bottom:.8rem;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center;justify-content:center;text-align:center;line-height:1.05}',
+			'ᝰ>[cc="website"]>[T="V"]>title{display:block;line-height:1.1;font-size:1.1rem;padding:1rem .8rem;font-weight:bold;border-bottom:1px dotted var(--ph)}',
+			'ᝰ>[cc="website"]>[T="V"]>p{line-height:1.2;font-size:.9rem;padding:.8rem;margin:0;border-bottom:1px dotted var(--ph)}',
 			'ᝰ>[cc="website"]>[T="V"]>video{display:block;border-radius:4px 4px 0 0;border-bottom:1px solid var(--h-bd);margin-top:.8rem}',
-			'ᝰ>[cc="website"]>[T="V"]>p[sc]{margin-top:-1px;border-radius:0 0 4px 4px}',
-			'ᝰ>[cc="website"]>[T="V"]>p>[se]{display:block;line-height:30px;text-align:left;width:auto}',
-			'ᝰ>[cc="website"]>[T="V"]>p>[se]:nth-child(2){float:right;text-align:right}',
-			'ᝰ>[cc="website"]>[T="V"]>p[vs]>span[u],ᝰ>[cc="website"]>[T="V"]>p[sc],ᝰ>[cc="website"]>[T="V"]>p[bf]{background:var(--fg);color:var(--bg);opacity:.32;border-radius:3px}',
-			'ᝰ>[cc="website"]>[T="V"]>p[bf]{font-size:.9rem;line-height:1.5;border-radius:2px;padding:.8rem;margin-top:1rem}',
-			'ᝰ>[cc="website"]>[T="V"]>p[vs]>span.active{opacity:.6}',
+			'ᝰ>[cc="website"]>[T="V"]>div{display:flex;margin-top:-1px;border-radius:0 0 4px 4px;background:rgba(180,180,180,.3)}',
+			'ᝰ>[cc="website"]>[T="V"]>div>*{flex:1;line-height:30px;text-align:left}',
+			'ᝰ>[cc="website"]>[T="V"]>div>*:nth-child(2){text-align:right}',
+			'ᝰ>[cc="website"]>[T="V"]>links>[u],ᝰ>[cc="website"]>[T="V"]>brief{background:var(--fg);color:var(--bg);opacity:.32;border-radius:3px}',
+			'ᝰ>[cc="website"]>[T="V"]>brief{display:block;font-size:.9rem;line-height:1.5;border-radius:2px;padding:.8rem;margin-top:1rem}',
+			'ᝰ>[cc="website"]>[T="V"]>links{padding:1.5rem 0;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;align-items:center;justify-content:center}',
+			'ᝰ>[cc="website"]>[T="V"]>links>*{min-height:30px;text-align:center;display:flex;align-items:center;justify-content:center}',
+			'ᝰ>[cc="website"]>[T="V"]>links>[active]{opacity:.4}',
 		]
 	}
-	favorite_flush(e){
-	
+	favorite_load(e){
+		let ie=true
+		this.E('fv_list').html('')
+		for(let x in this.wm){
+			const o=JSON.parse(this.cache(`${x}_favorites`)||'{}')
+			console.log(o);
+			for(let i in o){
+				ie=false
+				this.E('fv_list').append(this.N('div',{i,x,click:'App.pages.video.website_info(this,true)'},
+					this.N('img',{src:this.ph,ss:o[i].c}),
+					this.N('title',o[i].n)
+				))
+			}
+		}
+		this.E('favorite').node('h2>svg:last-child')[ie?'s_attr':'d_attr']('hide')
 	}
-	website_back(e){
-	
+	favorite_flush(e){
+		for(let x in this.wm)this.cache(`${x}_favorites`,'{}')
+		this.favorite_load()
+		toast.success('收藏夹已清空')
 	}
 	website_collect(e){
-	
+		const {i,n,c}=this.E('wb_info').g_attr('i','n','c')
+		const fo=JSON.parse(this.cache(`${this.w.X}_favorites`)||'{}')
+		if(i in fo)delete fo[i]
+		else fo[i]={n,c}
+		this.cache(`${this.w.X}_favorites`,JSON.stringify(fo))
+		this.E('wb_collect').firstChild.s_attr({'xlink:href':i in fo?'/assets/icon.svg#collect_ok':'/assets/icon.svg#collect_no'})
+		this.favorite_load()
 	}
-	website_filters(e){
-	
+	website_back(e){
+		this.E('website').classList.remove('wait')
+		if(!this.E('wb_info').h_attr('hide')&&!this.E('wb_info').h_attr('fv')){
+			const id=this.E('wb_info').g_attr('i')
+			this.E('wb_info').s_attr('hide').d_attr('i').html('')
+			this.E('wb_filters').d_attr('hide')
+			this.E('wb_collect').s_attr('hide')
+			this.E('wb_list').d_attr('hide').node('[i="'+id+'"]').scrollIntoView({block:'center'})
+			this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
+			return
+		}
+		this.E('website').node('h2').childNodes[1].textContent='媒体源'
+		this.E('website').node('h2').childNodes[3].s_attr('hide')
+		this.E('wb_filters').s_attr('hide').html('')
+		this.E('wb_info').s_attr('hide').html('')
+		this.E('wb_list').s_attr('hide').html('')
+		this.E('wb_home').d_attr('hide')
+		e.s_attr('hide')
+		this.w={}
 	}
-	website_list(e){
-	
+	async website_filters(X){
+		const ct=eval(`typeof ${fucase(X)}`)
+		if(ct=='undefined'){
+			this.script(`/addons/${X}.js`,`App.pages.video.website_filters("${X}")`)
+			return
+		}
+		this.w={X}
+		this.E('wb_back').d_attr('hide')
+		this.E('wb_home').s_attr('hide')
+		this.E('wb_list').d_attr('hide').html('')
+		this.E('wb_info').s_attr('hide').html('')
+		this.E('wb_filters').html('').d_attr('hide')
+		this.E('website').node('h2').childNodes[1].textContent=this.wm[X]
+		eval(fucase(X)).filters(()=>this.w.X==X,s=>{
+			this.w={X,o:{},_:s}
+			const ts=Object.keys(s),t=this.w.o.type=ts[0]
+			let $c,$a,$y,$s,$t=ts.map(v=>this.N('div',{v,k:'type',click:'App.pages.video.website_list(this)'},s[v].title))
+			if(_type(s[t].subt,'object')){
+				const ks=Object.keys(s[t].subt)
+				this.w.o.subt=ks[0]
+				$c=ks.map(v=>this.N('div',{v,k:'subt',a:v==ks[0],click:'App.pages.video.website_list(this)'},s[t].subt[v]))
+			}
+			if(_type(s[t].area,'array')){
+				this.w.o.area=s[t].area[0][0]
+				$a=s[t].area.map(([v,n])=>this.N('div',{v,k:'area',a:v===s[t].area[0][0],click:'App.pages.video.website_list(this)'},n))
+			}
+			if(_type(s[t].year,'array')){
+				this.w.o.year=s[t].year[0][0]
+				$y=s[t].year.map(([v,n])=>this.N('div',{v,k:'year',a:v===s[t].year[0][0],click:'App.pages.video.website_list(this)'},n))
+			}
+			if(_type(s[t].sort,'object')){
+				const ks=Object.keys(s[t].sort)
+				this.w.o.sort=ks[0]
+				$s=ks.map(v=>this.N('div',{v,k:'sort',a:v===ks[0],click:'App.pages.video.website_list(this)'},s[t].sort[v]))
+			}
+			if($t)this.E('wb_filters').append(this.N('div',...$t))
+			if($c)this.E('wb_filters').append(this.N('div',...$c))
+			if($a)this.E('wb_filters').append(this.N('div',...$a))
+			if($y)this.E('wb_filters').append(this.N('div',...$y))
+			if($s)this.E('wb_filters').append(this.N('div',...$s))
+			this.E('wb_filters').node('div>[k="type"]').click()
+		})
 	}
-	website_info(e){
-	
-	}
-	
-}
-
-
-
-
-/*
-H.page_video=async function(){
-	if(this.M.classList.contains('loaded'))return;
-
-	const NF=/(抢先|陈翔六点半|大电影|羊羊|没事|燃烧吧|拜托了|热恋|行不通|吃饭|差评女友|不好惹|怎敌她|永不放弃|鹊刀门|量产型|乡村爱情|扑通扑通|二龙湖|小财迷|武侠世界|别怕)/;
-	const II=`data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHZpZXdCb3g9IjAgMCA0MTkuNTI4IDU5NS4yNzYiPg0KPHJlY3QgeD0iLTkuOTM2IiB5PSItOS43NjYiIHN0eWxlPSJmaWxsOiM3NzciIHdpZHRoPSI0MzkuMTQ5IiBoZWlnaHQ9IjYxMy43ODciLz4NCjxnPg0KCTxnPg0KCQk8cmVjdCB4PSI0Mi4zNzUiIHk9IjgwLjEzNCIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjIwNS4yNzciIGhlaWdodD0iMTguMzgzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgNDIuMzc1NSA5Mi4yMDQpIiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTdweCI+WU9VIEFSRSBJTlZJVEVEIFRPPC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iNDIuMzc1IiB5PSIxMTIuNTE3IiBzdHlsZT0iZmlsbDpub25lIiB3aWR0aD0iMzE3LjA1IiBoZWlnaHQ9IjExMS44MyIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQyLjM3NTUgMTUwLjg1NjMpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPlRIRSBHUkFORCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1MCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjU0cHgiPk9QRU5JTkc8L3RzcGFuPjwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjQwLjM4NCIgeT0iNDQwLjExMyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjEyNy4xMTciIGhlaWdodD0iMTIyLjA2NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDQwLjM4MzggNTA0LjcwODQpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6I0ZGRkZGRjtmb250LWZhbWlseTonQXplcmV0TW9uby1CbGFjayc7Zm9udC1zaXplOjkwLjk4MThweCI+MDI8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSI1NC41ODkiIHN0eWxlPSJmaWxsOiNGRkZGRkY7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tQmxhY2snO2ZvbnQtc2l6ZTo2MS40MTI3cHgiPlNFUDwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNDQxLjY2NiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE4MC4xMDYiIGhlaWdodD0iODYuMDQzIi8+DQoJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIDEgMjAxLjYxNzQgNDUwLjE4NjEpIj48dHNwYW4geD0iMCIgeT0iMCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPkpvaW4gdXMgZm9yIGV4Y2x1c2l2ZSBzdXJwcmlzZXMsIDwvdHNwYW4+PHRzcGFuIHg9IjAiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLVNlbWlCb2xkJztmb250LXNpemU6MTJweCI+YWN0aXZpdGllcywgYW5kIHJlZnJlc2htZW50czwvdHNwYW4+PHRzcGFuIHg9IjEzNy4wMzUiIHk9IjE5IiBzdHlsZT0iZmlsbDojMzYzNjM0O2ZvbnQtZmFtaWx5OidBemVyZXRNb25vLUxpZ2h0Jztmb250LXNpemU6MTJweCI+4oCUZG9u4oCZdCA8L3RzcGFuPjx0c3BhbiB4PSIwIiB5PSIzOCIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPm1pc3Mgb3V0ITwvdHNwYW4+PC90ZXh0Pg0KCTwvZz4NCgk8Zz4NCgkJPHJlY3QgeD0iMjAxLjYxNyIgeT0iNTUyLjM5NyIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9IjE2NS41NTMiIGhlaWdodD0iOS42NSIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU2MC45MTY5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPk9uZSBTdC4gOSBMQSAsQ0EgMTIzNDwvdGV4dD4NCgk8L2c+DQoJPGc+DQoJCTxyZWN0IHg9IjIwMS42MTciIHk9IjUzNC40MTgiIHN0eWxlPSJmaWxsOm5vbmUiIHdpZHRoPSIxNTkuNDI2IiBoZWlnaHQ9IjExLjg0NCIvPg0KCQk8dGV4dCB0cmFuc2Zvcm09Im1hdHJpeCgxIDAgMCAxIDIwMS42MTczIDU0Mi45MzgyKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPnd3dy55b3Vyd2Vic2l0ZS5jb208L3RleHQ+DQoJPC9nPg0KCTxwb2x5bGluZSBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS13aWR0aDoyO3N0cm9rZS1taXRlcmxpbWl0OjEwIiBwb2ludHM9IjQ0LjcwMiw0MDMuMjI1IDQ0LjcwMiwyNTQuNDUzIA0KCQkxOTAuNTMsNDA0Ljg0MyAxOTIuNzczLDI1NC40NTMgMzc3LjEyOCw0MjAuNDc0IDM3Ny4xMjgsODEuMTU1IAkiLz4NCgk8Zz4NCgkJCTxlbGxpcHNlIHRyYW5zZm9ybT0ibWF0cml4KDAuMjQ3MSAtMC45NjkgMC45NjkgMC4yNDcxIC0zNS44MDc1IDUyMi45NTEpIiBzdHlsZT0iZmlsbDojRkZGRkZGIiBjeD0iMzE4LjYwNiIgY3k9IjI4NC41MTciIHJ4PSIzMi41NTMiIHJ5PSIzOS44MyIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMC45Njk5IDAuMjQzMyAtMC4yNDMzIDAuOTY5OSAyOTYuOTM3MSAyNzQuMDEzKSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1SZWd1bGFyJztmb250LXNpemU6MTNweCI+MDI6MDBQTTwvdGV4dD4NCgkJCTx0ZXh0IHRyYW5zZm9ybT0ibWF0cml4KDAuOTY5OSAwLjI0MzMgLTAuMjQzMyAwLjk2OTkgMjkyLjg5MSAyODkuNTg4OCkiIHN0eWxlPSJmaWxsOiMzNjM2MzQ7Zm9udC1mYW1pbHk6J0F6ZXJldE1vbm8tUmVndWxhcic7Zm9udC1zaXplOjEzcHgiPjA1OjAwUE08L3RleHQ+DQoJPC9nPg0KCTxnPg0KCQk8cGF0aCBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojMzYzNjM0O3N0cm9rZS1taXRlcmxpbWl0OjEwIiBkPSJNMjU4LjYwMyw1NC4xNDJoLTk3LjY3OGMtNS44MTEsMC0xMC41MjEtNC43MTEtMTAuNTIxLTEwLjUyMQ0KCQkJbDAsMGMwLTUuODExLDQuNzExLTEwLjUyMSwxMC41MjEtMTAuNTIxaDk3LjY3OGM1LjgxMSwwLDEwLjUyMiw0LjcxMSwxMC41MjIsMTAuNTIxbDAsMA0KCQkJQzI2OS4xMjQsNDkuNDMxLDI2NC40MTQsNTQuMTQyLDI1OC42MDMsNTQuMTQyeiIvPg0KCQk8Zz4NCgkJCTxyZWN0IHg9IjE2MS4wNzgiIHk9IjM5LjQzMiIgc3R5bGU9ImZpbGw6bm9uZSIgd2lkdGg9Ijk3LjM3MiIgaGVpZ2h0PSI5LjE5MSIvPg0KCQkJPHRleHQgdHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgMSAxNzYuNzIyMSA0Ny45NTE5KSIgc3R5bGU9ImZpbGw6IzM2MzYzNDtmb250LWZhbWlseTonQXplcmV0TW9uby1MaWdodCc7Zm9udC1zaXplOjEycHgiPlZJQ1RPUiAmYW1wO1ZJQzwvdGV4dD4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjwvc3ZnPg0K`;
-
-	//await this.db_set('drop table video');
-	this.db_table(this.page,`
-		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		X VARCHAR(10) NOT NULL, -- 平台
-		T INTEGER CHECK(T IN (1,2,3,4)), -- 主类: 1.电影 2.电视剧 3.综艺 4.动漫 
-		C VARCHAR(15) NOT NULL, -- 子类
-		Z VARCHAR(24) NOT NULL, -- 地区
-		Y VARCHAR(4) NOT NULL, -- 年份
-		D TEXT DEFAULT '', -- 导演
-		A TEXT DEFAULT '', -- 主演
-		N VARCHAR(50) NOT NULL, -- 标题
-		I TEXT NOT NULL, -- 封面
-		B TEXT DEFAULT '', -- 简介
-		S TEXT DEFAULT '{}', -- 视频源链
-		P TEXT DEFAULT '{}', -- 播放设置
-		O INTEGER DEFAULT 0 CHECK(O IN (0,1)), -- 是否已收藏: 0.否 1.是
-		CONSTRAINT uq_filter UNIQUE (X,T,C,Z,Y,N)
-	`);
-
-	const WS_MAP={ole:'欧乐影院',ayf:'爱一帆',ddz:'蛋蛋赞',ydq:'影视大全'};
-	this.X.video={
-		favorite_flush:async e=>{
-			if(!confirm('确认要清空收藏夹吗？'))return;
-			await this.db_set(`update video set O=0 where O=1`);
-			'#video_favorite>.grid'.N().innerHTML='';
-			e.classList.add('hide');
-		},
-		favorite_load:()=>{
-			const o=this.db_get(`select * from video where O=1`,[],false);
-			'#video_favorite>.grid'.N().innerHTML=o.map(_=>`<div X='${_.X}' N='${_.N}' onclick='H.X.video.website_info(this)'><img src='${_.I}'/><div>${_.N.split('$$').pop()}</div></div>`).join('');
-			'#favorite_flush'.N().classList[o.length>0?'remove':'add']('hide');
-		},
-		website:{},
-		website_load:()=>{
-			'#video_website>.grid'.N().innerHTML=Object.keys(WS_MAP).map(_=>`<div X='${_}' N='${WS_MAP[_]}' onclick='H.X.video.website_init(this)'>${_.V()}</div>`).join('');
-		},
-		website_back:async e=>{
-			const $a='#video_website>[T="A"]'.N(),$f='#video_website>[T="F"]'.N();
-			const $w='#video_website>[T="W"]'.N(),$v='#video_website>[T="V"]'.N();
-			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
-			if(!$v.classList.contains('hide')){
-				await H.X.video.website_option(0);
-				'#video_website>h2>#website_collect'.N().classList.add('hide');
-				$v.innerHTML='';
-				$v.classList.add('hide');
-				if(!$f.firstChild){
-					$a.classList.remove('hide');
-					return;
+	async website_list(e,p=1){
+		if(p=='..')return
+		if(e){
+			this.E('wb_list').s_attr({p:1}).html('')
+			const k=e.g_attr('k'),t=e.g_attr('v')
+			if(k=='type'&&t!=this.w.o.type){
+				this.E('wb_filters').nodes('[k="subt"],[k="area"],[k="year"],[k="sort"]').forEach(_=>_.remove())
+				this.w.o={type:t}
+				let $c,$a,$y,$s,s=this.w._
+				if(_type(s[t].subt,'object')){
+					const ks=Object.keys(s[t].subt)
+					this.w.o.subt=ks[0]
+					$c=ks.map(v=>this.N('div',{v,k:'subt',a:v==ks[0],click:'App.pages.video.website_list(this)'},s[t].subt[v]))
 				}
-				$f.classList.remove('hide');
-				$w.classList.remove('hide');
-				$t.textContent=WS_MAP[this.X.video.website.X];
-				return;
-			}
-			if(!$f.classList.contains('hide')){
-				$f.classList.add('hide');
-				$w.classList.add('hide');
-				$a.classList.remove('hide');
-				e.classList.add('hide');
-				$t.textContent='媒体源';
-				$f.innerHTML='';
-				$w.innerHTML='';
-			}
-		},
-		website_init:async e=>{
-			const X=e.getAttribute('X'),N=e.getAttribute('N');
-			this.X.video.website={X};
-			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
-			$t.textContent=N;
-			'#video_website>[T="A"]'.N().classList.add('hide');
-			'#video_website>[T="F"],#video_website>[T="W"]'.N(true).forEach(_=>_.classList.remove('hide'));
-			'#video_website>h2>#website_back'.N().classList.remove('hide');
-			const {S:F,P:V}=this.db_get('select S,P from video where X=? and N=?',[X,'.'],true)||{};
-			let {T:HT,C:HC,Z:HZ,Y:HY,S:HS}=JSON.parse(V||'{}');
-			const O={},todo=o=>{
-				const ks=Object.keys(this.X.video.website.filters=o);
-				HT=HT&&o[HT]?HT:ks[0];
-				const {C,Z,Y,S}=o[HT],cks=Object.keys(C),sks=Object.keys(S);
-				if(HC===undefined)HC=cks[0];
-				if(HZ===undefined)HZ=Z[0][0];
-				if(HY===undefined)HY=Y[0][0];
-				if(HS===undefined)HS=sks[0];
-				const T=ks.map(_=>`<div onclick='H.X.video.website_list(this)' k='T' v='${_}' class='${_===HT?'active':''}'>${o[_].N}</div>`).join('');
-				const c=cks.map(_=>`<div onclick='H.X.video.website_list(this)' k='C' v='${_}' class='${_===HC?'active':''}'>${C[_]}</div>`).join('');
-				const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_[0]}' class='${_[0]===HZ?'active':''}'>${_[1]}</div>`).join('');
-				const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_[0]}' class='${_[0]===HY?'active':''}'>${_[1]}</div>`).join('');
-				const s=sks.map(_=>`<div onclick='H.X.video.website_list(this)' k='S' v='${_}' class='${_===HS?'active':''}'>${S[_]}</div>`).join('');
-				'#video_website>[T="F"]'.N().innerHTML+=`<div k='T'>${T}</div><div k='C'>${c}</div><div k='Z'>${z}</div><div k='Y'>${y}</div><div k='S'>${s}</div>`;
-				'#video_website>[T="F"]>[k="C"]>.active'.N().click();
-			}
-			//if(F)return todo(JSON.parse(F));
-			let C={};
-			switch(X){
-				case 'ole':
-					fetch('https://api.olelive.com/v1/pub/vod/list/type',{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(async _=>{
-						if(!_.data)this.toast('请求失败','error');
-						for(let x of _.data.filter(_=>_.typeId<5)){
-							C=x.children
-								.map(_=>(_.typeId+'').startsWith(x.typeId+'')?[_.typeId+'',_.typeName]:null)
-								.filter(_=>_).reduce((x,[k,v])=>{x[k]=v;return x},{});
-							x.area=x.area.map(_=>[_,_]);
-							x.year=x.year.map(_=>[_+'',_+'']);
-							O[x.typeId]={N:x.typeName,Z:[['','全部'],...x.area],Y:[['','全部'],...x.year],C,S:{update:'最新',hot:'最热',desc:'添加'}};
-						}
-						await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
-						todo(O);
-					});
-					break;
-				case 'ayf':
-					C={movie:'电影',drama:'连续剧',variety:'综艺',anime:'动漫'};
-					for(let k in C){
-						O[k]={N:C[k],Z:[],Y:[],C:{},S:{}};
-						let x=await fetch(`https://api.yfsp.tv/api/list/getfiltertagsdata?SecondaryCode=${k}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>_?.data?.list||[]);
-						if(x.length<1)return this.toast('请求失败','error');
-						x.forEach((_,i)=>{
-							if(i>4)return;
-							for(let v of _.list){
-								if(i===0||i==1)O[k][['S','C'][i]][v.classifyId+'']=v.classifyName;
-								else if(i==2||i==4)O[k][i==2?'Z':'Y'].push([v.classifyId+'',v.classifyName]);
-							}
-						});
-					}
-					await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
-					todo(O);
-					break;
-				case 'ddz':
-					C={dianying:'电影',dianshiju:'连续剧',zongyi:'综艺',dongman:'动漫'};
-					for(let k in C){
-						O[k]={N:C[k],Z:[['','全部']],Y:[['','全部']],C:{},S:{}};
-						let x=await fetch(`https://dandanzan.org/${k}/`,{headers:{'x-up':this.use_proxy}}).then(_=>_.text());
-						x.matchAll(new RegExp(`href="\\/${k}\\/\\?genre=([a-z\\-]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>(O[k].C[_[1]]=_[2]));
-						x.matchAll(new RegExp(`href="\\/${k}\\/\\?country=([a-z]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Z.push([_[1],_[2]]));
-						x.matchAll(new RegExp(`href="\\/${k}\\/\\?year=([0-9a-z_]+)" class="">([^<]+)<\\/a>`,'g')).forEach(_=>O[k].Y.push([_[1],_[2]]));
-						O[k].S={'':'时间',click:'人气',rating:'评分'};
-					}
-					await this.db_set('replace into video(X,T,C,Z,Y,N,I,S)values(?,?,?,?,?,?,?,?)',[X,1,'.','.','.','.','.',JSON.stringify(O)]);
-					todo(O);
-					break;
-				
-			}
-		},
-		website_list:async(e,p=1)=>{
-			const $w=`#video_website>[T='W']`.N();
-			`#video_website`.N().classList.add('wait');
-			if(e){
-				const k=e.getAttribute('k'),v=e.getAttribute('v');
-				if(k=='T'&&p==1){
-					const {C,Z,Y,S}=this.X.video.website.filters[v];
-					'#video_website>[T="F"]>*:not([k="T"])'.N(true).forEach(_=>_.remove());
-					const cks=Object.keys(C),sks=Object.keys(S);
-					const c=cks.map(_=>`<div onclick='H.X.video.website_list(this)' k='C' v='${_}' class='${_===cks[0]?'active':''}'>${C[_]}</div>`).join('');
-					const z=Z.map(_=>`<div onclick='H.X.video.website_list(this)' k='Z' v='${_[0]}' class='${_[0]===Z[0][0]?'active':''}'>${_[1]}</div>`).join('');
-					const y=Y.map(_=>`<div onclick='H.X.video.website_list(this)' k='Y' v='${_[0]}' class='${_[0]===Y[0][0]?'active':''}'>${_[1]}</div>`).join('');
-					const s=sks.map(_=>`<div onclick='H.X.video.website_list(this)' k='S' v='${_}' class='${_===sks[0]?'active':''}'>${S[_]}</div>`).join('');
-					'#video_website>[T="F"]'.N().innerHTML+=`<div k='C'>${c}</div><div k='Z'>${z}</div><div k='Y'>${y}</div><div k='S'>${s}</div>`;
+				if(_type(s[t].area,'array')){
+					this.w.o.area=s[t].area[0][0]
+					$a=s[t].area.map(([v,n])=>this.N('div',{v,k:'area',a:v===s[t].area[0][0],click:'App.pages.video.website_list(this)'},n))
 				}
-				$w.innerHTML='';
-				$w.classList.remove('open');
-				`#video_website>[T='F']>[k='${k}']>*`.N(true).forEach(_=>_.classList[_.getAttribute('v')==v?'add':'remove']('active'));
-			}
-			const X=`#video_website>[T='F']>*>[k].active`.N(true).map(_=>[_.getAttribute('k'),_.getAttribute('v')]).reduce((_,[k,v])=>{_[k]=v;return _},{});
-			if(e)await this.db_set('update video set P=? where X=? and N=?',[JSON.stringify(X),this.X.video.website.X,'.']);
-			
-			let url;
-			switch(this.X.video.website.X){
-				case 'ole':
-					url=`https://api.olelive.com/v1/pub/vod/list/true/3/0/${encodeURIComponent(X.Z)}/${X.T}/${X.C}/${X.Y}/${X.S}/${p}/20`;
-					fetch(url+`?_vv=${(new Date).vv()}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
-						const {data:{list,total}}=o;
-						if(!list||list.length<1)return;
-						const x=list.map(({id,name:n,pic,score,remarks})=>{
-							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
-							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
-							return NF.test(N)?null:'div'.E(`<img src='${II}' s='https://static.olelive.com/${pic}'/><score>${score}</score><tip>${remarks?remarks.trim():''}</tip><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
-						}).filter(_=>_);
-						if(x.length<1)return;
-						$w.append(...x);
-						$w.setAttribute('p',p+1);
-					}).then(()=>{
-						`#video_website`.N().classList.remove('wait');
-					});
-					break;
-				case 'ayf':
-					url=`https://api.yfsp.tv/api/list/getconditionfilterdata?titleid=${X.T}&ids=${X.S},${X.C},${X.Z},,${X.Y}&page=${p}&size=24`;
-					fetch(url,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
-						const {list}=o?.data||{};
-						if(!list||list.length<1)return;
-						const x=list.map(({mediaKey:id,title:n,coverImgUrl:pic,score})=>{
-							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
-							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
-							return NF.test(N)?null:'div'.E(`<img src='${II}' s='${pic}'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'});
-						}).filter(_=>_);
-						if(x.length<1)return;
-						$w.append(...x);
-						$w.setAttribute('p',p+1);
-					}).then(()=>{
-						`#video_website`.N().classList.remove('wait');
-					});
-					break;
-				case 'ddz':
-					url=`https://dandanzan.org/${X.T}?page=${p}${X.S?`&ob=${X.S}`:''}${X.C?`&genre=${X.C}`:''}${X.Z?`&country=${X.Z}`:''}${X.Y?`&year=${X.Y}`:''}`;
-					fetch(url,{headers:{'x-up':this.use_proxy}}).then(_=>_.text()).then(_=>{
-						const x=[],reg=/\/(\d+)\.html"[^>]*>([^<]+)<\/a><\/h2>[\s\S]*?<span class="rate">([\d.]+)<\/span>/g;
-						while((m=reg.exec(_))!==null){
-							const [,id,n,score]=m;
-							let N=n.trim().replace(/\s*[】]\s/g,'').replace(/(\s*[【】:：·。～]\s*|\-+|—+)/g,'.').replace(/，/g,',').replace(/！/g,'!').replace(/\s\s/g,' ').replace(/\.{2,}/g,'.').trim().replace(/\s/g,'.').replace(/(\s*\.+$|\.?(剧场|真人)版)/g,'');
-							if(X.T=='1')N=N.replace(/\.?电影版/g,'');
-							if(!NF.test(N))x.push('div'.E(`<img src='${II}' s='https://dandanzan.org/thumbnail/${id}.jpg'/><score>${score}</score><div>${N}</div>`,{T:X.T,C:X.C,X:this.X.video.website.X,N:id+'$$'+N,onclick:'H.X.video.website_info(this)'}));
-						}
-						if(x.length<1)return;
-						$w.append(...x);
-						$w.setAttribute('p',p+1);
-					}).then(()=>{
-						`#video_website`.N().classList.remove('wait');
-					});
-					break;
-			}
-			
-		},
-		website_info:async e=>{
-			const X=this.X.video.website.X=e.getAttribute('X'),T=e.getAttribute('T'),C=e.getAttribute('C'),N=e.getAttribute('N'),[I,NN]=N.split('$$');
-			this.X.video.website.N=N;
-			const $t=Array.from('#video_website>h2'.N().childNodes).find(n=>n.nodeType===Node.TEXT_NODE);
-			$t.textContent=NN;
-			const $f='#video_website>[T="F"]'.N(),$w='#video_website>[T="W"]'.N();
-			const $='#video_website>[T="V"]'.N();
-			$.innerHTML=`
-				<svg viewBox='0 0 50 50'>
-					<path d='M25,5 a20,20 0 1,1 -20,20' stroke='var(--fg)' stroke-width='1' fill='none' stroke-linecap='round'>
-						<animate attributeName='stroke-dasharray' values='10,60;60,10;10,60' dur='1.5s' repeatCount='indefinite'/>
-						<animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='1s' repeatCount='indefinite'/>
-					</path>
-				</svg>`;
-			`#video_website`.N().classList.add('wait');
-			$f.classList.add('hide');
-			$w.classList.add('hide');
-			$.classList.remove('hide');
-			'#video_website>[T="A"]'.N().classList.add('hide');
-			'#video_website>h2>#website_back'.N().classList.remove('hide');
-			
-			const tm={movie:1,dianying:1,drama:2,dianshiju:2,zongyi:3,variety:3,anime:4,dongman:4};
-			const todo=async(C,area,year,director,actor,urls,brief,pic,fn,np=false)=>{
-				const r=this.db_get('select N,P,O from video where N=? AND X=?',[N,X],true);
-				if(!r)await this.db_set('replace into video(X,N,T,C,Z,Y,D,A,I,B,S)values(?,?,?,?,?,?,?,?,?,?,?)',[
-					X,N,tm[T]||T,C,area,year,director,actor,pic,brief,JSON.stringify(urls)
-				]);
-				'#video_website>h2>#website_collect>use'.N().setAttribute('xlink:href',r&&r.O?'o.svg#collect_ok':'o.svg#collect_no');
-				'#video_website>h2>#website_collect'.N().classList.remove('hide');
-				let {start,end,curr,u}=JSON.parse(r?.P||'{}');
-				this.X.video.website.start=start||0;
-				this.X.video.website.end=end||0;
-				this.X.video.website.curr=curr||0;
-				$.innerHTML=`<p><span>地区:&emsp;<em>${area}</em>&emsp;&emsp;&emsp;年份:&emsp;<em>${year}</em>&emsp;&emsp;&emsp;类型:&emsp;<em>${C}</em></span></p>
-					<p ${director.length>0?'':` class='hide'`}><span>导演: </span>${director.map(_=>`<span><em>${_}</em></span>`).join('')}</p>
-					<p><span>主演: </span>${actor.map(_=>`<span><em>${_}</em></span>`).join('')}</p><br>
-					<p vs>${urls.map(_=>`<span u='${_[1]}' onclick='H.X.video.website_play(this)'${np?` np='1'`:''} fn='${fn?fn.replace('?',_[1]):''}'>${_[0]}</span>`).join('')}</p>
-					<video preload autoplay crossorigin='anonymous' controls></video>
-					<p sc><span se s onclick='H.X.video.website_option(1)'>╟ ${this.X.video.website.start}</span><span se e onclick='H.X.video.website_option(-1)'>-${this.X.video.website.end} ╢</span></p>
-					<p bf>${brief}</p>`;
-				`#video_website`.N().classList.remove('wait');
-				const V='video'.N();
-				V.ondurationchange=()=>{
-					if(V.duration<250)return;
-					V.playbackRate=1.25;
-					V.currentTime=Math.max(this.X.video.website.curr,this.X.video.website.start);
-				};
-				V.ontimeupdate=()=>{
-					if(V.duration<250)return;
-					if(V.duration-V.currentTime>this.X.video.website.end)return;
-					const x=$.querySelector('p[vs]>span.active'),xx=x?x.nextElementSibling:null;
-					xx&&xx.click();
-				};
-				$.querySelector(`p[vs]>span${u?`[u='${u}']`:''}`).click();
-			};
-			switch(X){
-				case 'ole':
-					fetch(`https://api.olelive.com/v1/pub/vod/detail/${I}/true?_vv=${(new Date).vv()}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
-						let {typeIdName:C,area,year,director,actor,urls,content:brief,pic}=o.data;
-						actor=actor.split(' / ').map(_=>_.trim()).filter(_=>_);
-						director=director.split(' / ').map(_=>_.trim()).filter(_=>_);
-						pic=`https://static.olelive.com/${pic}`;
-						urls=urls.map(_=>[_.title,_.url]);
-						todo(C,area,year,director,actor,urls,brief,pic,null,true);
-					});
-					break;
-				case 'ayf':
-					fetch(`https://api.yfsp.tv/api/video/videodetails?mediaKey=${I}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(o=>{
-						console.log(o.data.detailInfo);
-						let {contentType:C,regional:area,postTime:year,director,starring:actor,episodes:urls,introduce:brief,coverImgUrl:pic}=o.data.detailInfo;
-						year=year.split('-')[0];
-						actor=actor.split(',').map(_=>_.trim()).filter(_=>_);
-						director=director.split(',').map(_=>_.trim()).filter(_=>_);
-						urls=urls.map(v=>[v.episodeTitle,v.episodeId]);
-						todo(C,area,year,director,actor,urls,brief,pic,`H.X.video.website_pu_ayf("${I}","?")`);
-					});
-					break;
-				case 'ddz':
-					fetch(`https://dandanzan.org/${C}/${I}.html`,{headers:{'x-up':this.use_proxy}}).then(_=>_.text()).then(async _=>{
-						const $o=_.H();
-						const year=$o.querySelector('header.product-header>span')?.innerText.replace(/\D/g,'')||'';
-						const [director,actor,C,area,,brief]=Array.from($o.querySelectorAll('header.product-header .product-excerpt>span')).map(_=>{
-							const $a=_.querySelectorAll('a');
-							if($a.length>0)return Array.from($a).map(_=>_.innerText.trim()).filter(_=>_);
-							return _.innerText.trim();
-						});
-						const urls=await fetch(`https://dandanzan.org/fetch_plays/${I}/${C}`,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>{
-							return _.video_plays.map(x=>[x.src_site,x.play_data]);
-						}).catch(_=>[]);
-						todo(C.join(' / '),area.pop(),year,director,actor,urls,brief,`https://dandanzan.org/image/${I}.jpg`);
-					});
-					break;
-			
-			}
-		},
-		website_option:async(e)=>{
-			const $=`#video_website video`.N();
-			if(!$)return;
-			if(e===1)this.X.video.website.start=$.currentTime;
-			else if(e===-1)this.X.video.website.end=$.duration-$.currentTime;
-			if(e!==0)`#video_website>[T='V']>p>[se][${e==1?'s':'e'}]`.N().innerText=(e==1?'╟ ':'-')+this.X.video.website[e?'start':'end']+(e==-1?' ╢':'');
-			const {start,end,u,N,X}=this.X.video.website;
-			await this.db_set('update video set P=? where N=? AND X=?',[
-				JSON.stringify({start,end,curr:$.currentTime,u}),N,X
-			])
-		},
-		website_pu_ayf:async(vk,pi)=>{
-			const u=`https://api.yfsp.tv/api/video/getplaydata?mediaKey=${vk}&videoId=${pi}&videoType=1`;
-			return await fetch(u,{headers:{'x-up':this.use_proxy}}).then(_=>_.json()).then(_=>_?.data?.list?.filter(_=>_.mediaUrl).sort((a,b)=>parseInt(a.resolution)-parseInt(b.resolution))?.pop()).then(_=>_?_.mediaUrl:null);
-		},
-		website_play:async e=>{
-			const u=e.getAttribute('u'),fn=e.getAttribute('fn'),np=e.getAttribute('np')==1;
-			e.parentNode.childNodes.forEach(_=>_.classList[_==e?'add':'remove']('active'));
-			this.X.video.website.u=u;
-			const todo=async url=>{
-				if(np&&url&&url.includes('.m3u8'))url=`https://corsproxy.io/?url=${encodeURIComponent(url)}`;
-				`#video_website video`.N().setAttribute('src',url||'');
-				await H.X.video.website_option(0);
-			};
-			if(!fn)return await todo(u);
-			const url=await eval(fn);
-			await todo(url);
-		},
-		website_collect:async e=>{
-			const {N,X}=this.X.video.website;
-			const $u=e.firstChild,o=$u.getAttribute('xlink:href').endsWith('_no');
-			$u.setAttribute('xlink:href',o?'o.svg#collect_ok':'o.svg#collect_no');
-			await this.db_get('update video set O=? where N=? AND X=?',[o?1:0,N,X]);
-			this.toast('已'+(o?'添加到收藏夹!':'从收藏夹中删除!'));
-			this.X.video.favorite_load();
-		},
+				if(_type(s[t].year,'array')){
+					this.w.o.year=s[t].year[0][0]
+					$y=s[t].year.map(([v,n])=>this.N('div',{v,k:'year',a:v===s[t].year[0][0],click:'App.pages.video.website_list(this)'},n))
+				}
+				if(_type(s[t].sort,'object')){
+					const ks=Object.keys(s[t].sort)
+					this.w.o.sort=ks[0]
+					$s=ks.map(v=>this.N('div',{v,k:'sort',a:v===ks[0],click:'App.pages.video.website_list(this)'},s[t].sort[v]))
+				}
+				if($c)this.E('wb_filters').append(this.N('div',...$c))
+				if($a)this.E('wb_filters').append(this.N('div',...$a))
+				if($y)this.E('wb_filters').append(this.N('div',...$y))
+				if($s)this.E('wb_filters').append(this.N('div',...$s))
+			}else this.w.o[k]=t
+			e.parentNode.childNodes.forEach(_=>_[_==e?'s_attr':'d_attr']('active'))
+		}
+		const fo=JSON.stringify(this.w.o)
+		this.E('website').classList.add('wait')
+		const filters=this.w.o,next=await eval(fucase(this.w.X)).list(()=>fo==JSON.stringify(filters),({id,title,cover,score,tip})=>{
+			const o={i:id,click:'App.pages.video.website_info(this)'}
+			return this.N('div',o,
+				this.N('img',{src:this.ph,ss:this.link(cover)}),
+				this.N('title',title),
+				tip?this.N('tip',tip):'',
+				score?this.N('score',score):'',
+			)
+		},async $=>this.E('wb_list').append(...$),filters,p)
+		if(next=='✘')return
+		this.E('wb_list').s_attr({p:next})
+		this.E('website').classList.remove('wait')
 	}
-
-	const img=`https://static.olelive.com/upload/vod/20251215-1/e0ac3d0e9e6900a61a42ff747eccb699.jpg`;
-	this.M.innerHTML=`
-		<style>
-			
-			
-		</style>
-		<card id='video_favorite'><h2>${'favorite'.V()}收藏夹${'trash'.V('X.video.favorite_flush',{id:'favorite_flush',c:'hide'})}</h2><div class='grid' style='--gc:4'></div></card>
-		<card id='video_website'><h2>${'website'.V()}媒体源${'back'.V('X.video.website_back',{id:'website_back',c:'hide'})}${'collect_no'.V('X.video.website_collect',{id:'website_collect',c:'hide'})}</h2>
-			<div T='A' class='grid' style='--gc:2'></div>
-			<div T='F' class='hide'></div>
-			<div T='W' class='grid hide' style='--gc:4' more='H.X.video.website_list' p='1'></div>
-			<div T='V' class='row hide'></div>
-		</card>
-	`;
-	this.X.video.favorite_load();
-	this.X.video.website_load();
-
-	this.M.classList.add('loaded');
-	setTimeout(()=>'main>svg'.N().classList.add('hide'),800);
+	website_info(e,ifv=false){
+		const id=this.w.id=e.g_attr('i').trim()
+		if(ifv){
+			this.w.X=e.g_attr('x')
+			const ct=eval(`typeof ${fucase(this.w.X)}`)
+			if(ct=='undefined'){
+				this.script(`/addons/${this.w.X}.js`,`App.pages.video.E("fv_list").node("[i='${id}']").click()`)
+				return
+			}
+			this.E('wb_back').d_attr('hide')
+			this.E('website').node('h2').childNodes[1].textContent=this.wm[this.w.X]
+			this.E('wb_info').s_attr('fv')
+		}else this.E('wb_info').d_attr('fv')
+		const cover=e.node('img').g_attr('ss')
+		this.E('wb_list').s_attr('hide')
+		this.E('wb_filters').s_attr('hide')
+		this.E('wb_home').s_attr('hide')
+		const fo=JSON.parse(this.cache(`${this.w.X}_favorites`)||'{}')
+		const {u,curr,start,end}=JSON.parse(this.cache(`${this.w.X}_history_${id}`)||'{}')
+		this.w.u=u||''
+		this.w.end=isNaN(end)?0:parseInt(end)
+		this.w.curr=isNaN(curr)?0:parseInt(curr)
+		this.w.start=isNaN(start)?0:parseInt(start)
+		this.E('wb_collect').d_attr('hide').firstChild.s_attr({'xlink:href':id in fo?'/assets/icon.svg#collect_ok':'/assets/icon.svg#collect_no'})
+		this.E('wb_info').html(this.loader).d_attr('hide').s_attr({i:id})
+		eval(fucase(this.w.X)).info(()=>this.w.id==id,async({title,subt,area,year,directors,actors,brief,links})=>{
+			this.E('wb_info').s_attr({i:id,n:title,c:cover}).append(
+				this.N('title',title),
+				this.N('p',`类型: ${subt||'未知'}`),
+				this.N('p',`地区: ${area||'未知'}　　　时间: ${year}`),
+				this.N('p',`导演: ${directors?directors.join(', '):'未知'}`),
+				this.N('p',`主演: ${actors?actors.join(', '):'未知'}`),
+				this.N('video',{preload:'',autoplay:'',crossorigin:'anonymous',controls:''}),
+				this.N('div',
+					this.N('div',{click:'App.pages.video.website_seek("start",this)'},'╟ '+this.w.start.time()),
+					this.N('div',{click:'App.pages.video.website_seek("end",this)'},'-'+this.w.end.time()+' ╢'),
+				),
+				brief?this.N('brief',brief):'',
+				this.N('links',...links.map(([n,u])=>this.N('div',{u,click:'App.pages.video.website_play(this)'},n=='立即播放'?'默认':n))),
+			)
+			const V=this.E('wb_info').node('video')
+			V.ondurationchange=()=>{
+				if(!V.isConnected||V.duration<250)return
+				V.playbackRate=1.25
+				V.currentTime=Math.max(this.w.curr,this.w.start)
+			}
+			V.ontimeupdate=()=>{
+				if(!V.isConnected||V.duration<250)return
+				if(V.duration-V.currentTime>this.w.end)return
+				const $=this.E('wb_info').node('links>[active]'),$n=$?$.nextElementSibling:null
+				$n&&$n.click()
+			}
+			this.E('wb_info').node('title').scrollIntoView({block:'start'})
+			this.E('wb_info').node('.news_loader')?.remove()
+			this.E('wb_info').node(`links>[u${this.w.u?('="'+this.w.u+'"'):''}]`).click()
+		},id)
+	}
+	website_seek(_,e){
+		const o=JSON.parse(this.cache(`${this.w.X}_history_${this.w.id}`)||'{}')
+		const v=this.E('wb_info').node('video'),ct=v.currentTime,tc=v.duration
+		this.w.u=o.u=this.E('wb_info').node('links>[active]').g_attr('u')
+		this.w.u=o.curr=ct
+		this.w[_]=o[_]=_=='end'?(tc-ct):ct
+		this.cache(`${this.w.X}_history_${this.w.id}`,JSON.stringify(o))
+		e.innerText=e.innerText.replace(/\d+:\d+(:\d+)?/,o[_].time())
+	}
+	async website_play(e){
+		const cu=this.w.u=e.g_attr('u'),uu=e.g_attr('uu')
+		const {u,curr,start,end}=JSON.parse(this.cache(`${this.w.X}_history_${this.w.id}`)||'{}')
+		const o=u!=cu?{u:cu,curr:0,start:0,end:0}:{u,curr,start,end}
+		this.cache(`${this.w.X}_history_${this.w.id}`,JSON.stringify(o))
+		this.E('wb_info').nodes('links>[active]').forEach(_=>_.d_attr('active'))
+		e.s_attr('active')
+		const V=this.E('wb_info').node('video')
+		if(uu&&uu.startsWith('http'))return V.s_attr({src:uu})
+		if(o.u.startsWith('http'))return V.s_attr({src:o.u})
+		await eval(fucase(this.w.X)).src(()=>this.w.u==o.u,(cu,nu)=>{
+			if(cu&&cu.startsWith('http'))V.s_attr({src:cu})
+			if(nu&&nu.startsWith('http'))e.nextElementSibling.s_attr({uu:nu})
+		},cu)
+	}
 }
-
-*/
