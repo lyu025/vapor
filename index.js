@@ -179,7 +179,7 @@ class App extends Page{
 				this.N('div',{c:'core'},...Object.keys(App.menus).map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this)'},this.N('svg',{path:p}),App.menus[p]))),
 			),
 			this.N('main',{id:'main'}),
-			this.N('footer',{id:'footer'},...['home','video','record','news','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
+			this.N('footer',{id:'footer'},...['home','article','record','img','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
 			this.N('div',{id:'toast'}),
 		];
 	}

@@ -171,7 +171,7 @@ class Img extends Page{
 		const body=new URLSearchParams();
 		Object.entries({q,sortType:'updated_at',page:p,pageSize:100,sType:'',fills:'',fromCollection:-1,t:Date.now(),ctoken:'null'}).forEach(([k,v])=>body.append(k,v));
 		const url='https://www.iconfont.cn/api/icon/search.json';
-		fetch(url,{method:'POST',body:body.toString(),headers:{'x-up':Vapor.use_proxy,'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}}).then(_=>_.json()).then(_=>{
+		fetch(this.link(url),{method:'POST',body:body.toString(),headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}}).then(_=>_.json()).then(_=>{
 			if(!_?.data)return toast.error('请求返回数据为空')
 			const r=/viewBox\s*=\s*["']\s*(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s+(-?\d+(?:\.\d+)?)\s*["']/i
 			const o=(_.data?.icons||[]).map(v=>{

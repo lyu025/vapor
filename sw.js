@@ -118,6 +118,7 @@ async function flush_caches(){
 				return _
 			}
 			// 检查是否需要缓存
+			if(r.cache=='no-store')return _
 			let nc=false,c_type=r.headers.get('content-type')||''
 			// 检查是否匹配缓存模式
 			for(let P of PATTERNS)if(P.test(pathname))nc=true
