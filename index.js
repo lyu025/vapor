@@ -207,7 +207,7 @@ class App extends Page{
 			setTimeout(()=>this.E('wait').remove(),300)
 		},1600)
 
-		const ov=new IntersectionObserver((s,o)=>{
+		const og=new IntersectionObserver((s,o)=>{
 			let $=null,mf,p;
 			for(let e of s)if(e.target.parentNode&&e.target.parentNode.classList.contains('grid')&&(e.intersectionRatio>=0.7)){
 				o.unobserve($=e.target);
@@ -229,17 +229,29 @@ class App extends Page{
 			}
 		},{threshold:0.7});
 
+		const ov=new IntersectionObserver(s=>{
+			s.forEach(e=>{
+				const v=e.target
+				if(!e.isIntersecting&&!v.paused)v.pause()
+			})
+		},{threshold:0.5,rootMargin:'10px'})
+
 		const oo=new MutationObserver(s=>{
 			for(let e of s){
-				const $s=Array.from(e.addedNodes);
-				const x=e.target.classList.contains('grid');
-				if(!(x&&$s.length>0))continue;
+				const $s=Array.from(e.addedNodes).filter(_=>_.nodeName!='#text')
+				if($s.length<1)continue
 				for(let $ of $s){
-					const i=$.node('img[ss]:not(img[_])')
-					i&&oi.observe(i)
+					let $vs=$.nodes('video')
+					if($vs.length<1&&$.nodeName=='VIDEO')$vs=[$]
+					if($vs.length>0)$vs.forEach(_=>ov.observe(_))
+					let $is=$.nodes('img[ss]:not(img[_])')
+					if($is.length<1&&$.nodeName=='IMG')$is=[$]
+					if($is.length>0)$is.forEach(_=>oi.observe(_))
 				}
+				const x=e.target.classList.contains('grid')
+				if(!x)continue
 				const $=$s[$s.length-1];
-				ov.observe($);
+				og.observe($);
 			}
 		});
 		oo.observe(document.body,{subtree:true,childList:true,attributeFilter:['_']});

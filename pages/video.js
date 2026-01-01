@@ -262,7 +262,7 @@ class Video extends Page{
 				this.N('p',`地区: ${v.area||'未知'}　　　时间: ${v.year||'未知'}`),
 				v.directors.length>0?this.N('p',`导演: ${v.directors.join(', ')}`):'',
 				v.actors.length>0?this.N('p',`主演: ${v.actors.join(', ')}`):'',
-				this.N('video',{preload:'',autoplay:'',crossorigin:'anonymous',controls:'',poster:v.cover||this.ph}),
+				this.N('video',{preload:'',autoplay:'',crossorigin:'anonymous',controls:'',poster:v.cover||this.ph,s:'transform:translateZ(0)'}),
 				this.N('div',
 					this.N('div',{click:'App.pages.video.website_seek("start",this)'},'╟ '+this.w.start.time()),
 					this.N('div',{click:'App.pages.video.website_seek("end",this)'},'-'+this.w.end.time()+' ╢'),
@@ -270,6 +270,7 @@ class Video extends Page{
 				v.brief?this.N('brief',v.brief):'',
 				this.N('links',...v.links.map(([n,u])=>this.N('div',{u,click:'App.pages.video.website_play(this)'},n=='立即播放'?'默认':n))),
 			)
+			this.w.cs=Math.floor(Date.now()/1000)
 			const $=this.E('wb_info').node('video')
 			$.ondurationchange=()=>{
 				if(!$.isConnected||isNaN($.duration)||$.duration<250)return
@@ -281,9 +282,13 @@ class Video extends Page{
 			}
 			$.ontimeupdate=()=>{
 				if(!$.isConnected||isNaN($.duration)||$.duration<250)return
-				const $c=this.E('wb_info').node('links>[active]')
-				const uu=$c?$c.g_attr('u'):null,cc=$.currentTime
-				this.cache(`${this.w.X}_history_${id}`,JSON.stringify({u:uu,curr:cc,start:this.w.start,end:this.w.end}))
+				const ns=Math.floor(Date.now()/1000)
+				if(ns-this.w.cs>=2){
+					this.w.cs=ns
+					const $c=this.E('wb_info').node('links>[active]')
+					const uu=$c?$c.g_attr('u'):null,cc=$.currentTime
+					this.cache(`${this.w.X}_history_${id}`,JSON.stringify({u:uu,curr:cc,start:this.w.start,end:this.w.end}))
+				}
 				if($.duration-$.currentTime>this.w.end)return
 				const $o=this.E('wb_info').node('links>[active]'),$n=$o?$o.nextElementSibling:null
 				$n&&$n.click()
