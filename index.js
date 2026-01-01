@@ -208,26 +208,26 @@ class App extends Page{
 		},1600)
 
 		const og=new IntersectionObserver((s,o)=>{
-			let $=null,mf,p;
+			let $=null,mf,p
 			for(let e of s)if(e.target.parentNode&&e.target.parentNode.classList.contains('grid')&&(e.intersectionRatio>=0.7)){
-				o.unobserve($=e.target);
-				p=$.parentNode.g_attr('p');
-				mf=$.parentNode.g_attr('more');
-				break;
+				o.unobserve($=e.target)
+				p=$.parentNode.g_attr('p')
+				mf=$.parentNode.g_attr('more')
+				break
 			}
-			if(mf&&/^\d+$/.test(p))eval(mf+'(null,'+p+')');
-		},{threshold:0.7});
+			if(mf&&p)eval(mf+'(null,"'+p+'")')
+		},{threshold:0.7})
 
 		const oi=new IntersectionObserver((s,o)=>{
 			for(let e of s)if((e.target.nodeName=='IMG')&&(e.intersectionRatio>=0.7)){
-				const sa=e.target.g_attr('src'),sb=e.target.g_attr('ss');
+				const sa=e.target.g_attr('src'),sb=e.target.g_attr('ss')
 				if(sb&&sa!=sb){
-					e.target.s_attr({src:sb});
-					e.target.s_attr({_:''});
-					o.unobserve(e.target);
+					e.target.s_attr({src:sb})
+					e.target.s_attr({_:''})
+					o.unobserve(e.target)
 				}
 			}
-		},{threshold:0.7});
+		},{threshold:0.7})
 
 		const ov=new IntersectionObserver(s=>{
 			s.forEach(e=>{
@@ -250,8 +250,8 @@ class App extends Page{
 				}
 				const x=e.target.classList.contains('grid')
 				if(!x)continue
-				const $=$s[$s.length-1];
-				og.observe($);
+				const $g=$s[$s.length-1]
+				og.observe($g)
 			}
 		});
 		oo.observe(document.body,{subtree:true,childList:true,attributeFilter:['_']});

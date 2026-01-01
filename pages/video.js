@@ -120,9 +120,11 @@ class Video extends Page{
 			$t.textContent=this.wm[this.w.X]
 			this.E('wb_search').d_attr('hide')
 			this.E('wb_filters').d_attr('hide')
-			this.E('wb_list').d_attr('hide').node(`[i='${id}}']`).scrollIntoView({block:'center'})
-			const {X,o,_}=this.w
-			this.w={X,o,_}
+			const $u=this.E('wb_list').d_attr('hide').node(`[i="${id}"]`)
+			console.log(id,$u);
+			$u&&$u.scrollIntoView({block:'center'})
+			const {X,o,s,_}=this.w
+			this.w={X,o,s,_}
 			return
 		}
 		// 收藏夹打开的详情页/列表页 返回到主面板
