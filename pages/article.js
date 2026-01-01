@@ -91,7 +91,7 @@ class Article extends Page{
 		this.E('ft_star').html(this.loader)
 		const $=[],zs=[['shu','子鼠'],['niu','丑牛'],['hu','寅虎'],['tu','卯兔'],['long','辰龙'],['she','巳蛇'],['ma','午马'],['yang','未羊'],['hou','申猴'],['ji','酉鸡'],['gou','戌狗'],['zhu','亥猪']]
 		for(let [k,n] of zs){
-			const _=await fetch(this.link(`https://m.smxs.com/shengxiaoriyun/${k}`)).then(_=>_.text())
+			const _=await fetch(`https://m.smxs.com/shengxiaoriyun/${k}`,{headers:{'x-up':'true'}}).then(_=>_.text())
 			const yl=_.split('<div class="hlinfoitem">阳历：<span>').pop().split('</span></div>').shift()
 			const nl=_.split('<div class="hlinfoitem">农历：<span>').pop().split('</span></div>').shift()
 			const gz=_.split('<div class="hlinfoitem">干支：<span>').pop().split('</span></div>').shift()
@@ -111,7 +111,7 @@ class Article extends Page{
 		]
 		$.length=0
 		for(let [k,t,n] of xm){
-			const _=await fetch(this.link(`https://m.smxs.com/xingzuoriyun/${k}`)).then(_=>_.text())
+			const _=await fetch(`https://m.smxs.com/xingzuoriyun/${k}`,{headers:{'x-up':'true'}}).then(_=>_.text())
 			const zt=_.split('div class="ztystit">整体运势</div>').pop().split('<div class="ztysdesc">')[1].split('</div>').shift().trim()
 			const aq=_.split('div class="ztystit">爱情运势</div>').pop().split('<div class="ztysdesc">')[1].split('</div>').shift().trim()
 			const sy=_.split('div class="ztystit">事业学业</div>').pop().split('<div class="ztysdesc">')[1].split('</div>').shift().trim()
@@ -127,29 +127,29 @@ class Article extends Page{
 		e.style.animation='article_svg_spin 1s infinite linear'
 		this.E('jk_info').html(this.loader)
 		const decoder=new TextDecoder('gb2312')
-		const {duanzi}=await fetch(this.link('https://www.yduanzi.com/duanzi/getduanzi?_='+(Date.now()))).then(_=>_.json())
+		const {duanzi}=await fetch('https://www.yduanzi.com/duanzi/getduanzi?_='+(Date.now()),{headers:{'x-up':'true'}}).then(_=>_.json())
 		this.E('jk_info').html(duanzi)
 		e.style.animation='unset'
 	}
 	async saying_load(e){
 		e.style.animation='article_svg_spin 1s infinite linear'
 		this.E('sy_info').html(this.loader)
-		const {data:a}=await fetch(this.link('https://v2.xxapi.cn/api/yiyan?type=hitokoto&_='+(Date.now()))).then(_=>_.json())
-		const {data:b}=await fetch(this.link('https://v2.xxapi.cn/api/dujitang?_='+(Date.now()))).then(_=>_.json())
+		const {data:a}=await fetch('https://v2.xxapi.cn/api/yiyan?type=hitokoto&_='+(Date.now()),{headers:{'x-up':'true'}}).then(_=>_.json())
+		const {data:b}=await fetch('https://v2.xxapi.cn/api/dujitang?_='+(Date.now()),{headers:{'x-up':'true'}}).then(_=>_.json())
 		this.E('sy_info').html(a+'<br><br>'+b)
 		e.style.animation='unset'
 	}
 	async poetry_load(e){
 		e.style.animation='article_svg_spin 1s infinite linear'
 		this.E('pt_info').html(this.loader)
-		const o=await fetch(this.link('https://tixbay.net/poeman/getPoemText?_='+(Date.now()))).then(_=>_.text())
+		const o=await fetch('https://tixbay.net/poeman/getPoemText?_='+(Date.now()),{headers:{'x-up':'true'}}).then(_=>_.text())
 		this.E('pt_info').html(o.replaceAll('\n','<br>'))
 		e.style.animation='unset'
 	}
 	async car_load(e){
 		e.style.animation='article_svg_spin 1s infinite linear'
 		this.E('cr_info').html(this.loader)
-		const _=await fetch(this.link('https://www.qhsou.com/car?_='+(Date.now()))).then(_=>_.text())
+		const _=await fetch('https://www.qhsou.com/car?_='+(Date.now()),{headers:{'x-up':'true'}}).then(_=>_.text())
 		const o=_.split('<dd> <a> <img src="').map(_=>_.startsWith('https')?_.split('</p> </a> </dd>').shift().split('"> <p>'):null).filter(Boolean)
 		this.E('cr_info').html(o.map(([u,n])=>`<div><img src='${this.pholder}' ss='${this.link(u)}'/>${n}</div>`).join(''))
 		e.style.animation='unset'
