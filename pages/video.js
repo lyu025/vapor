@@ -152,22 +152,22 @@ class Video extends Page{
 		this.E('wb_filters').html('').d_attr('hide')
 		eval(fucase(X)).filters(()=>this.w.X==X,s=>{
 			this.w={X,o:{},_:s}
-			const ts=Object.keys(s),t=this.w.o.type=ts[0]
+			const ts=Object.keys(s),t=this.w.o.type=ts[0]||null
 			let $c,$a,$y,$s,$t=ts.map(v=>this.N('div',{v,k:'type',click:'App.pages.video.website_list(this)'},s[v].title))
-			if(_type(s[t].subt,'object')){
+			if(s[t]&&_type(s[t].subt,'object')){
 				const ks=Object.keys(s[t].subt)
 				this.w.o.subt=ks[0]
 				$c=ks.map(v=>this.N('div',{v,k:'subt',a:v==ks[0],click:'App.pages.video.website_list(this)'},s[t].subt[v]))
 			}
-			if(_type(s[t].area,'array')){
+			if(s[t]&&_type(s[t].area,'array')){
 				this.w.o.area=s[t].area[0][0]
 				$a=s[t].area.map(([v,n])=>this.N('div',{v,k:'area',a:v===s[t].area[0][0],click:'App.pages.video.website_list(this)'},n))
 			}
-			if(_type(s[t].year,'array')){
+			if(s[t]&&_type(s[t].year,'array')){
 				this.w.o.year=s[t].year[0][0]
 				$y=s[t].year.map(([v,n])=>this.N('div',{v,k:'year',a:v===s[t].year[0][0],click:'App.pages.video.website_list(this)'},n))
 			}
-			if(_type(s[t].sort,'object')){
+			if(s[t]&&_type(s[t].sort,'object')){
 				const ks=Object.keys(s[t].sort)
 				this.w.o.sort=ks[0]
 				$s=ks.map(v=>this.N('div',{v,k:'sort',a:v===ks[0],click:'App.pages.video.website_list(this)'},s[t].sort[v]))
@@ -177,7 +177,8 @@ class Video extends Page{
 			if($a)this.E('wb_filters').append(this.N('div',...$a))
 			if($y)this.E('wb_filters').append(this.N('div',...$y))
 			if($s)this.E('wb_filters').append(this.N('div',...$s))
-			this.E('wb_filters').node(`div>[k='type']`).click()
+			const $=this.E('wb_filters').node(`div>[k='type']`)
+			$&&$.click()
 		})
 	}
 	async website_list(e,p=1){
