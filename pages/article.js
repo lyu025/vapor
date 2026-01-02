@@ -177,7 +177,7 @@ class Article extends Page{
 		const _=await fetch(this.link('https://www.qhsou.com/car?_='+(Date.now()))).then(_=>_.text()).catch(_=>{
 			toast.error('网络请求失败!')
 			return null
-		}
+		})
 		const o=_?_.split('<dd> <a> <img src="').map(_=>_.startsWith('https')?_.split('</p> </a> </dd>').shift().split('"> <p>'):null).filter(Boolean):[]
 		this.E('cr_info').html(o.map(([u,n])=>`<div><img src='${this.pholder}' ss='${this.link(u)}'/>${n}</div>`).join(''))
 		e.style.animation='unset'
