@@ -1,6 +1,7 @@
 class Page{
 	static Pdata={} // 页面数据
 	static Ntree={} // 节点树
+	static proxy_no=0
 	static use_proxy=false
 
 	constructor(id){
@@ -98,7 +99,7 @@ class Page{
 		'head'.node().append('script'.elem('',{src:_,onload,type:'text/javascript',async:''}))
 	}
 	link(_){
-		return Page.use_proxy?`@@${_}`:_
+		return Page.use_proxy?`@${Page.proxy_no}@${_}`:_
 	}
 	async trans(_){
 		if(_&&_type(_,'string'))_=[_]

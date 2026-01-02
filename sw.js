@@ -8,7 +8,7 @@ const VERSION='v1.0.0'
 const CNAME=`vapor-${VERSION}`
 
 // 代理前缀
-const PROXY='https://corsproxy.io';
+const PM=['https://corsproxy.io'];
 
 // 预缓存资源（关键路径）
 const ASSETS=[
@@ -73,7 +73,7 @@ async function flush_caches(){
 
 // 网络请求拦截
 'fetch'.bind(e=>{
-	let r=e.request,is_proxy=r.url.includes('@@'),url=is_proxy?r.url.split('@@').pop():r.url
+	let r=e.request,[is_proxy,proxy_no]=r.url.match(/@(\d)@/)||[false],url=is_proxy?r.url.split(/@\d@/).pop():r.url
 	const {hash,origin,pathname}=new URL(url)
 	// 忽略: 非本地资源 + 非GET请求
 	if(r.method!='GET'&&origin==self.location.origin)return
@@ -86,7 +86,7 @@ async function flush_caches(){
 		const h=new Headers(r.headers)
 		h.set('Origin',origin)
 		h.set('Referer',url)
-		r=new Request(PROXY+'?url='+encodeURIComponent(url),{
+		r=new Request((proxy_no in PM?PM[proxy_no]:PM[0])+'?url='+encodeURIComponent(url),{
 			duplex:'half',method:r.method,headers:h,body:r.body
 		})
 	}
