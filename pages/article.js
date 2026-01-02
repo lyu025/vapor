@@ -156,7 +156,7 @@ class Article extends Page{
 				toast.error('网络请求失败!')
 				return {}
 			})
-			o+='<br><br>'+b
+			o+='<br><br>'+x
 		}
 		this.E('sy_info').html(o||'')
 		e.style.animation='unset'
