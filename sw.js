@@ -84,9 +84,14 @@ async function flush_caches(){
 	}
 	// 是否走代理
 	const is_proxy=origin==PROXY
-	if(r.headers.get('x-up')==='true'&&!is_proxy)r=new Request(PROXY+'?url='+encodeURIComponent(r.url),{
-		duplex:'half',method:r.method,headers:r.headers,body:r.body
-	})
+	if(r.headers.get('x-up')==='true'&&!is_proxy){
+		const h=new Headers(r.headers)
+		h.set('Origin',new URL(r.url).origin)
+		h.set('Referer',r.url)
+		r=new Request(PROXY+'?url='+encodeURIComponent(r.url),{
+			duplex:'half',method:r.method,headers:h,body:r.body
+		})
+	}
 	// 返回数据处理
 	e.respondWith(
 		// 先匹配缓存

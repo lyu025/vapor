@@ -179,7 +179,7 @@ class App extends Page{
 				this.N('div',{c:'core'},...Object.keys(App.menus).map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this)'},this.N('svg',{path:p}),App.menus[p]))),
 			),
 			this.N('main',{id:'main'}),
-			this.N('footer',{id:'footer'},...['home','article','record','img','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
+			this.N('footer',{id:'footer'},...['home','books','record','img','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
 			this.N('div',{id:'toast'}),
 		];
 	}
@@ -328,7 +328,12 @@ class App extends Page{
 					break
 			}
 		},navigator.serviceWorker);
-		setInterval(()=>r.update(),2000);
+		setInterval(()=>{
+			const sw=r.installing||r.waiting||r.active
+			if(!sw||!sw.activated)return
+			console.log('SW 检查更新')
+			r.update()
+		},2000);
 	}catch(_){toast.error('SW 注册失败',_)}
 });
 
