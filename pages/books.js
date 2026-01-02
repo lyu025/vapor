@@ -1,7 +1,7 @@
 class Books extends Page{
 	static #o=null;
 	static open(){
-		if (!this.#o)this.#o=new Books();
+		if(!this.#o)this.#o=new Books();
 		return this.#o
 	}
 	define(){
@@ -109,8 +109,8 @@ class Books extends Page{
 		this.E('kx_info').s_attr('hide').html('')
 		this.E('kx_filters').html('').d_attr('hide')
 		this.E('kxwk').node('h2').childNodes[1].textContent=this.cm[X]
-		
-		const _=await fetch(`https://book.sciencereading.cn/shop/book/Booksimple/list.do?showQueryModel.dp1Value=${X}&showQueryModel.pageSplit.showRow=0`,{headers:{'x-up':'true'}}).then(_=>_.text())
+		let url=`https://book.sciencereading.cn/shop/book/Booksimple/list.do?showQueryModel.dp1Value=${X}&showQueryModel.pageSplit.showRow=0`
+		const _=await fetch(this.link(url)).then(_=>_.text())
 		const C=_.split('xueke="').map((_,i)=>i<1?null:[_.split('"').shift(),_.split('<span>')[1].split('<').shift().trim()]).filter(Boolean)
 		C.unshift(['','全部'])
 		const T=_.split('bookType="').map((_,i)=>i<1?null:_.split('"').shift()).filter(Boolean)
@@ -138,7 +138,8 @@ class Books extends Page{
 		if(!!this.w.yr)q+=`&book_xueke=on&showQueryModel.publishYear=${this.w.yr}`
 		if(this.w.st&&this.w.st in sm)q+=`&showQueryModel.bookOrderColumn=${sm[this.w.st]}`
 		if(!!this.w.bt)q+=`&book_publishYear=on&showQueryModel.bookType=${encodeURIComponent("'"+this.w.bt+"'")}`
-		let _=await fetch(`https://book.sciencereading.cn/shop/book/Booksimple/list.do?${q}`,{headers:{'x-up':'true'}}).then(_=>_.text())
+		let url=`https://book.sciencereading.cn/shop/book/Booksimple/list.do?${q}`
+		let _=await fetch(this.link(url)).then(_=>_.text())
 		const next=parseInt(_.split(`');">末页</a>`)[0].split("'").pop().trim())>Number(p)?(Number(p)+1):'..'
 		const $=_.split('<a href="/shop/book/Booksimple/show.do?id=').map((v,i)=>{
 			if(i<1)return null
@@ -175,18 +176,19 @@ class Books extends Page{
 		this.E('kx_info').html(`<iframe crossorigin='anonymous' src='https://book.sciencereading.cn/shop/book/Booksimple/onlineRead.do?id=${id}&readMark=0'></iframe>`)
 		return
 		
-		
-		const _=await fetch(`https://book.sciencereading.cn/shop/book/Booksimple/onlineRead.do?id=${id}&readMark=0`,{headers:{'x-up':'true'}}).then(_=>_.text())
+		let url=`https://book.sciencereading.cn/shop/book/Booksimple/onlineRead.do?id=${id}&readMark=0`
+		const _=await fetch(this.link(url)).then(_=>_.text())
 		const aes=_.split('id="AESCode" value="')[1].split('"')[0]
 		console.log(aes);
 		const body=new FormData()
 		body.append('text',aes)
-		const x=await fetch(`https://cws-wkreader.sciencereading.cn/cpdfapi/v2/documents/science-server-info-decrypt`,{method:'POST',body,headers:{'x-up':'true'}}).then(_=>_.json())
+		url=`https://cws-wkreader.sciencereading.cn/cpdfapi/v2/documents/science-server-info-decrypt`
+		const x=await fetch(this.link(url),{method:'POST',body}).then(_=>_.json())
 		console.log(x);
-		const u=x.data.docHttp+'/cpdfapi/v1/documents/download-file?cmisdoc='+x.data.cmisdoc
+		url=x.data.docHttp+'/cpdfapi/v1/documents/download-file?cmisdoc='+x.data.cmisdoc
 		console.log(u);
-		const headers={'x-up':'true','Access-Token':x.data.userToken||'','Foxit-App-Name':'Creader_client_mobile','Origin':'https://book.sciencereading.cn'}
-		const xx=await fetch(u,{headers}).then(_=>_.arrayBuffer())
+		const headers={'Access-Token':x.data.userToken||'','Foxit-App-Name':'Creader_client_mobile','Origin':'https://book.sciencereading.cn'}
+		const xx=await fetch(this.link(url),{headers}).then(_=>_.arrayBuffer())
 		
 		return
 		eval(fucase(this.w.X)).info(()=>this.w.T==T,async({title,time,box})=>{

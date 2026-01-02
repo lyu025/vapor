@@ -73,8 +73,8 @@ async function flush_caches(){
 
 // 网络请求拦截
 'fetch'.bind(e=>{
-	let r=e.request
-	const {hash,origin,pathname}=new URL(r.url)
+	let r=e.request,is_proxy=r.url.includes('@@'),url=is_proxy?r.url.split('@@').pop():r.url
+	const {hash,origin,pathname}=new URL(url)
 	// 忽略: 非本地资源 + 非GET请求
 	if(r.method!='GET'&&origin==self.location.origin)return
 	// 本地资源 忽略非静态资源请求; 图标文件重置请求头
@@ -82,13 +82,11 @@ async function flush_caches(){
 		if(!/\.(js|css|json|png|jpg|svg)$/.test(pathname))return
 		if(hash&&!pathname=='/assets/icon.svg')r=new Request(pathname)
 	}
-	// 是否走代理
-	const is_proxy=origin==PROXY
-	if(r.headers.get('x-up')==='true'&&!is_proxy){
+	if(is_proxy){
 		const h=new Headers(r.headers)
-		h.set('Origin',new URL(r.url).origin)
-		h.set('Referer',r.url)
-		r=new Request(PROXY+'?url='+encodeURIComponent(r.url),{
+		h.set('Origin',origin)
+		h.set('Referer',url)
+		r=new Request(PROXY+'?url='+encodeURIComponent(url),{
 			duplex:'half',method:r.method,headers:h,body:r.body
 		})
 	}
@@ -100,23 +98,23 @@ async function flush_caches(){
 			// 无缓存时走常规请求拉数据
 			let _=await fetch(r)
 			// 如果是走代理的M3U8文件请求，重置返回内容，保证子文件都走代理
-			if(is_proxy&&r.url.includes('.m3u8')){
+			if(is_proxy&&url.includes('.m3u8')){
 				let text=await (_.clone()).text()
 				if(text.includes('#EXTM3U')){
-					text=M3U8.proxy(text,r.url,PROXY)
+					text=M3U8.proxy(text,url,PROXY)
 					if(text.startsWith(PROXY)&&text.endsWith('.m3u8')){
-						const u=text
-						_=await fetch(u)
+						const nurl=text
+						_=await fetch(nurl)
 						text=await (_.clone()).text()
 						if(text.includes('#EXTM3U')){
-							text=M3U8.proxy(text,u,PROXY)
+							text=M3U8.proxy(text,nurl,PROXY)
 							const headers=new Headers(Object.fromEntries(_.headers.entries()))
-							console.log(`[SW] 已修正M3U8内容: ${u}`)
+							console.log(`[SW] 已修正M3U8内容: ${nurl}`)
 							return new Response(text,{status:200,statusText:'OK',headers})
 						}
 						return _
 					}
-					console.log(`[SW] 已修正M3U8内容: ${r.url}`)
+					console.log(`[SW] 已修正M3U8内容: ${url}`)
 					const headers=new Headers(Object.fromEntries(_.headers.entries()))
 					return new Response(text,{status:200,statusText:'OK',headers})
 				}
@@ -132,7 +130,7 @@ async function flush_caches(){
 			if(!nc)return _
 			const cache=await caches.open(CNAME)
 			await cache.put(r,_.clone())
-			console.log(`[SW] 已缓存: ${r.url}`)
+			console.log(`[SW] 已缓存: ${url}`)
 			return _
 		})
 	)

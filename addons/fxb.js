@@ -11,7 +11,7 @@ class Fxb{
 	}
 	static async list(is_run,o_parser,tid,page=1){
 		if(page==1||!page)page=`sid=${tid}&pubid=1`
-		return await fetch(`${Fxb.#u}lazy_section.php?${page}`,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+		return await fetch(Vapor.link(`${Fxb.#u}lazy_section.php?${page}`)).then(_=>_.text()).then(_=>{
 			if(!is_run())return '✘'
 			const [,...$]=_.split('<div class="tiles late article')
 			const next=_.split('<div class="next"><a href="https://www.philstar.com/lazy_section.php?').pop().split('"').shift().trim()
@@ -37,10 +37,13 @@ class Fxb{
 			}).filter(Boolean)
 			o_parser(o)
 			return next
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return '..'
 		})
 	}
 	static async info(is_run,o_parser,url){
-		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+		return await fetch(Vapor.link(url)).then(_=>_.text()).then(_=>{
 			if(!is_run())return
 			let [,title]=_.split('<div class="article__title"><h1>')
 			if(title)title=title.split('</h1>').shift().trim()
@@ -70,7 +73,7 @@ class Fxb{
 						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
 						else if(img){
 							const src=img.g_attr('src')
-							if(src)o=`<img src='${src}'/>`
+							if(src)o=`<img src='${Vapor.link(src)}'/>`
 							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
 						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
@@ -78,8 +81,11 @@ class Fxb{
 				return o
 			}).filter(Boolean)
 			if(ibrief)box.unshift(`<p>&emsp;&emsp;${ibrief}</p>`)
-			if(img)box.unshift(`<img src='${img}'/>`)
+			if(img)box.unshift(`<img src='${Vapor.link(img)}'/>`)
 			return o_parser({title,time,box})
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return null
 		})
 	}
 }

@@ -2,14 +2,13 @@ class Page{
 	static Pdata={} // 页面数据
 	static Ntree={} // 节点树
 	static use_proxy=false
+
 	constructor(id){
 		if(id in Page.Ntree)return toast.error(`页面 <${id}> 已经存在，初始失败`)
 		this.id=id
-
 		Page.Ntree[this.id]={}
 		Page.Pdata[this.id]={}
 		this.$=`#${this.id=='app'?'':'page_'}${this.id}`.node()
-
 		if(this.id!='app'&&!this.$)Page.Ntree.app.main.append(this.$='section'.elem({id:`page_${this.id}`}))
 		this.define&&this.define()
 		const styles=(this.styles&&this.styles()||[]).map(_=>_.replaceAll('ᝰ','#page_'+this.id).trim()).filter(_=>_)
@@ -99,15 +98,15 @@ class Page{
 		'head'.node().append('script'.elem('',{src:_,onload,type:'text/javascript',async:''}))
 	}
 	link(_){
-		return Page.use_proxy?`https://corsproxy.io?url=${encodeURIComponent(_)}`:_
+		return Page.use_proxy?`@@${_}`:_
 	}
 	async trans(_){
 		if(_&&_type(_,'string'))_=[_]
 		if(!_type(_,'array'))return []
 		if(_.length<1)return []
 		const o=[[_,'auto','zh-CN'],'te_lib']
-		const url='https://translate-pa.googleapis.com/v1/translateHtml'
-		const headers={'x-up':'true','Content-Type':'application/json+protobuf','X-Goog-Api-Key':'AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520'}
+		const url=':https://translate-pa.googleapis.com/v1/translateHtml'
+		const headers={'Content-Type':'application/json+protobuf','X-Goog-Api-Key':'AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520'}
 		return await fetch(url,{method:'POST',body:JSON.stringify(o),headers}).then(_=>_.json()).then(x=>x.shift())
 	}
 }
@@ -179,7 +178,7 @@ class App extends Page{
 				this.N('div',{c:'core'},...Object.keys(App.menus).map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this)'},this.N('svg',{path:p}),App.menus[p]))),
 			),
 			this.N('main',{id:'main'}),
-			this.N('footer',{id:'footer'},...['home','books','record','img','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
+			this.N('footer',{id:'footer'},...['home','radio','video','img','setting'].map(p=>this.N('div',{p,a:p==this.page,click:'Vapor.jump_to(this,true)'},this.N('svg',{path:p}),App.menus[p]))),
 			this.N('div',{id:'toast'}),
 		];
 	}
@@ -294,7 +293,7 @@ class App extends Page{
 		this.E('title').innerHTML=App.menus[p]
 		this.E('menu').classList.remove('open')
 		this.E('main').nodes('section').forEach(_=>_[_.id==('page_'+this.page)?'d_attr':'s_attr']('hide'))
-		if(!(p in App.pages))this.script(`pages/${p}.js`,`const $=${fucase(p)}?.open();$&&(App.pages.${p}=$)`)
+		if(!(p in App.pages))this.script(`pages/${p}.js`,`if(Vapor.page=='${p}'){const $=${fucase(p)}?.open();$&&(App.pages.${p}=$)}`)
 		setTimeout(()=>this.loader.s_attr('hide'),1000)
 	}
 }

@@ -9,7 +9,7 @@ class Flw{
 	}
 	static async list(is_run,o_parser,tid,page=1){
 		const url=`${Flw.#u}?mod=forumdisplay&fid=${tid}&filter=lastpost&orderby=dateline&mobile=2&page=${page}`
-		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+		return await fetch(Vapor.link(url)).then(_=>_.text()).then(_=>{
 			if(!is_run())return '✘'
 			const [,...$]=_.split('<li id="thread_')
 			const o=$.map(_=>{
@@ -22,11 +22,14 @@ class Flw{
 			}).filter(Boolean)
 			o_parser(o)
 			return o.length<1?'..':(page+1)
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return '..'
 		})
 	}
 	static async info(is_run,o_parser,id){
 		const url=`${Flw.#u}?mod=viewthread&tid=${id}&mobile=2`;
-		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+		return await fetch(Vapor.link(url)).then(_=>_.text()).then(_=>{
 			if(!is_run())return
 			let [,title]=_.split('<h3 style="font-size:18px;">')
 			if(title)title=title.split('</h3>').shift().trim()
@@ -52,7 +55,7 @@ class Flw{
 						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
 						else if(img){
 							const src=img.g_attr('src')
-							if(src)o=`<img src='${Flw.#u}${src.replace('forum.php','')}'/>`
+							if(src)o=`<img src='${Vapor.link(Flw.#u+src.replace('forum.php',''))}'/>`
 							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
 						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
@@ -61,6 +64,9 @@ class Flw{
 			}).filter(Boolean)
 			if(box[0]&&box[0].startsWith('<p>&emsp;&emsp;'))box[0]=box[0].replace('<p>&emsp;&emsp;','<p>')
 			return o_parser({title,time,box})
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return null
 		})
 	}
 }

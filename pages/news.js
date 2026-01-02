@@ -160,13 +160,8 @@ class News extends Page{
 				this.N('div'),
 			)
 			this.E('wb_info').node('title').scrollIntoView({block:'start'})
-			const list=oo||box
-			if(this.use_proxy)for(let i in list)if(list[i].includes('<img src')){
-				const [a,x]=list[i].split(`<img src='`),[u,...m]=x.split("'")
-				list[i]=`${a}<img src='${this.link(u)}'${m.join("'")}`
-			}
 			this.E('wb_info').node('.news_loader')?.remove()
-			this.E('wb_info').node('div').innerHTML=list.join('').trim()
+			this.E('wb_info').node('div').innerHTML=(oo||box).join('').trim()
 		},id)
 	}
 }

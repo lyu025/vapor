@@ -91,7 +91,7 @@ class Video extends Page{
 			const s=JSON.parse(this.cache(`${x}_favorites`)||'{}')
 			for(let i in s){
 				const o=s[i],a={i,x,o:JSON.stringify(o),click:'App.pages.video.website_info(this,true)'}
-				$.push(this.N('div',a,this.N('img',{src:this.ph,ss:o.cover}),this.N('title',o.title)))
+				$.push(this.N('div',a,this.N('img',{src:this.ph,ss:this.link(o.cover)}),this.N('title',o.title)))
 			}
 		}
 		this.E('fv_list').html('').append(...$)
@@ -264,10 +264,10 @@ class Video extends Page{
 				this.N('p',`地区: ${v.area||'未知'}　　　时间: ${v.year||'未知'}`),
 				v.directors.length>0?this.N('p',`导演: ${v.directors.join(', ')}`):'',
 				v.actors.length>0?this.N('p',`主演: ${v.actors.join(', ')}`):'',
-				this.N('video',{preload:'',autoplay:'',crossorigin:'anonymous',controls:'',poster:v.cover||this.ph,s:'transform:translateZ(0)'}),
+				this.N('video',{preload:'',autoplay:'',crossorigin:'anonymous',controls:'',poster:v.cover?this.link(v.cover):this.ph,s:'transform:translateZ(0)'}),
 				this.N('div',
-					this.N('div',{click:'App.pages.video.website_seek("start",this)'},'╟ '+this.w.start.time()),
-					this.N('div',{click:'App.pages.video.website_seek("end",this)'},'-'+this.w.end.time()+' ╢'),
+					this.N('div',{click:'App.pages.video.website_seek("start",this)'},'▏'+this.w.start.time()),
+					this.N('div',{click:'App.pages.video.website_seek("end",this)'},'-'+this.w.end.time()+'▕'),
 				),
 				v.brief?this.N('brief',v.brief):'',
 				this.N('links',...v.links.map(([n,u])=>this.N('div',{u,click:'App.pages.video.website_play(this)'},n=='立即播放'?'默认':n))),
@@ -320,7 +320,7 @@ class Video extends Page{
 		if(uu&&uu.startsWith('http'))return $.s_attr({src:this.link(uu)})
 		if(cu.startsWith('http'))return $.s_attr({src:this.link(cu)})
 		await eval(fucase(this.w.X)).src(()=>this.w.u==cu,(u,nu)=>{
-			if(u&&u.startsWith('http'))$.s_attr({src:thid.link(u)})
+			if(u&&u.startsWith('http'))$.s_attr({src:this.link(u)})
 			if(nu&&nu.startsWith('http'))e.nextElementSibling.s_attr({uu:nu})
 		},cu)
 	}

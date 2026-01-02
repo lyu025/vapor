@@ -9,7 +9,7 @@ class Cls{
 	}
 	static async list(is_run,o_parser,tid,page=''){
 		const url=`${Cls.#u}/${tid}?app=CailianpressWap&refresh_type=1&rn=10${!page||page==1?'':('&last_time='+page)}`
-		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.json()).then(({data})=>{
+		return await fetch(Vapor.link(url)).then(_=>_.json()).then(({data})=>{
 			if(!is_run()||!(data.list||data.roll_data))return '✘'
 			const list=data.list||data.roll_data,o=list.map(({id,article_id:aid,content:abrief,title,img,brief,ctime,is_ad})=>{
 				if(is_ad)return null
@@ -23,11 +23,14 @@ class Cls{
 			}).filter(Boolean)
 			o_parser(o)
 			return list.length>0?list.pop().sort_score:'..'
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return '..'
 		})
 	}
 	static async info(is_run,o_parser,id){
 		const url=`https://m.cls.cn/${id}`;
-		return await fetch(url,{headers:{'x-up':'true'}}).then(_=>_.text()).then(_=>{
+		return await fetch(Vapor.link(url)).then(_=>_.text()).then(_=>{
 			if(!is_run())return
 			let [,title]=_.split('class="f-s-26 f-f-pm l-h-123077 title-box">')
 			if(title)title=title.split('</div>').shift().trim()
@@ -53,7 +56,7 @@ class Cls{
 						if((v.childNodes.length==1&&v.firstChild.tagName=='STRONG')||v.tagName=='STRONG'||t=='heading')o=`<strong>${text}</strong>`
 						else if(img){
 							const src=img.g_attr('src')
-							if(src)o=`<img src='${src}'/>`
+							if(src)o=`<img src='${Vapor.link(src)}'/>`
 							if(text)o=(o||'')+`<p>&emsp;&emsp;${text}</p>`
 						}else o=`<p>&emsp;&emsp;${text}</p>`
 						break
@@ -62,6 +65,9 @@ class Cls{
 			}).filter(Boolean)
 			if(box[0]&&box[0].startsWith('<p>&emsp;&emsp;'))box[0]=box[0].replace('<p>&emsp;&emsp;','<p>')
 			return o_parser({title,time,box})
+		}).catch(_=>{
+			toast.error('网络请求失败!')
+			return null
 		})
 	}
 }
