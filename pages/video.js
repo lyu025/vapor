@@ -286,7 +286,7 @@ class Video extends Page{
 			$.ontimeupdate=()=>{
 				if(!$.isConnected||isNaN($.duration)||$.duration<250)return
 				const ns=Math.floor(Date.now()/1000)
-				if(ns-this.w.cs>=2){
+				if(ns-this.w.cs>=4){
 					this.w.cs=ns
 					const $c=this.E('wb_info').node('links>[active]')
 					const uu=$c?$c.g_attr('u'):null,cc=$.currentTime
