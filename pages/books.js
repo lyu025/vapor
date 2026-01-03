@@ -29,6 +29,7 @@ class Books extends Page{
 	constructor(){
 		if(Books.#o)return
 		super('books')
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		return[

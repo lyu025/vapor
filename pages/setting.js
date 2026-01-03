@@ -12,6 +12,7 @@ class Setting extends Page{
 	constructor(){
 		if(Setting.#o)return
 		super('setting')
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		return[

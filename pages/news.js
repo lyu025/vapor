@@ -13,6 +13,7 @@ class News extends Page{
 	constructor(){
 		if(News.#o)return
 		super('news')
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		return[

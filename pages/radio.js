@@ -13,6 +13,7 @@ class Radio extends Page{
 	constructor(){
 		if(Radio.#o)return
 		super('radio')
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		return[

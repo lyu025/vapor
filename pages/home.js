@@ -8,6 +8,7 @@ class Home extends Page{
 		if(Home.#o)return
 		super('home')
 		this.monitor()
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		const net=navigator.onLine,cache='caches' in window

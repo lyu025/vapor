@@ -14,6 +14,7 @@ class Video extends Page{
 		if(Video.#o)return
 		super('video')
 		this.favorite_load()
+		Vapor.loader.s_attr('hide')
 	}
 	nodes(){
 		return[
