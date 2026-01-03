@@ -155,8 +155,7 @@ class App extends Page{
 			this.$.s_attr({theme:this.theme})
 			;`meta[name='theme-color']`.node().s_attr({content:'#fff'})
 		}
-		this.E('main').innerHTML=`<svg viewBox='0 0 50 50'><defs><linearGradient id='svg_loader' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#60A5FA' stop-opacity='0.2'></stop><stop offset='50%' stop-color='#60A5FA' stop-opacity='0.8'></stop><stop offset='100%' stop-color='#60A5FA' stop-opacity='0.2'></stop><animate attributeName='x1' values='0%;100%;0%' dur='3s' repeatCount='indefinite'></animate></linearGradient></defs><g><path d='M15,15 L35,15 L35,35 L15,35 Z' fill='none' stroke='url(#svg_loader)' stroke-width='2'><animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='3s' repeatCount='indefinite'></animateTransform></path><path d='M10,20 L30,20 L30,40 L10,40 Z' fill='none' stroke='url(#svg_loader)' stroke-width='2' opacity='0.5'><animateTransform attributeName='transform' type='rotate' from='360 25 25' to='0 25 25' dur='3s' repeatCount='indefinite'></animateTransform></path></g></svg>`
-		this.loader=this.E('main').node('svg').s_attr('hide')
+		this.E('main').html('')
 		this.jump_to(this.page)
 		setTimeout(()=>this.E('wait').d_attr('hide'),1000)
 	}
@@ -287,15 +286,13 @@ class App extends Page{
 	jump_to(e,quite=false){
 		let p=_type(e,'string')?e:e.g_attr('p')
 		if(p==this.page&&this.E('title').innerText.trim()!='...')return
-		this.loader.d_attr('hide')
 		this.cache('page',this.page=p);
 		this.E('footer').childNodes.forEach(_=>_[_.g_attr('p')==p?'s_attr':'d_attr']('active'))
 		this.E('menu').nodes('.core>*').forEach(_=>_[_.g_attr('p')==p?'s_attr':'d_attr']('active'))
-		this.E('title').innerHTML=App.menus[p]
+		this.E('title').html(App.menus[p])
 		this.E('menu').classList.remove('open')
 		this.E('main').nodes('section').forEach(_=>_[_.id==('page_'+this.page)?'d_attr':'s_attr']('hide'))
 		if(!(p in App.pages))this.script(`pages/${p}.js`,`if(Vapor.page=='${p}'){const $=${fucase(p)}?.open();$&&(App.pages.${p}=$)}`)
-		setTimeout(()=>this.loader.s_attr('hide'),1000)
 	}
 }
 

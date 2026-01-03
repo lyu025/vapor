@@ -42,7 +42,7 @@ nav{
 	background:var(--h-bg);border-right:1px solid var(--h-bd);padding-bottom:11rem;
 	position:fixed;top:calc(2rem + 24px);bottom:0;left:-240px;z-index:400;transition:left 0.3s;
 }
-nav.open{left:0;animation:menu_open .4s ease-out}
+nav.open{left:0;animation:menu_open .2s ease-out}
 nav>.top{display:flex;padding:2rem 0 1rem 1.4rem}
 nav>.top>img{display:block;width:80px;height:80px;border-radius:50%}
 nav>.top>div{flex:1;font-weight:600;padding:2rem 1rem}
@@ -62,8 +62,7 @@ main>svg{
 	position:absolute;top:50%;left:50%;z-index:1000000000;
 }
 
-@keyframes page{from{opacity:0}to{opacity:1}}
-main>section{display:block;animation:page 1.2s ease-in;min-height:calc(100vh - 4rem - 130px)}
+main>section{display:block;min-height:calc(100vh - 4rem - 130px)}
 
 section>card{display:block;margin-top:2rem}
 section>card>h2{
@@ -118,7 +117,7 @@ footer>div{
 	border:none;color:var(--fg);display:flex;flex-direction:column;
 	align-items:center;gap:0.25rem;cursor:pointer;font-size:0.75rem;
 }
-footer>div[active]{color:var(--primary)}
+footer>div[active]{font-weight:bold;font-size:.9rem}
 footer>div>svg{display:block;width:40px;height:40px}
 
 #app_toast{position:fixed;top:calc(2rem + 34px);right:0;z-index:9999}
