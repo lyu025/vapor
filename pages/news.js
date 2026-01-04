@@ -82,7 +82,7 @@ class News extends Page{
 	async website_filters(X){
 		const ct=eval(`typeof ${fucase(X)}`)
 		if(ct=='undefined'){
-			this.script(`/addons/${X}.js`,`App.pages.news.website_filters("${X}")`)
+			this.script(`addons/${X}.js`,`App.pages.news.website_filters("${X}")`)
 			return
 		}
 		this.w={X}

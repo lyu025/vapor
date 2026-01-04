@@ -6,7 +6,7 @@ class Video extends Page{
 	}
 	define(){
 		this.w={}
-		this.ph='/assets/poster.jpg'
+		this.ph='assets/poster.jpg'
 		this.wm={ymt:'茅台',yhn:'红牛',yhy:'虎牙',ydb:'豆瓣'}
 		this.loader=`<svg class='video_loader' viewBox='0 0 50 50'><path d='M25,5 a20,20 0 1,1 -20,20' stroke='var(--fg)' stroke-width='1' fill='none' stroke-linecap='round'><animate attributeName='stroke-dasharray' values='10,60;60,10;10,60' dur='1.5s' repeatCount='indefinite'/><animateTransform attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='1s' repeatCount='indefinite'/></path></svg>`
 	}
@@ -140,7 +140,7 @@ class Video extends Page{
 	async website_filters(X){
 		const C=fucase(X)
 		if(eval(`typeof ${C}`)=='undefined'){
-			this.script(`/addons/${X}.js`,`${C}&&App.pages.video.website_filters("${X}")`)
+			this.script(`addons/${X}.js`,`${C}&&App.pages.video.website_filters("${X}")`)
 			return
 		}
 		this.w={X}
